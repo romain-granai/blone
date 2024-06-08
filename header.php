@@ -10,4 +10,18 @@
 
 <body <?php body_class(); ?> data-barba="wrapper">
     <?php wp_body_open(); ?>
-    <h1>Header</h1>
+    <div class="curtain"></div>
+    <?php get_template_part( 'template-parts/topbar-navigation' ); ?>
+    <?php 
+        $namespace;
+        if(is_front_page()){
+            $namespace = 'home';
+        } else if(is_singular( 'product' )){
+            $namespace = 'single-product';
+        } else if(is_shop()) {
+            $namespace = 'shop';
+        } else {
+            $namespace = 'page';
+        }
+    ?>
+    <div data-barba="container" data-barba-namespace="<?php echo $namespace; ?>">

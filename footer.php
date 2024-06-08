@@ -1,4 +1,7 @@
-        <h2>Footer</h2>
+        </div> <!-- Closing Barba Container -->
+        <footer>
+            footer
+        </footer>
         <?php wp_footer(); ?>
     </body>
 
