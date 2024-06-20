@@ -3,8 +3,8 @@
 // // Ajout du menu principal
 	function blone_register_my_menu() {
 		register_nav_menus( array(
-			// 'top-right'	=> __( 'Top Right', 'blone' ),
-			// 'legal'	=> __( 'Menu mentions légales', 'blone' ),
+			'main'	=> __( 'Main', 'blone' ),
+			'tools'	=> __( 'Tools', 'blone' ),
 			// 'decouvrir'	=> __( 'Menu footer Decouvrir', 'blone' )
 		));
 
@@ -37,3 +37,8 @@
 	// 	return $menu;
 		
 	// }
+
+
+
+
+

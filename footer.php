@@ -1,5 +1,5 @@
         </div> <!-- Closing Barba Container -->
-        <footer>
+        <footer class="footer">
             footer
         </footer>
         <?php wp_footer(); ?>

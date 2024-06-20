@@ -41,3 +41,11 @@ function prefix_reset_metabox_positions(){
 	delete_user_meta( wp_get_current_user()->ID, 'meta-box-order_custom_post_type' );
   }
   add_action( 'admin_init', 'prefix_reset_metabox_positions' );
+
+function custom_mime_types($mimes) {
+	// Add .obj to the list of mime types
+	$mimes['obj'] = 'text/plain';
+	return $mimes;
+}
+
+add_filter('upload_mimes', 'custom_mime_types');

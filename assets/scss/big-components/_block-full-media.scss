@@ -1,0 +1,50 @@
+.block--full-media {
+    --blur: 40px;
+    --brightness: .5;
+    position: relative;
+    width: 100%;
+    height: 85svh;
+    overflow: hidden;
+    color: $white;
+    font-weight: 520;
+    line-height: .82;
+    text-transform: uppercase;
+
+    &--viewport {
+        height: 100svh;
+    }
+
+    &--sm {
+        width: calc(100% - ($gutter*2));
+        margin: $gutter*2 0;
+    }
+
+    .media {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 120%;
+        z-index: 1;
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        backdrop-filter: blur(var(--blur)) brightness(var(--brightness));
+
+    }
+}
+
+.block--full-media__text {
+    position: absolute;
+    bottom: $gutter*2;
+    left: $gutter*2;
+    line-height: inherit;
+    @include fs-big;
+    z-index: 3;
+}

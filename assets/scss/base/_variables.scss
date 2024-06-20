@@ -8,8 +8,7 @@ $xl: 1350px;
 $xxl: 1700px;
 $xxxl: 1850px;
 
-$f-primary: 'Roobert';
-$f-secondary: 'Reckless II';
+$f-primary: "Raleway", sans-serif;
 
 $black: #000;
 $white: #FFF;
@@ -30,6 +29,12 @@ $red: #E30613;
 $light-red: #FFD2D2;
 
 $c-primary: $red;
+
+$f-w-400: 400;
+$f-w-500: 500;
+$f-w-520: 520;
+$f-w-600: 600;
+$f-w-700: 700;
 
 $space-xxs: $gutter/2;
 $space-xs: $gutter/3*2;

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
     box-sizing: border-box;
 }
@@ -9,13 +11,18 @@ html {
 }
 
 body {
-    font-family: 'Roobert';
+	font-family: $f-primary;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
+    letter-spacing: .05em;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-weight: normal;
+    font-weight: inherit;
     margin: 0;
-    line-height: 1;
+    // line-height: 1;
     font-size: unset;
 }
 
@@ -47,11 +54,11 @@ p {
     }
 }
 
-.small-title {
-    @include small-title;
+// .small-title {
+//     @include small-title;
 
-    .text-and-media & {
-        margin-bottom: .25em;
-    }
-}
+//     .text-and-media & {
+//         margin-bottom: .25em;
+//     }
+// }
 

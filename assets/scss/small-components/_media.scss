@@ -1,0 +1,6 @@
+.media {
+    img, video {
+        display: block;
+        @include object-cover;
+    }
+}

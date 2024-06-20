@@ -15,6 +15,11 @@ function enqueue_scripts_and_styles() {
 
     // CSS
     wp_enqueue_style( 'main', get_template_directory_uri() . '/assets/css/main.min.css' );
+
+    // Dequeue WooCommerce styles
+    wp_dequeue_style('woocommerce-layout');
+    wp_dequeue_style('woocommerce-smallscreen');
+    wp_dequeue_style('woocommerce-general');
 }
 
 add_action( 'wp_enqueue_scripts', 'enqueue_scripts_and_styles' );
