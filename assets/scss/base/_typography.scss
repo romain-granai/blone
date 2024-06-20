@@ -1,0 +1,57 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Roobert';
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    margin: 0;
+    line-height: 1;
+    font-size: unset;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+strong, b {
+    font-weight: 500;
+}
+
+i, em {
+    font-style: italic;
+}
+
+p {
+    &:first-child {
+        margin-top: 0;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    &:only-child {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+.small-title {
+    @include small-title;
+
+    .text-and-media & {
+        margin-bottom: .25em;
+    }
+}
+

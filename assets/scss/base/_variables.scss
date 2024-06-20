@@ -1,0 +1,44 @@
+$gutter: 4rem;
+
+$xs : 400px;
+$sm : 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1350px;
+$xxl: 1700px;
+$xxxl: 1850px;
+
+$f-primary: 'Roobert';
+$f-secondary: 'Reckless II';
+
+$black: #000;
+$white: #FFF;
+// $grey: ;
+$extra-light-grey: #FAFAFA;
+$light-grey: #D9D9D9;
+$dark-grey: #909090;
+
+$green: #7CAD2E;
+$light-green: #CDE6A5;
+$blue: #4352CD;
+$light-blue: #B8BFFB;
+$gold: #D1A02E;
+$light-gold: #FAEBC8;
+$magenta: #AF1B8A;
+$light-magenta: #F0C8E6;
+$red: #E30613;
+$light-red: #FFD2D2;
+
+$c-primary: $red;
+
+$space-xxs: $gutter/2;
+$space-xs: $gutter/3*2;
+$space-sm: $gutter;
+$space-md: $gutter/2*3;
+$space-lg: $gutter * 2;
+$space-xl: $gutter/2*5;
+$space-2xl: $gutter*3;
+$space-3xl: $gutter*5;
+$space-4xl: $gutter*6;
+
+$radius: 1.5rem;

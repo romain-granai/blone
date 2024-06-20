@@ -1,0 +1,28 @@
+.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.d-none {
+    display: none;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.clean-list {
+    @include clean-list;
+}
