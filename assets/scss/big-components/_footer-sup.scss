@@ -1,0 +1,38 @@
+.footer-sup {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $gutter;
+    padding: 0 $gutter*2;
+
+}
+
+.footer-sup__side {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: $gutter;
+    padding: $gutter*3 0;
+
+    &:nth-child(2){
+        background-color: #F4F4F4;
+    }
+}
+
+.footer-sup__in {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    grid-column: 2/6;
+    gap: $gutter;
+    // background: blue;
+}
+
+.mail-and-subscribe {
+    display: flex;
+    align-items: flex-end;
+    gap: $gutter/2;
+
+    .email {
+        flex: 1 1 100%;
+    }
+}

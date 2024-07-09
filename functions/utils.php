@@ -52,3 +52,46 @@ add_shortcode( 'email', 'blone_crypt_email' );
 // }, 11);
 
 // add_theme_support( 'post-thumbnails', array( 'post' ) ); 
+
+function get_correct_page_id() {
+    if (function_exists('is_shop') && is_shop()) {
+        return wc_get_page_id('shop');
+    } elseif (function_exists('is_cart') && is_cart()) {
+        return wc_get_page_id('cart');
+    } elseif (function_exists('is_checkout') && is_checkout()) {
+        return wc_get_page_id('checkout');
+    } elseif (function_exists('is_account_page') && is_account_page()) {
+        return wc_get_page_id('myaccount');
+    } else {
+        return get_queried_object_id();
+    }
+};
+
+function slugify($text) {
+    // Replace non letter characters by -
+    $text = preg_replace('~[^\pL]+~u', '-', $text);
+
+    // Transliterate
+    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+    // Remove unwanted characters
+    $text = preg_replace('~[^-\w]+~', '', $text);
+
+    // Remove numbers
+    $text = preg_replace('~[0-9]+~', '', $text);
+
+    // Trim
+    $text = trim($text, '-');
+
+    // Remove duplicate -
+    $text = preg_replace('~-+~', '-', $text);
+
+    // Lowercase
+    $text = strtolower($text);
+
+    if (empty($text)) {
+        return 'n-a';
+    }
+
+    return $text;
+}

@@ -1,6 +1,88 @@
 .footer {
+    display: flex;
+    flex-direction: column;
+    color: $white;
     background-color: $black;
-    height: 50vh;
+    height: 50svh;
+    @include fs-sm;
+    text-transform: uppercase;
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        @include clean-list;
+
+        &:not(.footer__contact ul) {
+            gap: .5em;
+        }
+    }
+    
+    @media (max-width: $xl){
+        @include fs-xs;
+    }
+}
+
+.footer__top {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr); 
+    flex: 1 1 100%;
+    padding: 0 $gutter*2 $gutter;
+
+    @media (max-width: $xl){
+		padding: $gutter $gutter;
+	}
+}
+
+.footer__logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    a {
+
+    }
+
+    img {
+
+    }
+}
+
+.footer__nav {
+    display: flex;
+    justify-content: center;
+    gap: $gutter;
+
+    >div {
+        flex: 0 0 calc(16.66% - 3.3rem);
+    }
+
+    span {
+        font-weight: 600;
+    }
+
+    @media (max-width: $xl){
+		gap: $gutter/2;
+	}
+}
+
+.footer__contact {
+
+    ul {
+        text-transform: none;
+    }
+}
+
+.footer__bottom {
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid $white;
+	padding: $gutter/4 $gutter*2;
+
+	@media (max-width: $xl){
+		padding: $gutter/4 $gutter;
+	}
+
 }
 
 

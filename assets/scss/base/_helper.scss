@@ -26,3 +26,27 @@
 .clean-list {
     @include clean-list;
 }
+
+.m-top-sm {
+    margin-top: $space-sm;
+}
+
+.m-top-md {
+    margin-top: $space-lg;
+}
+
+.m-top-lg {
+    margin-top: $space-2xl;
+}
+
+.m-bottom-sm {
+    margin-bottom: $space-sm;
+}
+
+.m-bottom-md {
+    margin-bottom: $space-lg;
+}
+
+.m-bottom-lg {
+    margin-bottom: $space-2xl;
+}

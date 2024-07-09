@@ -3,7 +3,7 @@
 	grid-template-columns: repeat(3, 1fr);
 	// grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
 	// row-gap: 50px;
-	margin: 0 0 50vh;
+	margin: 0;
 	padding: 0;
 	list-style-type: none;
 	box-shadow: 0 0 50px -20px rgba(0,0,0,.1);
@@ -13,6 +13,7 @@
 	--color-1: rgba(124,167,255,1);
 	--color-2: rgba(207,174,248,1);
 	--color-3: rgba(92,255,137,1);
+    --color-4: rgb(92, 255, 247);
 	position: relative;
 	text-align: center;
 	outline: 1px solid white;

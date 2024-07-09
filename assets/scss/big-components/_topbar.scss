@@ -6,8 +6,13 @@
     @include fs-sm;
     text-transform: uppercase;
 	z-index: 100;
+	transition: all .8s cubic-bezier(.5,.5,0,1);
 
-    @media (max-width: $lg){
+	&--is-hidden {
+		transform: translate3d(0,-100%,0);
+	}
+
+    @media (max-width: $xl){
         @include fs-xs;
     }
 }
@@ -22,6 +27,10 @@
 
 	.nav {
 		align-items: center;
+	}
+
+	@media (max-width: $xl){
+		padding: $gutter/2 $gutter;
 	}
 }
 
@@ -53,6 +62,10 @@
 		box-shadow: 0 0 50px -20px rgba(0, 0, 0, 0.1);
 		transition: transform .3s ease-out, visibility .2s ease-out, opacity .2s ease-out;
 		z-index: 2;
+	}
+
+	@media (max-width: $xl){
+		padding: $gutter $gutter;
 	}
 }
 
@@ -111,6 +124,7 @@
 	}
 
 	a {
+		display: inline-block;
 		@include transition($properties: font-weight, $duration: .2s);
 		// @mixin transition($properties: all, $duration: .3s, $timing-function: ease-in-out)
 

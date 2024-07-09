@@ -1,0 +1,91 @@
+.block--text-n-media {
+    --blur: 40px;
+    --brightness: .5;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: $gutter*2;
+    margin: $gutter*2 0;
+    
+    .media {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 120%;
+    }
+
+    img, video {
+
+    }
+
+    @media (max-width: $xl){
+        grid-template-columns: repeat(2, 1fr); 
+        gap: $gutter;
+    }
+}
+
+.block--text-n-media__media {
+    grid-column: span 2;
+    
+
+    .block--text-n-media--left & {
+        order: 2;
+    }
+
+    .block--text-n-media--right & {
+        order: 1;
+    }
+
+    >div {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16/9;
+        overflow: hidden;
+
+        &:after {
+            content: "";
+            position: absolute;
+            display: block;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            backdrop-filter: blur(var(--blur)) brightness(var(--brightness));
+        }
+    }
+
+    @media (max-width: $xl){
+        grid-column: span 1;
+    }
+}
+
+.block--text-n-media__text {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+
+    *:is(h2, h3, h4, h5){
+        @include fs-xl;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    .block--text-n-media--left & {
+        padding-left: $gutter*2;
+        order: 1;
+
+        @media (max-width: $xl){
+            padding-left: $gutter;
+        }
+    }
+
+    .block--text-n-media--right & {
+        padding-right: $gutter*2;
+        order: 2;
+
+        @media (max-width: $xl){
+            padding-right: $gutter;
+        }
+    }
+}

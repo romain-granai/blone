@@ -5,6 +5,7 @@
 }
 
 html {
+    --topBarH: 81.5px;
     font-size: 62.5%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -40,6 +41,8 @@ i, em {
 }
 
 p {
+    @include fs-md;
+
     &:first-child {
         margin-top: 0;
     }

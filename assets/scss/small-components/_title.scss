@@ -1,0 +1,25 @@
+.title {
+    text-transform: uppercase;
+    @include fs-md;
+    font-weight: 700;
+    
+    // padding: 0 $gutter*2;
+    display: flex;
+    align-items: center;
+
+    &--section {
+        margin: $gutter*2;
+    }
+
+    &--center {
+        justify-content: center;
+    }
+
+    &--left {
+        justify-content: flex-start;
+    }
+
+    &--right {
+        justify-content: flex-end;
+    }
+}

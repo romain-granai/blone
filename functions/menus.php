@@ -5,6 +5,7 @@
 		register_nav_menus( array(
 			'main'	=> __( 'Main', 'blone' ),
 			'tools'	=> __( 'Tools', 'blone' ),
+			'footer'	=> __( 'Footer', 'blone' ),
 			// 'decouvrir'	=> __( 'Menu footer Decouvrir', 'blone' )
 		));
 

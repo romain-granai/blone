@@ -1,0 +1,84 @@
+.bottle-screen {
+    --color-1: #ffbfbf;
+    --color-2: #f0dbff;
+    --color-3: #c8e3ff;
+    --color-4: #fcdfe5;
+    position: relative;
+	width: 100%;
+	height: 100svh;
+	overflow: hidden;
+    // background-color: red;
+
+    &:before {
+        content: "";
+        position: absolute;
+        display: block;
+        top: calc(50% - 50vmax);
+        left: calc(50% - 50vmax);
+        width: 100vmax;
+        aspect-ratio: 1;
+        background: linear-gradient(52deg, var(--color-1) 0%, var(--color-2) 33%, var(--color-3) 66%, var(--color-4) 100%); 
+    }
+}
+
+.bottle-screen__bg {
+	position: absolute;
+	top: calc(50% - 50vmax);
+	left: calc(50% - 50vmax);
+	width: 100vmax;
+	aspect-ratio: 1;
+	display: grid;
+	grid-template-columns: repeat(20, 1fr);
+	grid-template-rows: repeat(20, 1fr); 
+	user-select: none;
+	background-color: white;
+ 	mix-blend-mode: soft-light;
+}
+
+.bottle-screen__number {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 5vmax;
+	color: black;
+	// opacity: 0;
+	font-variant-numeric: lining-nums;
+    -moz-font-feature-settings: "lnum" 1;
+    -moz-font-feature-settings: "lnum=1";
+    -ms-font-feature-settings: "lnum" 1;
+    -o-font-feature-settings: "lnum" 1;
+    -webkit-font-feature-settings: "lnum" 1;
+    font-feature-settings: "lnum" 1;
+}
+
+.bottle-screen__fg {
+    position: absolute;
+    display: grid;
+    grid-template: 1fr/1fr;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.bottle-screen__model {
+    grid-area: 1/1/2/2;
+    mix-blend-mode: luminosity;
+}
+
+.bottle-screen__current-number {
+    grid-area: 1/1/2/2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-variant-numeric: lining-nums;
+    -moz-font-feature-settings: "lnum" 1;
+    -moz-font-feature-settings: "lnum=1";
+    -ms-font-feature-settings: "lnum" 1;
+    -o-font-feature-settings: "lnum" 1;
+    -webkit-font-feature-settings: "lnum" 1;
+    font-feature-settings: "lnum" 1;
+    font-size: 20vmax;
+	mix-blend-mode: difference;
+    color: #fff;
+}

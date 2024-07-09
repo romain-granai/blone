@@ -1,5 +1,8 @@
 $(document).ready(function () {
     console.log('READY TO RUMBLE');
+    var subNavIsOpen = false;
+    var mobileNavIsOpen = false;
+
     const lenis = new Lenis({
         duration: 1,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
@@ -16,17 +19,51 @@ $(document).ready(function () {
 
     topbar();
     nav();
-    dropdowns();
+    btn();
+    homeSliderBottle();
     blockFullMedia();
+    blockTextNMedia();
     productListMedia();
+    catList();
     productList3d();
+    mediaList();
+    singleProductImages();
+    dropdowns();
+    blockTextWithNavigation();
+
+    
 
     function raf(time) {
         lenis.raf(time)
         requestAnimationFrame(raf)
     }
 
-    function topbar() {};
+    function topbar() {
+        ScrollTrigger.create({
+            trigger: 'body',
+            start: 'top top',
+            end: 'bottom bottom',
+            invalidateOnRefresh: true,
+            refreshPriority: -1000,
+            onUpdate: (self) => {
+                if(self.scroll() >= window.innerHeight / 2){
+                    if (!subNavIsOpen && !mobileNavIsOpen) {
+                        if (self.direction === -1) { // scrolling Up
+                            $('.topbar').removeClass('topbar--is-hidden');
+                        } else { // scrolling Down
+                            $('.topbar').addClass('topbar--is-hidden');
+                            $('[data-nav]').removeClass('is-active');
+                            $('.topbar__sub').removeClass('topbar__sub--is-active');
+                        }
+                    }
+                } else {
+                    $('.topbar').removeClass('topbar--is-hidden');
+                    $('[data-nav]').removeClass('is-active');
+                    $('.topbar__sub').removeClass('topbar__sub--is-active');
+                }
+            }
+        });
+    };
 
     function nav() {
         $('[data-nav]').on('mouseenter, mousemove', (e)=>{
@@ -36,12 +73,13 @@ $(document).ready(function () {
             $('.topbar__sub').removeClass('topbar__sub--is-active');
             $(e.target).addClass('is-active');
             thisSubNavEl.addClass('topbar__sub--is-active');
-    
+            subNavIsOpen = true;
         });
 
         $('.topbar__sub').on('mouseleave', (e)=>{
             $('[data-nav]').removeClass('is-active');
             $('.topbar__sub').removeClass('topbar__sub--is-active');
+            subNavIsOpen = false;
         });
 
         $('[data-nav]').on('mouseleave', (e)=>{
@@ -49,11 +87,200 @@ $(document).ready(function () {
             if(e.relatedTarget.className == 'topbar__main' || e.relatedTarget.className == 'nav-list'){
                 $('[data-nav]').removeClass('is-active');
                 $('.topbar__sub').removeClass('topbar__sub--is-active');
+                subNavIsOpen = false;
             }
         });
     };
     
     function dropdowns() {};
+
+    function btn(){
+        var $btn = $('.btn');
+        
+        $btn.on('mouseenter', function(){
+            var $this = $(this);
+            var thisText = $this.data('text');
+            gsap.to($(this).find('span'), {duration: .5, scrambleText:{text:thisText, chars:'0123456789'}});
+        });
+        
+        // var mainNavItemWidth = $('.topbar__main .nav-list a').outerWidth(true);
+
+        // $('.topbar__main .nav-list a').each(function(){
+        //     var mainNavItemWidth = $(this).outerWidth(true);
+        //     $(this).css('width', mainNavItemWidth + 'px')
+        // });
+
+        // $('.nav-list a').on('mouseenter', function(){
+        //     var $this = $(this);
+        //     var thisText = $this.attr('title');
+        //     gsap.to($this, {duration: .5, scrambleText:{text:thisText, chars:'0123456789'}});
+        // });
+
+    };
+
+    function homeSliderBottle(){
+
+        var modelContainer = document.getElementById('model-container');
+        var modelUrl = $('.bottle-screen').data('model');
+
+        if(modelContainer == null){
+           return; 
+        };
+
+        var cursorPos = {y: 0, x: 0}; 
+        var perfumeNumber = ['741', '852', '963'];
+        var perfumeColor = [0x00ff, 0xaa00ee, 0xff0000];
+        var currentPerfumeIndex = 0;
+        var rotationSpeed = 0.01;
+        var isAnimating = false;
+
+        // Create the bottleScene
+        const bottleScene = new THREE.Scene();
+
+        // Create a camera
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        // Create the renderer with alpha to enable transparency
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // Set the clear color to be fully transparent
+        renderer.setClearColor(0x000000, 0); 
+
+        // Add the renderer to the HTML
+        document.getElementById('model-container').appendChild(renderer.domElement);
+
+        // // Add directional light to illuminate the model
+        // const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        // directionalLight.position.set(0.2, 1, 10); // Adjust the position of the light
+        // bottleScene.add(directionalLight);
+
+        // Add ambient light for general illumination
+        const ambientLight = new THREE.AmbientLight(perfumeColor[0], 0.5);
+        bottleScene.add(ambientLight);
+
+        // Add directional light to simulate sunlight
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(0.2, 1, 10).normalize();
+        bottleScene.add(directionalLight);
+
+        // Add a point light to highlight the shininess
+        const pointLight1 = new THREE.PointLight(perfumeColor[0], 1);
+        pointLight1.position.set(2, 3, 2);
+        bottleScene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(perfumeColor[0], 1);
+        pointLight2.position.set(-2, -3, -2);
+        bottleScene.add(pointLight2);
+
+        let object = null;
+        var shinyMaterial;
+        // Load a 3D model
+        const objLoader = new THREE.OBJLoader();
+        objLoader.load(modelUrl, function (loadedObject) {
+        // objLoader.load('https://assets.codepen.io/225413/uploads_files_2120086_tresor.obj', function (loadedObject) {
+            
+            // Create a shiny material
+            var shinyMaterial = new THREE.MeshPhongMaterial({
+                        color: 0x222222,    // Color of the material
+                        color: 0x000000,
+                shininess: 100,    // Shininess value (adjust as needed)
+            });
+                
+            // const shinyMaterial = new THREE.MeshPhysicalMaterial({
+            //     color: 0x555555,      // Base color of the material
+            //     metalness: 0.2,       // Non-metallic appearance
+            //     roughness: 0.2,       // Perfectly smooth surface
+            //     // opacity: 0.75,        // Adjust opacity to make it transparent
+            //     // transparent: true,    // Enable transparency
+            //     reflectivity: 1.0,    // Full reflectivity to simulate glass
+            //     clearcoat: 1.0,       // Add a clear coat layer for extra shininess
+            //     clearcoatRoughness: 0.0, // Smooth clear coat layer
+            //     transmission: 1.0,    // Enable transmission for refractive appearance
+            //     ior: 1.5,             // Index of Refraction, adjust for more/less refraction
+            // });
+            
+            // Apply the shiny material to the model
+            loadedObject.traverse(function (child) {
+                if (child.isMesh) {
+                    child.material = shinyMaterial;
+                }
+            });
+
+            // Add the loaded object to the bottleScene
+            bottleScene.add(loadedObject);
+                
+            object = loadedObject;
+            object.scale.set(1.25, 1.25, 1.25);
+        }, undefined, function (error) {
+            console.error(error);
+        });
+
+        // Render the bottleScene
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Check if the object is loaded and rotate it around its own axis
+            if (object) {
+                object.rotation.y += rotationSpeed; // Adjust the rotation speed as needed
+                        object.rotation.x = cursorPos.y / 1000;
+                        object.rotation.z = cursorPos.x / 1500;
+            }
+
+            renderer.render(bottleScene, camera);
+        }
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+
+        let scrollTriggerBottle = gsap.timeline({
+            scrollTrigger: {
+                markers: true,
+                trigger: '.bottle-screen',
+                start: 'top bottom', 
+                end: 'bottom top',
+                scrub: true,
+            }
+        });
+        
+        scrollTriggerBottle.from('#model-container', {yPercent: 20, ease: 'none'})
+                           .to('#model-container', {yPercent: -20, ease: 'none'});
+
+        Observer.create({
+            target: '.bottle-screen',
+            type: 'pointer',
+            onMove: (self) => {
+            
+            const velocityX = Math.abs(self.velocityX);
+            const velocityY = Math.abs(self.velocityY);
+            const velocity = velocityX + velocityY;
+            const yPosPercent = self.y - (window.innerHeight / 2);
+            const xPosPercent = self.x - (window.innerWidth / 2);
+
+            let mappedVelocity = gsap.utils.pipe(
+                gsap.utils.clamp(0, 2500),
+                gsap.utils.mapRange(0, 2500, 0, .25)
+            );
+                
+            gsap.to(cursorPos, {y: yPosPercent, duration: 2, ease: 'power4.Out'})
+            gsap.to(cursorPos, {x: xPosPercent, duration: 2, ease: 'power4.Out'})
+                
+            isAnimating = true;
+                
+            // clearTimeout(stopTimeout);
+            // stopTimeout = setTimeout(cursorStopped, 200); // Adjust timeout duration as needed
+            }
+        });
+
+
+    };
 
     function blockFullMedia(){
         var $blockFullMedia = $('.block--full-media');
@@ -62,6 +289,112 @@ $(document).ready(function () {
             var $this = $(this);
             var $thisMedia = $this.find('.media');
             var $thisText = $this.find('.block--full-media__text');
+            var hasVid = $this.find('video').length;
+            var animationType = $(this).hasClass('block--full-media--wave') ? 'wave' : 'numeric';
+
+            if(animationType == 'wave'){
+                var $thisTextSplit = new SplitText($thisText, {type: 'chars'});
+
+                let textAnimIn = gsap.timeline({
+                    scrollTrigger: {
+                        // markers: true,
+                        trigger: $thisText,
+                        endTrigger: $this,
+                        start: 'top bottom', // when the top of the trigger hits the top of the viewport
+                        end: 'bottom bottom', // end after scrolling 500px beyond the start
+                        scrub: true,
+                    }
+                });
+
+                textAnimIn.from($thisTextSplit.chars, {autoAlpha: 0, 'font-weight': 100, xPercent: 25, yPercent: 25, stagger: .1, easing: 'none'});
+            } else {
+                let textScrambleIn = gsap.timeline({
+                    scrollTrigger: {
+                        // markers: true,
+                        trigger: $thisText,
+                        endTrigger: $this,
+                        start: 'top bottom', // when the top of the trigger hits the top of the viewport
+                        end: 'bottom bottom', // end after scrolling 500px beyond the start
+                        scrub: true,
+                    }
+                });
+
+                textScrambleIn.to($thisText, {scrambleText:{text:$thisText[0].textContent, chars:'0123456789'}}, );
+            };
+
+            let imgParallax = gsap.timeline({
+                scrollTrigger: {
+                    onEnter: function(){
+                        if(hasVid){
+                            console.log('VIDEO PLAYED')
+                            $this.find('video')[0].play();
+                        }
+                    },
+                    onLeave: function(){
+                        if(hasVid){
+                            console.log('VIDEO PAUSED')
+                            $this.find('video')[0].pause();
+                        }
+                    },
+                    onEnterBack: function(){
+                        if(hasVid){
+                            console.log('VIDEO PLAYED')
+                            $this.find('video')[0].play();
+                        }
+                    },
+                    onLeaveBack: function(){
+                        if(hasVid){
+                            console.log('VIDEO PAUSED')
+                            $this.find('video')[0].pause();
+                        }
+                    },
+                    // markers: true,
+                    trigger: $this,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: .01,
+                }
+            });
+            
+            let imgBlurIn = gsap.timeline({
+                scrollTrigger: {
+                    // markers: true,
+                    trigger: $this,
+                    start: 'top bottom',
+                    end: 'top 60%',
+                    scrub: .01,
+                }
+            });
+
+            let imgBlurOut = gsap.timeline({
+                scrollTrigger: {
+                    // markers: true,
+                    trigger: $this,
+                    start: 'bottom 40%',
+                    end: 'bottom top',
+                    scrub: .01,
+                }
+            });
+
+
+
+
+
+            imgParallax.to($thisMedia, {yPercent: 20, ease: 'none'});
+            imgBlurIn.to($this, {'--blur': 0, '--brightness': 1, ease: 'none'});
+            imgBlurOut.to($this, {'--blur': 40, '--brightness': .5, ease: 'none'});
+
+            
+        });
+    };
+
+    function blockTextNMedia(){
+        var $blockTextNMedia = $('.block--text-n-media');
+
+        $blockTextNMedia.each(function(){
+            var $this = $(this);
+            var $thisMedia = $this.find('.media');
+            var $thisText = $this.find('h2');
             var $thisTextSplit = new SplitText($thisText, {type: 'chars'});
             var hasVid = $this.find('video').length;
 
@@ -133,7 +466,7 @@ $(document).ready(function () {
             imgParallax.to($thisMedia, {yPercent: 20, ease: 'none'});
             imgBlurIn.to($this, {'--blur': 0, '--brightness': 1, ease: 'none'});
             imgBlurOut.to($this, {'--blur': 40, '--brightness': .5, ease: 'none'});
-            textAnimIn.from($thisTextSplit.chars, {autoAlpha: 0, xPercent: 25, yPercent: 25, stagger: .1, easing: 'none'});
+            textAnimIn.from($thisTextSplit.chars, {autoAlpha: 0, 'font-weight': 100, xPercent: 25, yPercent: 25, stagger: .1, easing: 'none'});
         });
     };
 
@@ -174,6 +507,78 @@ $(document).ready(function () {
         imgParallax.to(productListMedia, {yPercent: 20, ease: 'none'});
         imgBlurIn.to(productListImg, {'--blur': 0, '--brightness': 1, ease: 'none'});
         imgBlurOut.to(productListImg, {'--blur': 40, '--brightness': .5, ease: 'none'});
+    };
+
+    function catList(){
+        $('.cat-item').each(function(){
+            var $this = $(this);
+            var thisTitle = $(this).find('.cat-item__title');
+            var thisTitleSplit = new SplitText(thisTitle, {type: 'chars'});
+            
+            var enterVPAnim = gsap.timeline({
+            scrollTrigger: {
+                onLeave: function(){$this.addClass('cat-item--ready')},
+                onEnterBack: function(){$this.removeClass('cat-item--ready')},
+                trigger: $(this),
+                start: 'top bottom', // when the top of the trigger hits the top of the viewport
+                end: 'bottom 80%', // end after scrolling 500px beyond the start
+                scrub: true, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+                }
+            });
+            
+            var leaveVPAnim = gsap.timeline({
+                onStart: function(){$(this).removeClass('.cat-item--ready')},
+            scrollTrigger: {
+                        // markers: true,
+                        onEnter: function(){$this.removeClass('cat-item--ready')},
+                        onLeaveBack: function(){$this.addClass('cat-item--ready')},
+                trigger: $(this),
+                start: 'top 5%', // when the top of the trigger hits the top of the viewport
+                end: 'top -15%', // end after scrolling 500px beyond the start
+                scrub: true, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+                    }
+            });
+            
+            enterVPAnim.from(thisTitleSplit.chars, {autoAlpha: 0, 'font-weight': 100, xPercent: 25, yPercent: 25, stagger: .1, easing: 'none'});
+            leaveVPAnim.to(thisTitleSplit.chars, {autoAlpha: 0, 'font-weight': 100, yPercent: -25, stagger: .1, easing: 'none'});
+        });
+        
+        $('.cat-list--v1').on('mouseenter, mousemove', function(e){
+            var element = $(this);
+            var offset = element.offset();
+            var width = element.width();
+            var posX = e.pageX - offset.left;
+            var posXPercent = (posX / width) * 100;
+            
+            const imgPosMap = gsap.utils.mapRange(0, 100, 50, -50, posXPercent);
+            
+            gsap.to($(this), {'--posX': posX + 'px', duration: 2, ease: 'power4.out'});
+            gsap.to($('.cat-item__details__media'), {'--x': imgPosMap + 'px', duration: 2, ease: 'power4.out'});
+        });
+        
+        $('.cat-list--v1 .cat-item__link').on('mouseenter, mousemove', function(e){
+            // console.log('ENTER')
+            // var thisItem = $(this).parents('.cat-item');
+            var element = $(e.target).parents('.cat-item');
+            var thisDetail = element.find('.cat-item__details');
+            var thisDetailImg = thisDetail.find('.cat-item__details__media img');
+            var offset = element.offset();
+            // var width = element.width();
+            var height = element.height();
+        
+            // var posX = e.pageX - offset.left;
+            var posY = e.pageY - offset.top;
+        
+            // var posXPercent = (posX / width) * 100;
+            var posYPercent = (posY / height) * 100;
+            const imgPosMap = gsap.utils.mapRange(0, 100, 25, -25, posYPercent);
+            console.log()
+            
+            gsap.to(thisDetail, {'--posY': posY + 'px', duration: 2, ease: 'power4.out'});
+            gsap.to(thisDetailImg, {'--y': imgPosMap + 'px', duration: 2, ease: 'power4.out'});
+        
+            
+        });
     };
 
     function productList3d(){
@@ -297,6 +702,70 @@ $(document).ready(function () {
         });
 
     }
+
+    function mediaList(){
+        $('.media-list').each(function(e){
+            var $this = $(this);
+            var items = $this.find('li');
+            var img = $this.find('img');
+
+            let staggerItems = gsap.timeline({
+                scrollTrigger: {
+                    // markers: true,
+                    trigger: $this,
+                    start: 'top bottom',
+                    end: 'top center',
+                    scrub: .01,
+                }
+            });
+
+            staggerItems.from(items, {yPercent: 25, stagger: .15, ease: 'none'}, 'sameTime')
+                        .to(items, {'--blur': '0px', '--brightness': 1, stagger: .15, ease: 'none'}, 'sameTime')
+                        .to(img, {yPercent: 20, stagger: .15, ease: 'none'}, 'sameTime');
+
+        });
+    };
+
+    function singleProductImages(){
+        $('.single-product__thumbnails__media').on('click', function(e){
+            var thisIndex = $(this).data('index');
+            $('.single-product__current__media').removeClass('single-product__current__media--is-active');
+            $('[data-related="'+ thisIndex +'"]').addClass('single-product__current__media--is-active');
+        });
+    };
+
+    function dropdowns(){
+        $('.dropdown__trigger').on('click', function(){
+            var isOpen = $(this).parent('.dropdown').hasClass('dropdown--is-open');
+
+            if(isOpen){
+                $(this).parent('.dropdown').removeClass('dropdown--is-open');
+            } else {
+                $(this).parent('.dropdown').addClass('dropdown--is-open');
+            }
+        });
+    };
+
+    function blockTextWithNavigation(){
+        var $link = $('.text-with-navigation__nav a');
+
+        $link.on('click', function(e){
+            e.preventDefault();
+            var thisHref = $(this).attr('href');
+            var offset = getComputedStyle(document.documentElement).getPropertyValue('--topBarH');
+
+            console.log(offset);
+
+            lenis.scrollTo(thisHref, {
+				offset: -parseFloat(offset),
+				// onComplete: ()=>{
+				// 	gsap.to('.slides', {autoAlpha: 1});
+				// 	// console.log( scrollTriggerID );
+				// }
+			});
+
+        });
+    };
 
     function debounce(func, wait, immediate) {
         var timeout;
