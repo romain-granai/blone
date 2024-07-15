@@ -27,6 +27,24 @@
     .single_add_to_cart_button {
         flex: 0 0 100%;
         cursor: pointer;
+        margin-top: 1em;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        font-size: 18px;
+        padding: .5em 1em;
+        cursor: pointer;
+        color: $white;
+        background-color: $black;
+        border: 1px solid $black;
+        transition: color .3s ease-in-out, background-color .3s ease-in-out;
+
+        &:hover {
+            color: $black;
+            background-color: $white;
+        }
     }
 
     .product_title {
@@ -36,6 +54,7 @@
 
     .woocommerce-product-details__short-description {
         @include fs-sm;
+        padding: 2em 0;
 
         @media (max-width: $xl){
             @include fs-xs;
@@ -48,6 +67,24 @@
 
     .dropdowns {
         margin-top: $gutter*2;
+    }
+
+    .price {
+        @include fs-md;
+    }
+
+    .quantity {
+        @include fs-xs;
+    }
+
+    .input-text {
+        border: none;
+        background-color: transparent;
+    }
+
+    .added_to_cart {
+        @include fs-xs;
+        margin-top: 1em;
     }
 }
 

@@ -4,8 +4,12 @@
     justify-content: center;
     line-height: 1;
     font-size: 18px;
+    width: fit-content;
+    text-decoration: none!important;
     padding: .5em 1em;
-    transition: color .3s ease-in-out, background-color .3s ease-in-out;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: color .2s ease-in-out, background-color .2s ease-in-out;
 
     &--big {
         font-size: 20px;
@@ -33,7 +37,8 @@
         border: 1px solid $black;
 
         &:hover {
-
+            color: $black;
+            background-color: $white;
         }
     }
 
@@ -66,4 +71,11 @@
     &--rounded {
         border-radius: 100px;
     }
+}
+
+.woocommerce-button,
+.button,
+.components-button,
+.wc-block-components-button {
+    @include btn;
 }

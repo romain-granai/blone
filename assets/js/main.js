@@ -7,8 +7,7 @@
 //@prepros-append vendor/Observer.js
 //@prepros-append vendor/lenis.js
 //@prepros-append vendor/three.js
-//@prepros-append vendor/OBJLoader.js
-//@prepros-append vendor/MTLLoader.js
+//@prepros-append vendor/GLTFLoader.js
 //@prepros-append vendor/ScrambleTextPlugin.js
 //@prepros-append vendor/SplitText.js
 

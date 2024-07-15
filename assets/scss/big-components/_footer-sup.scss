@@ -3,17 +3,63 @@
     grid-template-columns: repeat(2, 1fr);
     gap: $gutter;
     padding: 0 $gutter*2;
+    // overflow: ;
 
+    @media (max-width: $xl){
+        padding: 0 $gutter;
+    }
+
+    @media (max-width: $lg){
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column-reverse;
+        gap: unset;
+        padding: unset;
+    }
 }
 
 .footer-sup__side {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: $gutter;
-    padding: $gutter*3 0;
+    padding: $gutter*4 0;
 
     &:nth-child(2){
         background-color: #F4F4F4;
+
+        &:after {
+            content: "";
+            position: absolute;
+            display: block;
+            width: calc($gutter*2 + 1px);
+            height: 100%;
+            top: 0;
+            left: calc(100% - 1px);
+            background-color: inherit;
+        }
+    }
+
+    @media (max-width: $xl){
+       
+        &:nth-child(2) {
+            &:after {
+                width: calc($gutter + 1px);
+            }
+        }
+
+    }
+
+    @media (max-width: $lg){
+        display: flex;
+        padding: $gutter*2 $gutter;
+
+        &:nth-child(2){
+            &:after {
+                display: none;
+            }
+            
+        }
     }
 }
 

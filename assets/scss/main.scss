@@ -5,6 +5,7 @@
 @import "base/_typography";
 @import "base/_helper";
 
+@import "small-components/_curtain";
 @import "small-components/_title";
 @import "small-components/_cta";
 @import "small-components/_btn";
@@ -20,6 +21,8 @@
 @import "big-components/_media-list";
 @import "big-components/_single-product";
 @import "big-components/_dropdowns";
+@import "big-components/_wc-block-admin";
 @import "big-components/_footer-sup";
 
 @import "templates/_footer";
+@import "templates/_header";

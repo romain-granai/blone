@@ -1,11 +1,13 @@
 .bottle-screen {
+    container: inline-size;
+    --bg-opacity: 0;
     --color-1: #ffbfbf;
     --color-2: #f0dbff;
     --color-3: #c8e3ff;
     --color-4: #fcdfe5;
     position: relative;
 	width: 100%;
-	height: 100svh;
+	height: 110svh;
 	overflow: hidden;
     // background-color: red;
 
@@ -13,26 +15,31 @@
         content: "";
         position: absolute;
         display: block;
-        top: calc(50% - 50vmax);
-        left: calc(50% - 50vmax);
-        width: 100vmax;
-        aspect-ratio: 1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: var(--bg-opacity);
         background: linear-gradient(52deg, var(--color-1) 0%, var(--color-2) 33%, var(--color-3) 66%, var(--color-4) 100%); 
     }
 }
 
 .bottle-screen__bg {
 	position: absolute;
-	top: calc(50% - 50vmax);
-	left: calc(50% - 50vmax);
-	width: 100vmax;
+	// top: calc(50% - 50vmax);
+	// left: calc(50% - 50vmax);
+    top: calc(50% - 50cqmax);
+	left: calc(50% - 50cqmax);
+	// width: 100vmax;
+    width: 100cqmax;
 	aspect-ratio: 1;
 	display: grid;
 	grid-template-columns: repeat(20, 1fr);
 	grid-template-rows: repeat(20, 1fr); 
 	user-select: none;
-	background-color: white;
- 	mix-blend-mode: soft-light;
+    background-color: white;
+    mix-blend-mode: color-burn;
+    opacity: 0;
 }
 
 .bottle-screen__number {
@@ -42,6 +49,7 @@
 	font-size: 5vmax;
 	color: black;
 	// opacity: 0;
+    font-weight: 520;
 	font-variant-numeric: lining-nums;
     -moz-font-feature-settings: "lnum" 1;
     -moz-font-feature-settings: "lnum=1";
@@ -52,13 +60,14 @@
 }
 
 .bottle-screen__fg {
-    position: absolute;
-    display: grid;
-    grid-template: 1fr/1fr;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+	position: absolute;
+	top: calc(50% - 50vmax);
+	left: calc(50% - 50vmax);
+	width: 100vmax;
+	aspect-ratio: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .bottle-screen__model {
@@ -67,10 +76,15 @@
 }
 
 .bottle-screen__current-number {
-    grid-area: 1/1/2/2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: 520;
     font-variant-numeric: lining-nums;
     -moz-font-feature-settings: "lnum" 1;
     -moz-font-feature-settings: "lnum=1";
@@ -82,3 +96,25 @@
 	mix-blend-mode: difference;
     color: #fff;
 }
+
+.bottle-screen__ctas {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0 $gutter*2 $gutter*2;
+    display: flex;
+    justify-content: center;
+    gap: $gutter/2;
+    @include transition;
+
+    &--is-hidden {
+
+        transform: translate3d(0,-25%, 0);
+        opacity: 0;
+
+    }
+}
+
+
+    

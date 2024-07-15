@@ -64,6 +64,13 @@
     @media (max-width: $xl){
 		gap: $gutter/2;
 	}
+
+    @media (max-width: $xl){
+        > div {
+            flex: 0 0 calc(20% - 3.3rem);
+        }
+		
+	}
 }
 
 .footer__contact {

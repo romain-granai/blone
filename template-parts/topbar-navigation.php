@@ -21,10 +21,12 @@
 					$titleDataNav = strtolower($firstLevelItem->title);
 					$titleDataNav = preg_replace('/[^a-z0-9]+/', '-', $titleDataNav);
 					$titleDataNav = trim($titleDataNav, '-');
+
+					$hasSubItems = isset($menuStructure[$firstLevelItem->ID]);
 				?>
 
 					<li>
-						<a href="<?php echo esc_url($firstLevelItem->url); ?>" data-nav="<?php echo $titleDataNav; ?>" title="<?php echo esc_html($firstLevelItem->title); ?>" <?php echo $target ?>> <?php echo esc_html($firstLevelItem->title); ?> </a>
+						<a href="<?php echo esc_url($firstLevelItem->url); ?>" <?php echo $hasSubItems ? 'data-nav="' . $titleDataNav . '"' : ''; ?> title="<?php echo esc_html($firstLevelItem->title); ?>" <?php echo $target ?>> <?php echo esc_html($firstLevelItem->title); ?> </a>
 					</li>
 
 				<?php endforeach; ?>

@@ -46,14 +46,7 @@ add_action('woocommerce_after_add_to_cart_form', 'blone_display_acf_dropdowns');
 
 remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
 
-// //Add Barba to WooCommerce Templates
-// function blone_add_barba_container_start(){
-//     echo '<div data-barba="container" data-barba-namespace="woo">';
-// };
-// add_action('woocommerce_before_template_part', 'blone_add_barba_container_start');
 
-
-// Add Image into the products loop
 
 function blone_add_image_into_product_loop(){
 
@@ -119,9 +112,18 @@ function append_custom_html_after_product_item_open() {
     $product_id = $product->get_id();
     $model = get_field('product_3d_model', $product_id);
     $title = get_the_title($product_id);
+    $colors_array = [];
+
+    for ($i = 1; $i <= 4; $i++) {
+        $color = get_field('color_' . $i);
+        if ($color) {
+            $colors_array[] = $color;
+        }
+    }
+
     ?>
 
-    <div class="product-item__media">
+    <div class="product-item__media" style="--color-1: <?php echo $colors_array[0]; ?>; --color-2:  <?php echo $colors_array[1]; ?>; --color-3: <?php echo $colors_array[2]; ?>; --color-4: <?php echo $colors_array[3]; ?>">
         <span class="product-item__number">
             <?php
                 
@@ -165,6 +167,7 @@ add_filter( 'woocommerce_get_stock_html', function ( $html, $product ) {
 
 function blone_open_single_product(){
     echo '<div class="single-product__main">'; // Opening Single Product Block
+    // echo '<div class="add-to-cart-confirmation"></div>';
 }
 
 add_action('woocommerce_before_single_product_summary', 'blone_open_single_product', 10);
@@ -219,7 +222,18 @@ function blone_content_block(){
                     </div>
                     <div class="block--full-media__front">
                         <?php if($text): ?>
-                            <span class="block--full-media__text"><?php echo $text; ?></span>
+                            <?php if(get_sub_field('animation_type') == 'wave'): ?>
+                                <span class="block--full-media__text"><?php echo $text; ?></span>
+                            <?php else: 
+                                $parts = explode('<br>', $text);
+                                $parts = array_map('trim', $parts); 
+                            ?>
+                                <span class="block--full-media__text">
+                                    <?php foreach($parts as $line): ?>
+                                        <span><?php echo $line; ?></span>
+                                    <?php endforeach; ?>
+                                </span>
+                            <?php endif; ?>
                         <?php endif; ?>
                         <?php if($ctaLabel && $ctaLink): ?>
                             <a href="<?php echo $ctaUrl ?>" class="btn btn--light-neg btn--big btn--rounded" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>" title="<?php echo $ctaTitle ?>"><span><?php echo $ctaLabel; ?></span></a>
@@ -301,7 +315,7 @@ function blone_content_block(){
                 $alignmentClass = 'title--' . get_sub_field('alignment');
             ?>
 
-                <div class="title <?php echo $alignmentClass; ?>"><?php echo $theTitle; ?></div>
+                <div class="title <?php echo $alignmentClass; ?> title--section"><?php echo $theTitle; ?></div>
 
             <?php elseif( get_row_layout() == 'media_list' ): 
                 $mainTitle = get_sub_field('main_title');
@@ -548,4 +562,93 @@ function blone_show_subtitle_shop_page(){
 
 add_action( 'woocommerce_before_shop_loop', 'blone_show_subtitle_shop_page', 20 );
 
-// woocommerce_before_shop_loop
+
+//Single product Add to card button AJAX
+
+function custom_add_to_cart() {
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'custom_nonce')) {
+        wp_send_json_error('Invalid nonce');
+        return;
+    }
+
+    $product_id = intval($_POST['product_id']);
+    $quantity = intval($_POST['quantity']);
+
+    if (!$product_id || !$quantity) {
+        wp_send_json_error('Invalid product ID or quantity');
+        return;
+    }
+
+    $result = WC()->cart->add_to_cart($product_id, $quantity);
+
+    if ($result) {
+        // Get cart fragments and hash
+        $fragments = WC_AJAX::get_refreshed_fragments();
+        wp_send_json_success(array(
+            'fragments' => $fragments['fragments'],
+            'cart_hash' => $fragments['cart_hash']
+        ));
+    } else {
+        wp_send_json_error('Failed to add product to cart');
+    }
+}
+add_action('wp_ajax_custom_add_to_cart', 'custom_add_to_cart');
+add_action('wp_ajax_nopriv_custom_add_to_cart', 'custom_add_to_cart');
+
+
+add_filter('woocommerce_add_to_cart_fragments', 'custom_cart_fragment_update');
+
+function custom_cart_fragment_update($fragments) {
+    ob_start();
+    woocommerce_mini_cart();
+    $mini_cart = ob_get_clean();
+
+    $fragments['div.widget_shopping_cart_content'] = '<div class="widget_shopping_cart_content">' . $mini_cart . '</div>';
+
+    return $fragments;
+};
+
+// Add data-lenis-prevent to the .woocommerce-MyAccount-navigation
+
+function start_myaccount_navigation_wrapper() {
+    ob_start();
+}
+add_action( 'woocommerce_before_account_navigation', 'start_myaccount_navigation_wrapper', 5 );
+
+function end_myaccount_navigation_wrapper() {
+    $content = ob_get_clean();
+    $content = str_replace('<nav class="woocommerce-MyAccount-navigation">', '<nav class="woocommerce-MyAccount-navigation" data-lenis-prevent>', $content);
+    echo $content;
+}
+add_action( 'woocommerce_after_account_navigation', 'end_myaccount_navigation_wrapper', 15 );
+
+
+// Custom Login Item Label (if logged In or Off)
+
+function custom_menu_items($items, $menu, $args) {
+    // Loop through each menu item
+    foreach ($items as $item) {
+        // Check if the menu item URL is the My Account URL
+        if (strpos($item->url, wc_get_page_permalink('myaccount')) !== false) {
+            // Change the title based on login status
+            if (is_user_logged_in()) {
+                $item->title = 'My Account';
+            } else {
+                $item->title = 'Login';
+                // Optionally, you can change the URL to the login page if needed
+                $item->url = wp_login_url(); // Redirect to the login page
+            }
+        }
+    }
+    return $items;
+}
+add_filter('wp_get_nav_menu_items', 'custom_menu_items', 10, 3);
+
+
+
+
+
+
+
+
+

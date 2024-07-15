@@ -2,6 +2,7 @@ $(document).ready(function () {
     console.log('READY TO RUMBLE');
     var subNavIsOpen = false;
     var mobileNavIsOpen = false;
+    
 
     const lenis = new Lenis({
         duration: 1,
@@ -13,23 +14,113 @@ $(document).ready(function () {
         smoothTouch: false,
         // touchMultiplier: 2,
         infinite: false,
+        prevent: (node) => node.className === 'woocommerce-MyAccount-navigation',
     });
       
-    requestAnimationFrame(raf)
+    requestAnimationFrame(raf);
+
+    barba.use(barbaPrefetch);
+
+    // Initialize Barba
+    barba.init({
+        preventRunning: true,
+        prevent: ({ el }) => el.classList && el.classList.contains('added_to_cart'),
+        transitions: [
+            {
+                name: 'fade',
+                leave({current, next, trigger}) {
+                    console.log('GLOBAL LEAVE');
+
+                    return new Promise(resolve => {
+                         const leavingAnim = gsap.timeline({
+                             onComplete(){
+                                 resolve();
+                             }
+                         });
+     
+                         leavingAnim .to('.curtain', {duration: .75, autoAlpha: 1, ease: Expo.easeInOut})
+                                     .set(current.container, { autoAlpha: 0, display: 'none'});
+                     });
+                },
+                enter({current, next, trigger}) {
+                    console.log('GLOBAL ENTER');
+
+                    return new Promise(resolve => {
+                         
+                         const enterAnim = gsap.timeline({
+                             onComplete(){
+                                 resolve();
+                             }
+                         });
+     
+                         enterAnim   .fromTo(next.container, 0, {autoAlpha: 0}, {autoAlpha: 1, ease: Expo.easeInOut})
+                                     .to('.curtain', {duration: .75, autoAlpha: 0, ease: Expo.easeInOut});
+                     });
+                },
+                once(){
+                    productList3d();
+                    dropdowns();
+                    homeSliderBottle();
+                    preventSamePageReload();
+                },
+                afterEnter(){
+                    productList3d();
+                    dropdowns();
+                    homeSliderBottle();
+                    preventBarbaOnSomeLinks();
+
+                },
+                beforeLeave(){
+                    $('.topbar a').removeClass('is-active');
+                    $('.topbar__sub').removeClass('topbar__sub--is-active');
+                    $('.topbar').removeClass('topbar--is-hidden');
+                },
+                beforeEnter(){
+                    window.scrollTo(0, 0);
+                    killAllScrollTrigger();
+                    preventSamePageReload();
+                }
+
+            }
+        ],
+        views: [{
+            namespace: 'shop',
+            afterEnter(){
+                console.log('AFTER ENTER SHOP');
+                catList();
+            }
+        },{
+            namespace: 'cart',
+            afterEnter(){
+                console.log('AFTER ENTER CART');
+                $('a').attr('data-barba-prevent', true);
+                // preventBarbaOnSomeLinks();
+            }
+        },
+        {
+            namespace: 'checkout',
+            afterEnter(){
+                $('a').attr('data-barba-prevent', true);
+                // preventBarbaOnSomeLinks();
+            }
+        }]
+    });
 
     topbar();
     nav();
     btn();
-    homeSliderBottle();
+    // homeSliderBottle();
     blockFullMedia();
     blockTextNMedia();
     productListMedia();
-    catList();
-    productList3d();
+    // catList();
+    // productList3d();
     mediaList();
+    customAddToCart();
     singleProductImages();
-    dropdowns();
+    // dropdowns();
     blockTextWithNavigation();
+    preventBarbaOnSomeLinks();
 
     
 
@@ -118,169 +209,302 @@ $(document).ready(function () {
 
     };
 
-    function homeSliderBottle(){
-
+    function homeSliderBottle() {
         var modelContainer = document.getElementById('model-container');
         var modelUrl = $('.bottle-screen').data('model');
-
-        if(modelContainer == null){
-           return; 
-        };
-
-        var cursorPos = {y: 0, x: 0}; 
+        var cursorPos = { y: 0, x: 0 };
         var perfumeNumber = ['741', '852', '963'];
         var perfumeColor = [0x00ff, 0xaa00ee, 0xff0000];
         var currentPerfumeIndex = 0;
         var rotationSpeed = 0.01;
         var isAnimating = false;
-
+    
+        if (modelContainer == null) {
+            return;
+        };
+    
+        var prevNextWave = gsap.timeline({
+            paused: true,
+            onComplete: () => {
+                prevNextWave.restart().pause();
+                isAnimating = false;
+                gsap.set('.number', { clearProps: 'all' });
+                gsap.set('.bottle-screen__bg', { autoAlpha: 0 });
+            },
+            onStart: () => {
+                isAnimating = true;
+                gsap.set('.bottle-screen__bg', { autoAlpha: 0.5 });
+            }
+        });
+    
+        prevNextWave.to('.bottle-screen__number', {
+            autoAlpha: .5,
+            scale: 1.2,
+            duration: .2,
+            stagger: {
+                amount: .25,
+                from: 'center',
+                grid: 'auto',
+                ease: 'power2.inOut',
+            }
+        })
+        .to('.bottle-screen__number', {
+            autoAlpha: 0,
+            scale: 1,
+            duration: .2,
+            stagger: {
+                amount: .25,
+                from: 'center',
+                grid: 'auto',
+                ease: 'power2.inOut',
+            }
+        });
+    
         // Create the bottleScene
         const bottleScene = new THREE.Scene();
-
+    
         // Create a camera
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 5;
-
+    
         // Create the renderer with alpha to enable transparency
         const renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-
-        // Set the clear color to be fully transparent
-        renderer.setClearColor(0x000000, 0); 
-
+        renderer.setClearColor(0x000000, 0);
+    
         // Add the renderer to the HTML
-        document.getElementById('model-container').appendChild(renderer.domElement);
-
-        // // Add directional light to illuminate the model
-        // const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        // directionalLight.position.set(0.2, 1, 10); // Adjust the position of the light
-        // bottleScene.add(directionalLight);
-
+        modelContainer.appendChild(renderer.domElement);
+    
         // Add ambient light for general illumination
         const ambientLight = new THREE.AmbientLight(perfumeColor[0], 0.5);
         bottleScene.add(ambientLight);
-
+    
         // Add directional light to simulate sunlight
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(0.2, 1, 10).normalize();
         bottleScene.add(directionalLight);
-
-        // Add a point light to highlight the shininess
+    
+        // Add point lights to highlight shininess
         const pointLight1 = new THREE.PointLight(perfumeColor[0], 1);
         pointLight1.position.set(2, 3, 2);
         bottleScene.add(pointLight1);
-
+    
         const pointLight2 = new THREE.PointLight(perfumeColor[0], 1);
         pointLight2.position.set(-2, -3, -2);
         bottleScene.add(pointLight2);
-
+    
         let object = null;
-        var shinyMaterial;
-        // Load a 3D model
-        const objLoader = new THREE.OBJLoader();
-        objLoader.load(modelUrl, function (loadedObject) {
-        // objLoader.load('https://assets.codepen.io/225413/uploads_files_2120086_tresor.obj', function (loadedObject) {
+        const shinyMaterial = new THREE.MeshPhongMaterial({
+            color: 0x000000,
+            shininess: 100,
+        });
+    
+        // Load a GLTF model
+        const gltfLoader = new THREE.GLTFLoader();
+        gltfLoader.load(modelUrl, function (gltf) {
+            object = gltf.scene;
             
-            // Create a shiny material
-            var shinyMaterial = new THREE.MeshPhongMaterial({
-                        color: 0x222222,    // Color of the material
-                        color: 0x000000,
-                shininess: 100,    // Shininess value (adjust as needed)
-            });
-                
-            // const shinyMaterial = new THREE.MeshPhysicalMaterial({
-            //     color: 0x555555,      // Base color of the material
-            //     metalness: 0.2,       // Non-metallic appearance
-            //     roughness: 0.2,       // Perfectly smooth surface
-            //     // opacity: 0.75,        // Adjust opacity to make it transparent
-            //     // transparent: true,    // Enable transparency
-            //     reflectivity: 1.0,    // Full reflectivity to simulate glass
-            //     clearcoat: 1.0,       // Add a clear coat layer for extra shininess
-            //     clearcoatRoughness: 0.0, // Smooth clear coat layer
-            //     transmission: 1.0,    // Enable transmission for refractive appearance
-            //     ior: 1.5,             // Index of Refraction, adjust for more/less refraction
-            // });
-            
-            // Apply the shiny material to the model
-            loadedObject.traverse(function (child) {
+            object.traverse(function (child) {
                 if (child.isMesh) {
                     child.material = shinyMaterial;
                 }
             });
-
-            // Add the loaded object to the bottleScene
-            bottleScene.add(loadedObject);
-                
-            object = loadedObject;
-            object.scale.set(1.25, 1.25, 1.25);
+    
+            bottleScene.add(object);
+            object.scale.set(1.5, 1.5, 1.5);
         }, undefined, function (error) {
             console.error(error);
         });
-
+    
         // Render the bottleScene
         function animate() {
             requestAnimationFrame(animate);
-
-            // Check if the object is loaded and rotate it around its own axis
+    
+            // Check if the object is loaded and rotate it
             if (object) {
-                object.rotation.y += rotationSpeed; // Adjust the rotation speed as needed
-                        object.rotation.x = cursorPos.y / 1000;
-                        object.rotation.z = cursorPos.x / 1500;
+                object.rotation.y += rotationSpeed;
+                object.rotation.x = cursorPos.y / 1000;
+                object.rotation.z = cursorPos.x / 1500;
             }
-
+    
             renderer.render(bottleScene, camera);
         }
         animate();
-
+    
         // Handle window resize
         window.addEventListener('resize', function () {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
-
+    
         let scrollTriggerBottle = gsap.timeline({
             scrollTrigger: {
-                markers: true,
                 trigger: '.bottle-screen',
-                start: 'top bottom', 
+                start: 'top bottom',
                 end: 'bottom top',
                 scrub: true,
             }
         });
-        
-        scrollTriggerBottle.from('#model-container', {yPercent: 20, ease: 'none'})
-                           .to('#model-container', {yPercent: -20, ease: 'none'});
-
+    
+        scrollTriggerBottle.from('#model-container', { yPercent: 20, ease: 'none' })
+                           .to('#model-container', { yPercent: -20, ease: 'none' });
+    
+        let stBottleBgIn = gsap.timeline({
+            scrollTrigger: {
+                trigger: '.bottle-screen',
+                start: 'top 75%',
+                end: 'top 60%',
+                scrub: true,
+            }
+        });
+    
+        let stBottleBgOut = gsap.timeline({
+            scrollTrigger: {
+                trigger: '.bottle-screen',
+                start: 'bottom 35%',
+                end: 'bottom 10%',
+                scrub: true,
+                onEnter: (self) => {
+                    $('.bottle-screen__ctas').addClass('bottle-screen__ctas--is-hidden');
+                },
+                onLeaveBack: (self) => {
+                    $('.bottle-screen__ctas').removeClass('bottle-screen__ctas--is-hidden');
+                }
+            }
+        });
+    
+        stBottleBgIn.to('.bottle-screen', { '--bg-opacity': 1, ease: 'none' });
+        stBottleBgOut.to('.bottle-screen', { '--bg-opacity': 0, ease: 'none' });
+    
+        let stopTimeout;
+    
+        const cursorStopped = () => {
+            console.log('Cursor has stopped moving.');
+            gsap.to('.bottle-screen__bg', { autoAlpha: 0, duration: .2 });
+            isAnimating = false;
+        };
+    
         Observer.create({
             target: '.bottle-screen',
             type: 'pointer',
             onMove: (self) => {
-            
-            const velocityX = Math.abs(self.velocityX);
-            const velocityY = Math.abs(self.velocityY);
-            const velocity = velocityX + velocityY;
-            const yPosPercent = self.y - (window.innerHeight / 2);
-            const xPosPercent = self.x - (window.innerWidth / 2);
-
-            let mappedVelocity = gsap.utils.pipe(
-                gsap.utils.clamp(0, 2500),
-                gsap.utils.mapRange(0, 2500, 0, .25)
-            );
-                
-            gsap.to(cursorPos, {y: yPosPercent, duration: 2, ease: 'power4.Out'})
-            gsap.to(cursorPos, {x: xPosPercent, duration: 2, ease: 'power4.Out'})
-                
-            isAnimating = true;
-                
-            // clearTimeout(stopTimeout);
-            // stopTimeout = setTimeout(cursorStopped, 200); // Adjust timeout duration as needed
+                const velocityX = Math.abs(self.velocityX);
+                const velocityY = Math.abs(self.velocityY);
+                const velocity = velocityX + velocityY;
+                const yPosPercent = self.y - (window.innerHeight / 2);
+                const xPosPercent = self.x - (window.innerWidth / 2);
+    
+                let mappedVelocity = gsap.utils.pipe(
+                    gsap.utils.clamp(0, 2500),
+                    gsap.utils.mapRange(0, 2500, 0, .5)
+                );
+    
+                gsap.to(cursorPos, { y: yPosPercent, duration: 2, ease: 'power4.Out' });
+                gsap.to(cursorPos, { x: xPosPercent, duration: 2, ease: 'power4.Out' });
+                gsap.to('.bottle-screen__bg', { autoAlpha: mappedVelocity(velocity), duration: .2 });
+    
+                isAnimating = true;
+    
+                clearTimeout(stopTimeout);
+                stopTimeout = setTimeout(cursorStopped, 200);
             }
         });
-
-
-    };
+    
+        $('.bottle-screen__fg').on('mousemove mouseenter', function (e) {
+            var curPosX = e.pageX - $(this).offset().left;
+            var curPosY = e.pageY - $(this).offset().top;
+            var curPosXPercent = (curPosX / $(this).outerWidth()) * 100;
+            var curPosYPercent = (curPosY / $(this).outerHeight()) * 100;
+            var maxDistance = $(this).innerWidth() * Math.sqrt(2);
+    
+            $('.bottle-screen__number').each(function () {
+                var thisHalfW = $(this)[0].clientWidth / 2;
+                var thisHalfH = $(this)[0].clientHeight / 2;
+                var thisLeft = $(this)[0].offsetLeft;
+                var thisTop = $(this)[0].offsetTop;
+                var thisXCenter = thisLeft + thisHalfW;
+                var thisYCenter = thisTop + thisHalfH;
+                var distance = getDistance(curPosX, curPosY, thisXCenter, thisYCenter);
+                var opacity = gsap.utils.mapRange(0, maxDistance, 1, -7, distance);
+                var scale = gsap.utils.mapRange(0, maxDistance, .5, 0, distance);
+    
+                gsap.to($(this), {
+                    autoAlpha: opacity,
+                    duration: .2,
+                    ease: 'expo.inout',
+                });
+            });
+        });
+    
+        $('.prev-next--next').on('click', function () {
+            getNextOrPrev('next');
+        });
+    
+        $('.prev-next--prev').on('click', function () {
+            getNextOrPrev('prev');
+        });
+    
+        document.onkeydown = function (e) {
+            switch (e.keyCode) {
+                case 37:
+                    getNextOrPrev('prev');
+                    break;
+                case 39:
+                    getNextOrPrev('next');
+                    break;
+            }
+        };
+    
+        function getDistance(x1, y1, x2, y2) {
+            let y = x2 - x1;
+            let x = y2 - y1;
+            return Math.sqrt(x * x + y * y);
+        }
+    
+        function getNextOrPrev(nextOrPrev) {
+            if (isAnimating) {
+                return;
+            }
+    
+            prevNextWave.play();
+    
+            if (nextOrPrev == 'next') {
+                currentPerfumeIndex = (currentPerfumeIndex + 1) % products.length;
+    
+                gsap.to('.bottle-screen__current-number', {
+                    duration: 1,
+                    scrambleText: { text: products[currentPerfumeIndex].productTitle, chars: '0123456789' }
+                });
+                gsap.to(object.rotation, { y: '+=3.14', duration: 1 });
+                $('.bottle-screen__ctas a').attr('href', products[currentPerfumeIndex].permalink);
+    
+                gsap.to('.bottle-screen', { '--color-1': products[currentPerfumeIndex].colors[0] });
+                gsap.to('.bottle-screen', { '--color-3': products[currentPerfumeIndex].colors[2], delay: .1 });
+                gsap.to('.bottle-screen', { '--color-2': products[currentPerfumeIndex].colors[1], delay: .2 });
+                gsap.to('.bottle-screen', { '--color-1': products[currentPerfumeIndex].colors[0], delay: .3 });
+    
+                rotationSpeed = 0.01;
+            } else {
+                currentPerfumeIndex = (currentPerfumeIndex - 1 + products.length) % products.length;
+    
+                gsap.to('.bottle-screen__current-number', {
+                    duration: 1,
+                    scrambleText: { text: products[currentPerfumeIndex].productTitle, chars: '0123456789' }
+                });
+                gsap.to(object.rotation, { y: '-=3.14', duration: 1 });
+                $('.bottle-screen__ctas a').attr('href', products[currentPerfumeIndex].permalink);
+    
+                gsap.to('.bottle-screen', { '--color-1': products[currentPerfumeIndex].colors[0] });
+                gsap.to('.bottle-screen', { '--color-2': products[currentPerfumeIndex].colors[1], delay: .1 });
+                gsap.to('.bottle-screen', { '--color-3': products[currentPerfumeIndex].colors[2], delay: .2 });
+                gsap.to('.bottle-screen', { '--color-4': products[currentPerfumeIndex].colors[3], delay: .3 });
+    
+                rotationSpeed = -0.01;
+            }
+        };
+    }
+    
 
     function blockFullMedia(){
         var $blockFullMedia = $('.block--full-media');
@@ -291,36 +515,44 @@ $(document).ready(function () {
             var $thisText = $this.find('.block--full-media__text');
             var hasVid = $this.find('video').length;
             var animationType = $(this).hasClass('block--full-media--wave') ? 'wave' : 'numeric';
+            var isHeader = $(this).hasClass('header');
 
-            if(animationType == 'wave'){
-                var $thisTextSplit = new SplitText($thisText, {type: 'chars'});
+            if(!isHeader){
+                if(animationType == 'wave'){
+                    var $thisTextSplit = new SplitText($thisText, {type: 'chars'});
 
-                let textAnimIn = gsap.timeline({
-                    scrollTrigger: {
-                        // markers: true,
-                        trigger: $thisText,
-                        endTrigger: $this,
-                        start: 'top bottom', // when the top of the trigger hits the top of the viewport
-                        end: 'bottom bottom', // end after scrolling 500px beyond the start
-                        scrub: true,
-                    }
-                });
+                    let textAnimIn = gsap.timeline({
+                        scrollTrigger: {
+                            // markers: true,
+                            trigger: $thisText,
+                            endTrigger: $this,
+                            start: 'top bottom', // when the top of the trigger hits the top of the viewport
+                            end: 'bottom bottom', // end after scrolling 500px beyond the start
+                            scrub: true,
+                        }
+                    });
 
-                textAnimIn.from($thisTextSplit.chars, {autoAlpha: 0, 'font-weight': 100, xPercent: 25, yPercent: 25, stagger: .1, easing: 'none'});
-            } else {
-                let textScrambleIn = gsap.timeline({
-                    scrollTrigger: {
-                        // markers: true,
-                        trigger: $thisText,
-                        endTrigger: $this,
-                        start: 'top bottom', // when the top of the trigger hits the top of the viewport
-                        end: 'bottom bottom', // end after scrolling 500px beyond the start
-                        scrub: true,
-                    }
-                });
+                    textAnimIn.from($thisTextSplit.chars, {autoAlpha: 0, 'font-weight': 100, xPercent: 25, yPercent: 25, stagger: .1, easing: 'none'});
+                } else {
+                    $textLine = $thisText.find('span');
+                    let textScrambleIn = gsap.timeline({
+                        scrollTrigger: {
+                            // markers: true,
+                            trigger: $thisText,
+                            endTrigger: $this,
+                            start: 'top bottom', // when the top of the trigger hits the top of the viewport
+                            end: 'bottom bottom', // end after scrolling 500px beyond the start
+                            scrub: true,
+                        }
+                    });
 
-                textScrambleIn.to($thisText, {scrambleText:{text:$thisText[0].textContent, chars:'0123456789'}}, );
+                    $textLine.each(function(){
+                        textScrambleIn.to($(this), {scrambleText:{text:$(this)[0].textContent, chars:' 0123456789'}}, );
+                    });
+                    
+                };
             };
+
 
             let imgParallax = gsap.timeline({
                 scrollTrigger: {
@@ -356,15 +588,21 @@ $(document).ready(function () {
                 }
             });
             
-            let imgBlurIn = gsap.timeline({
-                scrollTrigger: {
-                    // markers: true,
-                    trigger: $this,
-                    start: 'top bottom',
-                    end: 'top 60%',
-                    scrub: .01,
-                }
-            });
+            if(!isHeader){
+                let imgBlurIn = gsap.timeline({
+                    scrollTrigger: {
+                        // markers: true,
+                        trigger: $this,
+                        start: 'top bottom',
+                        end: 'top 60%',
+                        scrub: .01,
+                    }
+                });
+
+                imgBlurIn.from($this, {'--blur': 40, '--brightness': .25, ease: 'none'});
+            };
+
+
 
             let imgBlurOut = gsap.timeline({
                 scrollTrigger: {
@@ -381,8 +619,8 @@ $(document).ready(function () {
 
 
             imgParallax.to($thisMedia, {yPercent: 20, ease: 'none'});
-            imgBlurIn.to($this, {'--blur': 0, '--brightness': 1, ease: 'none'});
-            imgBlurOut.to($this, {'--blur': 40, '--brightness': .5, ease: 'none'});
+            
+            imgBlurOut.to($this, {'--blur': 40, '--brightness': .25, ease: 'none'});
 
             
         });
@@ -581,127 +819,116 @@ $(document).ready(function () {
         });
     };
 
-    function productList3d(){
-
-        $('.product-item').each(function(){
+    function productList3d() {
+        $('.product-item').each(function () {
             var thisItemIsHovered = false;
             var this3DContainer = $(this).find('.product-item__3d');
             var model3d = this3DContainer.data('model');
-            
-            $(this).find('a').on('mouseenter, mouseover', function(){
+    
+            $(this).find('a').on('mouseenter mouseover', function () {
                 thisItemIsHovered = true;
             });
-            
-            $(this).find('a').on('mouseleave', function(){
+    
+            $(this).find('a').on('mouseleave', function () {
                 thisItemIsHovered = false;
             });
-            
+    
             // Create the scene
             const scene = new THREE.Scene();
-        
+    
             // Create a camera
-            const camera = new THREE.PerspectiveCamera(75, document.getElementById('product-item__3d').clientWidth / document.getElementById('product-item__3d').clientWidth);
+            const camera = new THREE.PerspectiveCamera(75, this3DContainer[0].clientWidth / this3DContainer[0].clientHeight);
             camera.position.z = 5;
-        
+    
             // Create the renderer with alpha to enable transparency
             const renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(document.getElementById('product-item__3d').clientWidth, document.getElementById('product-item__3d').clientWidth);
-        
-            // Set the clear color to be fully transparent
-            renderer.setClearColor(0x000000, 0); 
-        
+            renderer.setSize(this3DContainer[0].clientWidth, this3DContainer[0].clientHeight);
+            renderer.setClearColor(0x000000, 0);
+    
             // Add the renderer to the HTML
             this3DContainer[0].appendChild(renderer.domElement);
-        
+    
             // Add ambient light for general illumination
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
             scene.add(ambientLight);
-        
+    
             // Add directional light to simulate sunlight
             const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
             directionalLight.position.set(0.2, 1, 10).normalize();
             scene.add(directionalLight);
-        
-            // Add a point light to highlight the shininess
+    
+            // Add point lights to highlight the shininess
             const pointLight1 = new THREE.PointLight(0xffffff, 1);
             pointLight1.position.set(2, 3, 2);
             scene.add(pointLight1);
-        
+    
             const pointLight2 = new THREE.PointLight(0xffffff, 1);
             pointLight2.position.set(-2, -3, -2);
             scene.add(pointLight2);
-        
+    
             let object = null;
-        
-            // Load a 3D model
-            const objLoader = new THREE.OBJLoader();
-            objLoader.load(model3d, function (loadedObject) {
-            
-            // Create a shiny material
-            const shinyMaterial = new THREE.MeshPhongMaterial({
-                color: 0x222222,    // Color of the material
-                color: 0x000000,
-                shininess: 100,    // Shininess value (adjust as needed)
-            });
-            
-            // Apply the shiny material to the model
-            loadedObject.traverse(function (child) {
-                if (child.isMesh) {
-                    child.material = shinyMaterial;
-                }
-            });
-        
-            // Add the loaded object to the scene
-            scene.add(loadedObject);
-                
-            object = loadedObject;
+    
+            // Load a GLTF model
+            const gltfLoader = new THREE.GLTFLoader();
+            gltfLoader.load(model3d, function (gltf) {
+                // Create a shiny material
+                const shinyMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x222222,
+                    shininess: 100,
+                });
+    
+                // Apply the shiny material to the model
+                gltf.scene.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material = shinyMaterial;
+                    }
+                });
+    
+                // Add the loaded object to the scene
+                scene.add(gltf.scene);
+                object = gltf.scene;
                 object.scale.set(1.4, 1.4, 1.4);
-        }, undefined, function (error) {
-            console.error(error);
-        });
-        
+            }, undefined, function (error) {
+                console.error(error);
+            });
+    
             // Render the scene
             function animate() {
                 requestAnimationFrame(animate);
-        
-                // Check if the object is loaded and rotate it around its own axis
+    
+                // Check if the object is loaded and rotate it
                 if (object && thisItemIsHovered) {
-                    object.rotation.y += 0.01; // Adjust the rotation speed as needed
-                            // object.rotation.x = cursorPos.y / 1000;
-                            // object.rotation.z = cursorPos.x / 1500;
+                    object.rotation.y += 0.01;
                 }
-        
+    
                 renderer.render(scene, camera);
             }
             animate();
-        
+    
             // Handle window resize
             window.addEventListener('resize', function () {
-                camera.aspect = document.getElementById('product-item__3d').clientWidth / document.getElementById('product-item__3d').clientWidth;
+                camera.aspect = this3DContainer[0].clientWidth / this3DContainer[0].clientHeight;
                 camera.updateProjectionMatrix();
-                renderer.setSize(document.getElementById('product-item__3d').clientWidth, document.getElementById('product-item__3d').clientWidth);
+                renderer.setSize(this3DContainer[0].clientWidth, this3DContainer[0].clientHeight);
             });
-            
         });
-
-        $('.product-item__media').each(function(){
+    
+        $('.product-item__media').each(function () {
             var thisModel = $(this).find('.product-item__3d');
             let scrollTriggerBottle = gsap.timeline({
-                    // yes, we can add it to an entire timeline!
-                    scrollTrigger: {
-                            // markers: true,
-                            trigger: $(this),
-                            start: 'top bottom', // when the top of the trigger hits the top of the viewport
-                            end: 'bottom top', // end after scrolling 500px beyond the start
-                            scrub: .001, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
-                    }
+                scrollTrigger: {
+                    trigger: $(this),
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: .001,
+                }
             });
-        
-            scrollTriggerBottle.from(thisModel, {yPercent: 20, ease: 'none'})
-                                                 .to(thisModel, {yPercent: -20, ease: 'none'})
+    
+            scrollTriggerBottle.from(thisModel, { yPercent: 20, ease: 'none' })
+                .to(thisModel, { yPercent: -20, ease: 'none' });
         });
-
     }
+    
 
     function mediaList(){
         $('.media-list').each(function(e){
@@ -721,7 +948,7 @@ $(document).ready(function () {
 
             staggerItems.from(items, {yPercent: 25, stagger: .15, ease: 'none'}, 'sameTime')
                         .to(items, {'--blur': '0px', '--brightness': 1, stagger: .15, ease: 'none'}, 'sameTime')
-                        .to(img, {yPercent: 20, stagger: .15, ease: 'none'}, 'sameTime');
+                        .to(img, {yPercent: 16.66, stagger: .15, ease: 'none'}, 'sameTime');
 
         });
     };
@@ -746,6 +973,47 @@ $(document).ready(function () {
         });
     };
 
+    function customAddToCart(){
+        $('body').on('click', '.single_add_to_cart_button', function(e) {
+            e.preventDefault();
+    
+            var $thisbutton = $(this),
+                thisButtonText = $thisbutton.text();
+                product_id = $thisbutton.val(), // Assuming the button value is the product ID
+                quantity = $thisbutton.closest('form.cart').find('input.qty').val() || 1;
+    
+            var data = {
+                action: 'custom_add_to_cart',
+                product_id: product_id,
+                quantity: quantity,
+                nonce: custom_ajax_object.nonce
+            };
+            
+            $thisbutton.addClass('no-touch');
+
+            $.post(custom_ajax_object.ajax_url, data, function(response) {
+                console.log('Full response:', response); // Log the full response
+    
+                if (response && response.fragments) {
+                    // If the response contains fragments, consider it successful
+                    $(document.body).trigger('added_to_cart', [response.fragments, response.cart_hash, $thisbutton]);
+                    $thisbutton.text('Product added to cart!');
+                    
+                    setTimeout(function(){
+                        $thisbutton.removeClass('no-touch');
+                        $thisbutton.text(thisButtonText);
+                    }, 2000);
+
+                } else {
+                    alert('Failed to add product to cart.');
+                }
+            }).fail(function(xhr, status, error) {
+                console.error('AJAX error:', status, error); // Log any AJAX errors
+                alert('AJAX error: ' + error);
+            });
+        });
+    };
+
     function blockTextWithNavigation(){
         var $link = $('.text-with-navigation__nav a');
 
@@ -767,25 +1035,54 @@ $(document).ready(function () {
         });
     };
 
+    function preventBarbaOnSomeLinks(){
+        $('a[href*="cart"], a[href*="checkout"], a[href*="my-account"], .add_to_cart_button').each(function() {
+            $(this).attr('data-barba-prevent', true);
+        });
+    };
+
+
+
+
+    function killAllScrollTrigger() {
+
+        let triggers = ScrollTrigger.getAll();
+        triggers.forEach(trigger => {
+            trigger.kill();
+        });
+
+    };
+
+    function preventSamePageReload() {
+        var links = document.querySelectorAll('a[href]');
+        var cbk = function (e) {
+            if (e.currentTarget.href === window.location.href) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // if (!navIsClosed) {
+                //     closeNavTl.play();
+                // }
+            }
+        };
+
+        for (var i = 0; i < links.length; i++) {
+            links[i].addEventListener('click', cbk);
+        }
+    };
+
     function debounce(func, wait, immediate) {
         var timeout;
-      
-        return function executedFunction() {
-          var context = this;
-          var args = arguments;
-              
-          var later = function() {
-            timeout = null;
-            if (!immediate) func.apply(context, args);
-          };
-      
-          var callNow = immediate && !timeout;
-          
-          clearTimeout(timeout);
-      
-          timeout = setTimeout(later, wait);
-          
-          if (callNow) func.apply(context, args);
+        return function () {
+            var context = this, args = arguments;
+            var later = function () {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
         };
     };
 
