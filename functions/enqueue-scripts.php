@@ -32,6 +32,10 @@ function enqueue_scripts_and_styles() {
     wp_enqueue_style('wc-blocks-packages-style');
     wp_enqueue_style('wc-blocks-style-checkout');
 
+    if(is_cart() || is_checkout() || is_account_page()){
+        wp_enqueue_style('woocommerce-general');
+    }
+
     wp_enqueue_style( 'main', get_template_directory_uri() . '/assets/css/main.min.css' );
 
 }

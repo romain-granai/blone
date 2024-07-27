@@ -58,15 +58,33 @@ $(document).ready(function () {
                      });
                 },
                 once(){
+                    topbar();
+                    nav();
+                    btn();
                     productList3d();
                     dropdowns();
+                    mediaList();
+                    customAddToCart();
+                    blockTextNMedia();
+                    blockFullMedia();
+                    blockTextWithNavigation();
                     homeSliderBottle();
                     preventSamePageReload();
+                    preventBarbaOnSomeLinks();
                 },
                 afterEnter(){
+                    console.log('GLOBAL AFTER ENTER');
+                    topbar();
+                    btn();
                     productList3d();
                     dropdowns();
+                    mediaList();
+                    customAddToCart();
+                    blockTextNMedia();
+                    blockFullMedia();
+                    blockTextWithNavigation();
                     homeSliderBottle();
+                    preventSamePageReload();
                     preventBarbaOnSomeLinks();
 
                 },
@@ -88,13 +106,31 @@ $(document).ready(function () {
             afterEnter(){
                 console.log('AFTER ENTER SHOP');
                 catList();
+                productListMedia();
+            },
+        },{
+            namespace: 'single-product',
+            afterEnter(){
+                console.log('AFTER ENTER Single Product');
+                singleProductImages();
             }
         },{
             namespace: 'cart',
             afterEnter(){
                 console.log('AFTER ENTER CART');
                 $('a').attr('data-barba-prevent', true);
-                // preventBarbaOnSomeLinks();
+            }
+        },{
+            namespace: 'checkout',
+            afterEnter(){
+                console.log('AFTER ENTER Checkout');
+                $('a').attr('data-barba-prevent', true);
+            }
+        },{
+            namespace: 'account',
+            afterEnter(){
+                console.log('AFTER ENTER Account');
+                $('a').attr('data-barba-prevent', true);
             }
         },
         {
@@ -106,21 +142,21 @@ $(document).ready(function () {
         }]
     });
 
-    topbar();
-    nav();
-    btn();
+    // topbar();
+    // nav();
+    // btn();
     // homeSliderBottle();
-    blockFullMedia();
-    blockTextNMedia();
-    productListMedia();
+    // blockFullMedia();
+    // blockTextNMedia();
+    // productListMedia();
     // catList();
     // productList3d();
-    mediaList();
-    customAddToCart();
-    singleProductImages();
+    // mediaList();
+    // customAddToCart();
+    // singleProductImages();
     // dropdowns();
-    blockTextWithNavigation();
-    preventBarbaOnSomeLinks();
+    // blockTextWithNavigation();
+    // preventBarbaOnSomeLinks();
 
     
 
@@ -130,6 +166,7 @@ $(document).ready(function () {
     }
 
     function topbar() {
+        
         ScrollTrigger.create({
             trigger: 'body',
             start: 'top top',
@@ -583,6 +620,7 @@ $(document).ready(function () {
                     // markers: true,
                     trigger: $this,
                     start: 'top bottom',
+                    start: ()=>{ !isHeader ? 'top bottom' : 'top top' },
                     end: 'bottom top',
                     scrub: .01,
                 }
@@ -614,15 +652,10 @@ $(document).ready(function () {
                 }
             });
 
-
-
-
-
             imgParallax.to($thisMedia, {yPercent: 20, ease: 'none'});
             
             imgBlurOut.to($this, {'--blur': 40, '--brightness': .25, ease: 'none'});
 
-            
         });
     };
 

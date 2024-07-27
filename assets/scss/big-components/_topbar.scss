@@ -6,7 +6,7 @@
     @include fs-sm;
     text-transform: uppercase;
 	z-index: 100;
-	transition: all .8s cubic-bezier(.5,.5,0,1);
+	transition: transform .8s cubic-bezier(.5,.5,0,1);
 
 	&--is-hidden {
 		transform: translate3d(0,-100%,0);
@@ -125,6 +125,7 @@
 
 	a {
 		display: inline-block;
+		white-space: nowrap;
 		@include transition($properties: font-weight, $duration: .2s);
 		// @mixin transition($properties: all, $duration: .3s, $timing-function: ease-in-out)
 

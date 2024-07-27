@@ -22,6 +22,8 @@
             $namespace = 'shop';
         } else if(is_cart()) {
             $namespace = 'cart';
+        } else if(is_account_page()) {
+            $namespace = 'account';
         } else if(is_checkout()) {
             $namespace = 'checkout';
         } else {

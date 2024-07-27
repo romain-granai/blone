@@ -288,9 +288,7 @@ function blone_content_block(){
                 $textContent = get_sub_field('text_content');
                 $ctaLabel = get_sub_field('cta_label');
                 $ctaLink = get_sub_field('cta_link');
-                $ctaUrl = $ctaLink['url'];
-                $ctaTitle = $ctaLink['title'];
-                $ctaTarget = $ctaLink['target'] ? $ctaLink['target'] : '_self';
+
                 $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
                 $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
             ?>
@@ -303,7 +301,11 @@ function blone_content_block(){
                     <?php if($textContent): ?>
                         <?php echo $textContent; ?>
                     <?php endif; ?>
-                    <?php if($ctaLink): ?>
+                    <?php if($ctaLink): 
+                        $ctaUrl = $ctaLink['url'];
+                        $ctaTitle = $ctaLink['title'];
+                        $ctaTarget = $ctaLink['target'] ? $ctaLink['target'] : '_self';
+                    ?>
                         <a href="<?php echo $ctaUrl; ?>" class="btn" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>"><span><?php echo $ctaLabel; ?></span></a>
                     <?php endif; ?>
                 </div>
@@ -333,13 +335,14 @@ function blone_content_block(){
                         $image = get_sub_field('media');
                         $text = get_sub_field('text');
                         $link = get_sub_field('link');
-                        $linkUrl = $link['url'];
-                        $linkTarget = $Link['target'] ? $Link['target'] : '_self';
                     ?>
-
+                        
                         <li class="media-list__item">
-                            <?php if($link): ?>
-                                <a class="media-list__link" href="<?php echo $linkUrl; ?>" title="<?php echo $text; ?>"></a>
+                            <?php if($link): 
+                                $linkUrl = $link['url'];
+                                $linkTarget = $link['target'] ? $link['target'] : '_self';    
+                            ?>
+                                <a class="media-list__link" href="<?php echo $linkUrl; ?>" <?php echo $linkTarget; ?> title="<?php echo $text; ?>"></a>
                             <?php endif; ?>
                             <?php if(!empty( $image )): ?>
                                 <div class="media">
@@ -643,6 +646,31 @@ function custom_menu_items($items, $menu, $args) {
     return $items;
 }
 add_filter('wp_get_nav_menu_items', 'custom_menu_items', 10, 3);
+
+
+
+// Page checkout Wrap items
+// Add the opening div before customer details
+add_action( 'woocommerce_checkout_before_customer_details', 'custom_wrap_start', 1 );
+function custom_wrap_start() {
+    echo '<div class="checkout-grid">';
+}
+
+// Add the closing div after order review
+add_action( 'woocommerce_checkout_after_order_review', 'custom_wrap_end', 20 );
+function custom_wrap_end() {
+    echo '</div>';
+}
+
+add_filter( 'woocommerce_product_tabs', 'remove_additional_information_tab', 98 );
+
+function remove_additional_information_tab( $tabs ) {
+
+ unset( $tabs['additional_information'] );
+
+ return $tabs;
+
+}
 
 
 
