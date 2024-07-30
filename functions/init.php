@@ -17,12 +17,7 @@ function blone_unregister_tags() {
 add_action( 'init', 'blone_unregister_tags' );
 
 
-/* Autoriser les fichiers SVG */
-function wpc_mime_types($mimes) {
-	$mimes['svg'] = 'image/svg+xml';
-	return $mimes;
-}
-add_filter('upload_mimes', 'wpc_mime_types');
+
 
 // ACF - Activation des Options Page
 if( function_exists('acf_add_options_page') ) {
@@ -43,9 +38,26 @@ function prefix_reset_metabox_positions(){
   add_action( 'admin_init', 'prefix_reset_metabox_positions' );
 
 function custom_mime_types($mimes) {
-	// Add .obj to the list of mime types
+    // Allow SVG file upload
+    $mimes['svg'] = 'image/svg+xml';
+    // Allow GLTF file upload
+    $mimes['gltf'] = 'model/gltf+json';
+    $mimes['glb'] = 'model/gltf-binary';
 	$mimes['obj'] = 'text/plain';
-	return $mimes;
+    return $mimes;
 }
-
 add_filter('upload_mimes', 'custom_mime_types');
+
+// Fix MIME type check
+function fix_gltf_mime_type_check($data, $file, $filename, $mimes) {
+    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+    if ($ext === 'gltf') {
+        $data['type'] = 'model/gltf+json';
+        $data['ext'] = 'gltf';
+    } elseif ($ext === 'glb') {
+        $data['type'] = 'model/gltf-binary';
+        $data['ext'] = 'glb';
+    }
+    return $data;
+}
+add_filter('wp_check_filetype_and_ext', 'fix_gltf_mime_type_check', 10, 4);

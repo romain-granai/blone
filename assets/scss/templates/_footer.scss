@@ -74,7 +74,10 @@
 }
 
 .footer__contact {
-
+    > span {
+        display: inline-block;
+    }
+    
     ul {
         text-transform: none;
     }

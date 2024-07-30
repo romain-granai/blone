@@ -62,6 +62,7 @@ $(document).ready(function () {
                     nav();
                     btn();
                     productList3d();
+                    // productList3dOBJ();
                     dropdowns();
                     mediaList();
                     customAddToCart();
@@ -77,6 +78,7 @@ $(document).ready(function () {
                     topbar();
                     btn();
                     productList3d();
+                    // productList3dOBJ();
                     dropdowns();
                     mediaList();
                     customAddToCart();
@@ -961,6 +963,117 @@ $(document).ready(function () {
                 .to(thisModel, { yPercent: -20, ease: 'none' });
         });
     }
+
+    function productList3dOBJ() {
+        $('.product-item').each(function () {
+            var thisItemIsHovered = false;
+            var this3DContainer = $(this).find('.product-item__3d');
+            var model3d = this3DContainer.data('model');
+    
+            $(this).find('a').on('mouseenter mouseover', function () {
+                thisItemIsHovered = true;
+            });
+    
+            $(this).find('a').on('mouseleave', function () {
+                thisItemIsHovered = false;
+            });
+    
+            // Create the scene
+            const scene = new THREE.Scene();
+    
+            // Create a camera
+            const camera = new THREE.PerspectiveCamera(75, this3DContainer[0].clientWidth / this3DContainer[0].clientHeight);
+            camera.position.z = 5;
+    
+            // Create the renderer with alpha to enable transparency
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(this3DContainer[0].clientWidth, this3DContainer[0].clientHeight);
+            renderer.setClearColor(0x000000, 0);
+    
+            // Add the renderer to the HTML
+            this3DContainer[0].appendChild(renderer.domElement);
+    
+            // Add ambient light for general illumination
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+    
+            // Add directional light to simulate sunlight
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(0.2, 1, 10).normalize();
+            scene.add(directionalLight);
+    
+            // Add point lights to highlight the shininess
+            const pointLight1 = new THREE.PointLight(0xffffff, 1);
+            pointLight1.position.set(2, 3, 2);
+            scene.add(pointLight1);
+    
+            const pointLight2 = new THREE.PointLight(0xffffff, 1);
+            pointLight2.position.set(-2, -3, -2);
+            scene.add(pointLight2);
+    
+            let object = null;
+    
+            // Load an OBJ model
+            const objLoader = new THREE.OBJLoader();
+            objLoader.load(model3d, function (obj) {
+                // Create a shiny material
+                const shinyMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x222222,
+                    shininess: 100,
+                });
+    
+                // Apply the shiny material to the model
+                obj.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material = shinyMaterial;
+                    }
+                });
+    
+                // Add the loaded object to the scene
+                scene.add(obj);
+                object = obj;
+                object.scale.set(1.4, 1.4, 1.4);
+            }, undefined, function (error) {
+                console.error(error);
+            });
+    
+            // Render the scene
+            function animate() {
+                requestAnimationFrame(animate);
+    
+                // Check if the object is loaded and rotate it
+                if (object && thisItemIsHovered) {
+                    object.rotation.y += 0.01;
+                }
+    
+                renderer.render(scene, camera);
+            }
+            animate();
+    
+            // Handle window resize
+            window.addEventListener('resize', function () {
+                camera.aspect = this3DContainer[0].clientWidth / this3DContainer[0].clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(this3DContainer[0].clientWidth, this3DContainer[0].clientHeight);
+            });
+        });
+    
+        $('.product-item__media').each(function () {
+            var thisModel = $(this).find('.product-item__3d');
+            let scrollTriggerBottle = gsap.timeline({
+                scrollTrigger: {
+                    trigger: $(this),
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: .001,
+                }
+            });
+    
+            scrollTriggerBottle.from(thisModel, { yPercent: 20, ease: 'none' })
+                .to(thisModel, { yPercent: -20, ease: 'none' });
+        });
+    }
+    
     
 
     function mediaList(){
