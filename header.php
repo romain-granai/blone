@@ -34,23 +34,16 @@
         <?php if(!is_singular( 'product' )):
             $pageID = get_correct_page_id();
             $headerSizeClass = get_field('header_size', $pageID) != 'regular' ? get_field('header_size', $pageID) : '';
-            $headerMediaType = get_field('header_media_type', $pageID); 
+            // $headerMediaType = get_field('header_media_type', $pageID); 
             $headerImg = get_field('header_image', $pageID);
-            $headerVideo = get_field('header_video', $pageID);
             $headerText = get_field('header_title', $pageID) ? get_field('header_title', $pageID) : get_the_title($pageID);
         ?>
 
                 <header class="header block block--full-media block--full-media--wave block--full-media--text-bl <?php echo $headerSizeClass; ?>">
                     <h1 class="d-none"><?php echo get_the_title($pageID); ?></h1>
                     <div class="media">
-                        <?php if($headerMediaType == 'image'): ?>
-                            <?php if(!empty( $headerImg )): ?>
-                                <img src="<?php echo esc_url($headerImg['url']); ?>" alt="<?php echo esc_attr($headerImg['alt']); ?>" />
-                            <?php endif; ?>
-                        <?php else: ?>
-                            <?php if($headerVideo): ?>
-                                <video src="<?php echo $headerVideo['url']; ?>"  loop="" muted="" playsinline=""></video>
-                            <?php endif; ?>
+                        <?php if(!empty( $headerImg )): ?>
+                            <img src="<?php echo esc_url($headerImg['url']); ?>" alt="<?php echo esc_attr($headerImg['alt']); ?>" />
                         <?php endif; ?>
                     </div>
                     <?php if($headerText): ?>

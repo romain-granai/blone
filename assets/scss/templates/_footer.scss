@@ -14,7 +14,7 @@
         @include clean-list;
 
         &:not(.footer__contact ul) {
-            gap: .5em;
+            gap: 1em;
         }
     }
     
@@ -31,6 +31,13 @@
 
     @media (max-width: $xl){
 		padding: $gutter $gutter;
+	}
+
+    @media (max-width: $lg){
+		display: flex;
+        flex-direction: column;
+        gap: $gutter;
+        // align-items: center;
 	}
 }
 
@@ -62,24 +69,32 @@
     }
 
     @media (max-width: $xl){
-		gap: $gutter/2;
-	}
-
-    @media (max-width: $xl){
+        gap: $gutter/2;
         > div {
             flex: 0 0 calc(20% - 3.3rem);
         }
-		
+	}
+
+    @media (max-width: $lg){
+        display: grid;
+        row-gap: $gutter;
+        grid-template-columns: repeat(3, 1fr);
+	}
+
+    @media (max-width: $md){
+        grid-template-columns: repeat(2, 1fr);
 	}
 }
 
 .footer__contact {
     > span {
         display: inline-block;
+        margin-bottom: 1.25em;
     }
     
     ul {
         text-transform: none;
+        line-height: .5;
     }
 }
 
@@ -93,6 +108,10 @@
 		padding: $gutter/4 $gutter;
 	}
 
+}
+
+.otgs-development-site-front-end {
+    display: none!important;
 }
 
 

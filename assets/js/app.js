@@ -2,7 +2,8 @@ $(document).ready(function () {
     console.log('READY TO RUMBLE');
     var subNavIsOpen = false;
     var mobileNavIsOpen = false;
-    
+    var $burger = $('.burger');
+    var $mobileNav = $('.mobile-nav');
 
     const lenis = new Lenis({
         duration: 1,
@@ -60,6 +61,7 @@ $(document).ready(function () {
                 once(){
                     topbar();
                     nav();
+                    mobileNav();
                     btn();
                     productList3d();
                     // productList3dOBJ();
@@ -96,9 +98,14 @@ $(document).ready(function () {
                     $('.topbar').removeClass('topbar--is-hidden');
                 },
                 beforeEnter(){
+
+                    $mobileNav.removeClass('mobile-nav--is-open');
+                    mobileNavIsOpen = false;
+
                     window.scrollTo(0, 0);
                     killAllScrollTrigger();
                     preventSamePageReload();
+
                 }
 
             }
@@ -146,6 +153,7 @@ $(document).ready(function () {
 
     // topbar();
     // nav();
+    // mobileNav();
     // btn();
     // homeSliderBottle();
     // blockFullMedia();
@@ -169,6 +177,7 @@ $(document).ready(function () {
 
     function topbar() {
         
+
         ScrollTrigger.create({
             trigger: 'body',
             start: 'top top',
@@ -193,6 +202,15 @@ $(document).ready(function () {
                 }
             }
         });
+
+
+        var topBarHDebounce = debounce(function() {
+            var topBarH = $('.topbar').innerHeight();
+            gsap.set('html', {'--topBarH': topBarH + 'px'});
+        }, 100);
+        
+        $(window).on('resize', topBarHDebounce);
+
     };
 
     function nav() {
@@ -222,16 +240,44 @@ $(document).ready(function () {
         });
     };
     
+    function mobileNav(){
+
+        $burger.on('click', function(){
+            if(!mobileNavIsOpen){
+                $mobileNav.addClass('mobile-nav--is-open');
+                lenis.stop();
+                mobileNavIsOpen = true;
+            } else {
+                $mobileNav.removeClass('mobile-nav--is-open');
+                lenis.start();
+                mobileNavIsOpen = false;
+            }
+
+            var resizeDebounce = debounce(function() {
+                if(window.innerWidth > 768){
+                    $mobileNav.removeClass('mobile-nav--is-open');
+                    lenis.start();
+                    mobileNavIsOpen = false;
+                };
+            }, 100);
+            
+            $(window).on('resize', resizeDebounce);
+
+        });
+
+
+    };
+
     function dropdowns() {};
 
     function btn(){
         var $btn = $('.btn');
         
-        $btn.on('mouseenter', function(){
-            var $this = $(this);
-            var thisText = $this.data('text');
-            gsap.to($(this).find('span'), {duration: .5, scrambleText:{text:thisText, chars:'0123456789'}});
-        });
+        // $btn.on('mouseenter', function(){
+        //     var $this = $(this);
+        //     var thisText = $this.data('text');
+        //     gsap.to($(this).find('span'), {duration: .5, scrambleText:{text:thisText, chars:'0123456789'}});
+        // });
         
         // var mainNavItemWidth = $('.topbar__main .nav-list a').outerWidth(true);
 
@@ -622,7 +668,7 @@ $(document).ready(function () {
                     // markers: true,
                     trigger: $this,
                     start: 'top bottom',
-                    start: ()=>{ !isHeader ? 'top bottom' : 'top top' },
+                    start: ()=>{ return !isHeader ?  'top bottom' : 'top top' },
                     end: 'bottom top',
                     scrub: .01,
                 }
@@ -1182,7 +1228,7 @@ $(document).ready(function () {
     };
 
     function preventBarbaOnSomeLinks(){
-        $('a[href*="cart"], a[href*="checkout"], a[href*="my-account"], .add_to_cart_button').each(function() {
+        $('a[href*="cart"], a[href*="checkout"], a[href*="my-account"], a[href*="wp-login"], .add_to_cart_button, .wpml-ls-link, .wpml-ls-item a').each(function() {
             $(this).attr('data-barba-prevent', true);
         });
     };

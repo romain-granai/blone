@@ -22,6 +22,11 @@
         grid-template-columns: repeat(2, 1fr); 
         gap: $gutter;
     }
+
+    @media (orientation: portrait) {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 .block--text-n-media__media {
@@ -78,6 +83,11 @@
         @media (max-width: $xl){
             padding-left: $gutter;
         }
+
+        @media (orientation: portrait) and (max-width: $lg) {
+            padding-left: 0;
+            padding-right: 0;
+        }
     }
 
     .block--text-n-media--right & {
@@ -87,5 +97,12 @@
         @media (max-width: $xl){
             padding-right: $gutter;
         }
+
+        @media (orientation: portrait) {
+            padding-left: 0;
+            padding-right: 0;
+        }
     }
+
+
 }

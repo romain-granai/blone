@@ -11,6 +11,10 @@
     @media (max-width: $lg){
         grid-template-columns: repeat(2, 1fr);
     }
+
+    @media (max-width: $md){
+        grid-template-columns: 1fr;
+    }
 }
 
 .product-item {
@@ -24,6 +28,21 @@
 
     img {
         display: none;
+    }
+
+    .add-to-cart-button {
+        display: flex;
+        position: relative;
+    }
+
+    .add_to_cart_button {
+        flex: 1 1 100%;
+        border-radius: 0!important;
+    }
+
+    .added_to_cart {
+        position: absolute;
+        // top
     }
 }
 
@@ -67,6 +86,10 @@
 
     .product-list:has(> :last-child:nth-child(5)) & {
         display: block;
+    }
+
+    @media (max-width: $lg){
+        display: none!important;
     }
 }
 

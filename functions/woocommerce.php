@@ -299,7 +299,7 @@ function blone_content_block(){
 
                 <div class="block block--just-text <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
                     <?php if($textContent): ?>
-                        <?php echo $textContent; ?>
+                        <div><?php echo $textContent; ?></div>
                     <?php endif; ?>
                     <?php if($ctaLink): 
                         $ctaUrl = $ctaLink['url'];
@@ -639,7 +639,7 @@ function custom_menu_items($items, $menu, $args) {
             } else {
                 $item->title = 'Login';
                 // Optionally, you can change the URL to the login page if needed
-                $item->url = wp_login_url(); // Redirect to the login page
+                // $item->url = wp_login_url(); // Redirect to the login page
             }
         }
     }

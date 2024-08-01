@@ -32,6 +32,17 @@
 	@media (max-width: $xl){
 		padding: $gutter/2 $gutter;
 	}
+
+	@media (max-width: $lg){
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: $gutter/4 $gutter/2;
+
+		.nav {
+			display: none;
+		}
+	}
 }
 
 .topbar__logo-container {
@@ -84,6 +95,7 @@
 .nav {
 	display: flex;
 	
+
 	&--utils {
 		justify-content: flex-end;
 	}
@@ -156,4 +168,23 @@
 		object-position: center;
 	}
 }
+
+.nav-list > .wpml-ls-item {
+	position: relative;
+
+	.sub-menu {
+		display: none;
+		position: absolute;
+		left: 0;
+		top: 100%;
+		@include clean-list;
+	}
+
+	&:hover {
+		.sub-menu {
+			display: block;
+		}
+	}
+}
+
 

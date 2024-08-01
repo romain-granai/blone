@@ -1,0 +1,16 @@
+.block--just-text {
+    display: flex;
+    justify-content: center;
+    padding-left: $gutter*2;
+    padding-right: $gutter*2;
+
+    > div {
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    @media (max-width: $xl){
+        padding-left: $gutter;
+        padding-right: $gutter;
+    }
+}

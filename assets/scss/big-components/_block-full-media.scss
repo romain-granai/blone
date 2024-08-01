@@ -57,6 +57,11 @@
         backdrop-filter: blur(var(--blur)) brightness(var(--brightness));
 
     }
+
+    @media (orientation: portrait) {
+        height: unset;
+        aspect-ratio: 16/9;
+    }
 }
 
 .block--full-media__front {
