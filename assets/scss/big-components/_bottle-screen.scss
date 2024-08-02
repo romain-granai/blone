@@ -64,6 +64,9 @@
 	top: calc(50% - 50vmax);
 	left: calc(50% - 50vmax);
 	width: 100vmax;
+    top: calc(50% - 50svmax);
+	left: calc(50% - 50svmax);
+	width: 100svmax;
 	aspect-ratio: 1;
 	display: flex;
 	align-items: center;

@@ -6,6 +6,10 @@
     @media (max-width: $xl){
         padding: $gutter;
     }
+
+    @media (max-width: $lg){
+        padding: $gutter/2;
+    }
 }
 
 .wc-block-components-sidebar-layout.wc-block-cart,
@@ -394,6 +398,14 @@ form.woocommerce-checkout {
 .woocommerce div.product form.cart::after, .woocommerce div.product form.cart::before {
     display: none;
 }
+
+.wc-block-cart .wc-block-cart__submit-container--sticky {
+    background-color: white!important;
+}
+
+// .wc-block-components-product-metadata__description p {
+
+// }
 
 
 

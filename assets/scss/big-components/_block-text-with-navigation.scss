@@ -4,6 +4,10 @@
     @media (max-width: $xl){
         padding: 0 $gutter;
     }
+
+    @media (max-width: $lg){
+        padding: 0 $gutter/2;
+    }
 }
 .text-with-navigation {
     display: grid;
@@ -24,7 +28,7 @@
     grid-column: 1 / span 3;
     align-self: start;
     position: sticky;
-    top: var(--topBarH);
+    top: calc(var(--topBarH) - 1px);
     width: 100%;
     background-color: $white;
     transition: top 0.8s cubic-bezier(0.5,0.5,0,1);
@@ -33,7 +37,8 @@
         margin-block: 0;
         @include clean-list;
         width: 100%;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-y: hidden;
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
 
@@ -53,7 +58,9 @@
     }
 
     @media (max-width: $lg){
-        flex: 0 0 100%;
+        // flex: 0 0 100%;
+        width: calc(100% + $gutter);
+        margin-left: -$gutter/2;
         padding-block: 1em;
 
         body:has(.topbar--is-hidden) & {
@@ -62,7 +69,12 @@
 
         ul {
             display: flex;
-            gap: 2em;
+            gap: $gutter;
+            padding: 0 $gutter/2;
+        }
+
+        a {
+            @include fs-sm;
         }
     }
 }

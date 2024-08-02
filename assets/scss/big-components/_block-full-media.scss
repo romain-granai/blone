@@ -22,6 +22,11 @@
             width: calc(100% - $gutter);
             margin: $gutter 0 $gutter $gutter;
         }
+
+        @media (max-width: $lg){
+            width: calc(100% - $gutter/2);
+            margin: $gutter/2 0 $gutter/2 $gutter/2;
+        }
     }
 
     &--sm-left {
@@ -31,6 +36,11 @@
         @media (max-width: $xl){
             width: calc(100% - $gutter);
             margin: $gutter $gutter $gutter 0;
+        }
+
+        @media (max-width: $lg){
+            width: calc(100% - $gutter/2);
+            margin: $gutter/2 $gutter/2 $gutter/2 0;
         }
     }
 
@@ -59,8 +69,12 @@
     }
 
     @media (orientation: portrait) {
-        height: unset;
-        aspect-ratio: 16/9;
+
+        &:not(header){
+            height: unset;
+            aspect-ratio: 1;
+        }
+        
     }
 }
 
@@ -81,10 +95,18 @@
     }
 
     @media (max-width: $xl){
-        padding: $gutter $gutter $gutter $gutter;
+        padding: $gutter;
 
         .header & {
             padding: calc($gutter + var(--topBarH)) $gutter $gutter $gutter;
+        }
+    }
+
+    @media (max-width: $lg){
+        padding: $gutter/2;
+
+        .header & {
+            padding: calc($gutter + var(--topBarH)) $gutter/2 $gutter/2 $gutter/2;
         }
     }
 }

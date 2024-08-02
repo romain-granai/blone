@@ -8,7 +8,12 @@
 
     @media (max-width: $xl){
         gap: $gutter/2;
+        row-gap: $gutter;
         padding: 0 $gutter;
+    }
+
+    @media (max-width: $lg){
+        padding: 0 $gutter/2;
     }
 
 }
@@ -65,4 +70,8 @@
     text-transform: uppercase;
     @include fs-md;
     margin-top: 1em;
+
+    @media (max-width: $lg){
+        @include fs-sm;
+    }
 }

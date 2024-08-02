@@ -93,12 +93,17 @@
     }
 
     @media (max-width: $xl){
-        padding: calc(var(--topBarH) + $gutter) $gutter;
+        padding: calc(var(--topBarH) + $gutter) $gutter $gutter;
     }
 
     @media (max-width: $lg){
+        padding: calc(var(--topBarH) + $gutter/2) $gutter/2 $gutter;
         > div {
             // align-self: start;
+        }
+
+        .dropdowns {
+            margin-top: $gutter;
         }
     }
 

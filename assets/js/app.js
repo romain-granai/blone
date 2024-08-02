@@ -101,6 +101,7 @@ $(document).ready(function () {
 
                     $mobileNav.removeClass('mobile-nav--is-open');
                     mobileNavIsOpen = false;
+                    lenis.start();
 
                     window.scrollTo(0, 0);
                     killAllScrollTrigger();
@@ -177,6 +178,7 @@ $(document).ready(function () {
 
     function topbar() {
         
+        // console.log('TOPBAR');
 
         ScrollTrigger.create({
             trigger: 'body',
@@ -209,6 +211,8 @@ $(document).ready(function () {
             gsap.set('html', {'--topBarH': topBarH + 'px'});
         }, 100);
         
+        topBarHDebounce();
+
         $(window).on('resize', topBarHDebounce);
 
     };
@@ -243,6 +247,9 @@ $(document).ready(function () {
     function mobileNav(){
 
         $burger.on('click', function(){
+            
+            $('.topbar').removeClass('topbar--is-hidden');
+
             if(!mobileNavIsOpen){
                 $mobileNav.addClass('mobile-nav--is-open');
                 lenis.stop();
@@ -1212,7 +1219,11 @@ $(document).ready(function () {
         $link.on('click', function(e){
             e.preventDefault();
             var thisHref = $(this).attr('href');
-            var offset = getComputedStyle(document.documentElement).getPropertyValue('--topBarH');
+            var offset = $('.topbar').innerHeight();
+
+            if(window.matchMedia("(max-width: 992px)").matches){
+                offset = offset + $('.text-with-navigation__nav').innerHeight();
+            };
 
             console.log(offset);
 

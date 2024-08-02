@@ -74,6 +74,10 @@
         @include fs-xl;
         text-transform: uppercase;
         font-weight: 700;
+
+        @media (max-width: $xl){
+            @include fs-lg;
+        }
     }
 
     .block--text-n-media--left & {
@@ -85,8 +89,8 @@
         }
 
         @media (orientation: portrait) and (max-width: $lg) {
-            padding-left: 0;
-            padding-right: 0;
+            padding-left: $gutter;
+            padding-right: $gutter;
         }
     }
 
@@ -98,9 +102,9 @@
             padding-right: $gutter;
         }
 
-        @media (orientation: portrait) {
-            padding-left: 0;
-            padding-right: 0;
+        @media (orientation: portrait) and (max-width: $lg) {
+            padding-left: $gutter;
+            padding-right: $gutter;
         }
     }
 
