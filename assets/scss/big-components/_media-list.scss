@@ -8,12 +8,17 @@
 
     @media (max-width: $xl){
         gap: $gutter/2;
-        row-gap: $gutter;
+        row-gap: $gutter/4*3;
         padding: 0 $gutter;
     }
 
     @media (max-width: $lg){
+        // row-gap: $gutter/2;
         padding: 0 $gutter/2;
+    }
+
+    @media (max-width: $md){
+        row-gap: $gutter/2;
     }
 
 }
@@ -52,9 +57,9 @@
         flex: 0 1 calc(50% - $gutter/4);
     }
 
-    @media (max-width: $md){
-        flex: 0 1 100%;
-    }
+    // @media (max-width: $md){
+    //     flex: 0 1 100%;
+    // }
 }
 
 .media-list__link {
@@ -73,5 +78,10 @@
 
     @media (max-width: $lg){
         @include fs-sm;
+    }
+
+    @media (max-width: $md){
+        @include fs-xs;
+        margin-top: .5em;
     }
 }

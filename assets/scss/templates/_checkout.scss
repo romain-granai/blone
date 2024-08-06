@@ -4,4 +4,13 @@
     grid-template-columns: repeat(2, 1fr);
     gap: $gutter;
     align-items: flex-start;
+
+    #customer_details {
+        width: 100%;
+    }
+    
+    @media (max-width: $lg){
+        display: flex;
+        flex-direction: column;
+    }
 }

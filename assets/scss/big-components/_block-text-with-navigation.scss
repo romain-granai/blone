@@ -48,6 +48,8 @@
     }
 
     a {
+        // display: block;
+        // min-width: 20ch;
         @include fs-md;
         text-transform: uppercase;
         font-weight: 700;

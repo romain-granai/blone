@@ -15,6 +15,23 @@ add_action( 'after_setup_theme', 'blone_woocommerce_add_support' );
 // Remove WooCommerce CSS
 // add_filter( 'woocommerce_enqueue_styles', '__return_false' );
 
+// Add new fields to single product
+
+function blone_display_single_product_new_fields(){
+    $perfume = get_field('product_perfume');
+    $volume = get_field('product_volume');
+
+    if($perfume){
+        echo '<span class="single-product__perfume">' . $perfume . '</span>';
+    };
+
+    if($volume){
+        echo '<span class="single-product__volume">' . $volume . '</span>';
+    };
+};
+
+add_action('woocommerce_single_product_summary', 'blone_display_single_product_new_fields', 6);
+
 // Add dropdowns to single product
 function blone_display_acf_dropdowns(){
     // Check rows exists.
@@ -458,9 +475,11 @@ function custom_display_product_images() {
             $counter = 0;
             foreach ( $attachment_ids as $attachment_id ) {
                 $image_url = wp_get_attachment_image_url( $attachment_id, 'medium' );
+                echo '<div class="single-product__thumbnails__wrapper">';
                 echo '<button class="single-product__thumbnails__media" data-index="'. $counter .'">';
                 echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) . '" />';
                 echo '</button>';
+                echo '</div>';
                 $counter++;
             }
             echo '</div>';
@@ -632,7 +651,9 @@ function custom_menu_items($items, $menu, $args) {
     // Loop through each menu item
     foreach ($items as $item) {
         // Check if the menu item URL is the My Account URL
-        if (strpos($item->url, wc_get_page_permalink('myaccount')) !== false) {
+        // if (strpos($item->url, wc_get_page_permalink('myaccount')) !== false) {
+        if (strpos($item->url, wc_get_page_permalink('myaccount')) !== false && !in_array('wpml-ls-item', $item->classes)) {
+            
             // Change the title based on login status
             if (is_user_logged_in()) {
                 $item->title = 'My Account';

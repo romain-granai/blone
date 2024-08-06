@@ -1,7 +1,51 @@
 .header {
+    position: relative;
+    height: 85svh;
+    padding: calc($gutter*2 + var(--topBarH)) $gutter*2 $gutter*2 $gutter*2;
     background-color: rgb(220, 220, 220);
+    color: white;
+    overflow: hidden;
+    display: flex;
+    align-items: end;
 
     @media (orientation: portrait) {
         max-height: 75svh;
     }
+
+    @media (max-width: $xl){
+        padding: calc($gutter + var(--topBarH)) $gutter $gutter $gutter;
+    }
+
+    @media (max-width: $lg){
+        padding: calc($gutter + var(--topBarH)) $gutter/2 $gutter/2 $gutter/2;
+    }
+}
+
+.header__media {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    z-index: 1;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+.header__front {
+    position: relative;
+
+    z-index: 2;
+}
+
+.header__text {
+    width: max-content;
+    line-height: .82;
+    font-weight: 520;
+    @include fs-big;
 }

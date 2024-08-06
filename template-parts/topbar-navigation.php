@@ -48,15 +48,16 @@
 	<?php
 
 		wp_nav_menu(array(
-			'theme_location' => 'tools',
-			'container' => 'nav',
-			'container_class' => 'mobile-nav__tools',
-			'menu_class' => 'menu',
-		));
-		wp_nav_menu(array(
 			'theme_location' => 'main',
 			'container' => 'nav',
 			'container_class' => 'mobile-nav__main',
+			'menu_class' => 'menu',
+		));
+
+		wp_nav_menu(array(
+			'theme_location' => 'tools',
+			'container' => 'nav',
+			'container_class' => 'mobile-nav__tools',
 			'menu_class' => 'menu',
 		));
 

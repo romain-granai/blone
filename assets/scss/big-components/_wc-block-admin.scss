@@ -84,6 +84,9 @@
     margin-top: -$gutter*2;
     margin-left: -$gutter*2;
     margin-bottom: $gutter*2;
+    overflow: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
     
     &:after {
         content: "";
@@ -102,9 +105,7 @@
         display: flex;
         gap: $gutter;
         padding: 0 0 0 $gutter*2;
-        overflow: scroll;
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+
 
         &::-webkit-scrollbar {
             display: none;
@@ -135,6 +136,17 @@
 
         ul {
             padding: 0 0 0 $gutter;
+        }
+    }
+
+    @media (max-width: $lg){
+        width: calc(100% + $gutter);
+        margin-top: -$gutter/2;
+        margin-left: -$gutter/2;
+        margin-bottom: $gutter/2;
+
+        ul {
+            padding: 0 0 0 $gutter/2;
         }
     }
 }
@@ -177,6 +189,10 @@
 
     @media (max-width: $xl){
         padding-right: $gutter;
+    }
+
+    @media (max-width: $lg){
+        padding-right: $gutter/2;
     }
 }
 
@@ -309,6 +325,10 @@ form.woocommerce-checkout {
     width: clamp(400px, 50%, 600px);
     min-width: 200px;
     justify-self: end;
+
+    @media (max-width: $md){
+        width: 100%;
+    }
 }
 
 #order_review_heading {

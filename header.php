@@ -38,16 +38,16 @@
             $headerText = get_field('header_title', $pageID) ? get_field('header_title', $pageID) : get_the_title($pageID);
         ?>
 
-                <header class="header block block--full-media block--full-media--wave block--full-media--text-bl <?php echo $headerSizeClass; ?>">
+                <header class="header <?php echo $headerSizeClass; ?>">
                     <h1 class="d-none"><?php echo get_the_title($pageID); ?></h1>
-                    <div class="media">
+                    <div class="header__media">
                         <?php if(!empty( $headerImg )): ?>
                             <img src="<?php echo esc_url($headerImg['url']); ?>" alt="<?php echo esc_attr($headerImg['alt']); ?>" />
                         <?php endif; ?>
                     </div>
                     <?php if($headerText): ?>
-                        <div class="block--full-media__front"> 
-                            <h2 class="block--full-media__text"><?php echo $headerText; ?></h2>
+                        <div class="header__front"> 
+                            <h2 class="header__text"><?php echo $headerText; ?></h2>
                         </div>
                     <?php endif; ?>
                 </header>

@@ -15,7 +15,7 @@ $(document).ready(function () {
         smoothTouch: false,
         // touchMultiplier: 2,
         infinite: false,
-        prevent: (node) => node.className === 'woocommerce-MyAccount-navigation',
+        prevent: (node) => node.classList.contains('woocommerce-MyAccount-navigation'),
     });
       
     requestAnimationFrame(raf);
@@ -141,6 +141,7 @@ $(document).ready(function () {
             afterEnter(){
                 console.log('AFTER ENTER Account');
                 $('a').attr('data-barba-prevent', true);
+                $('.woocommerce-MyAccount-navigation').attr('data-lenis-prevent', true);
             }
         },
         {
@@ -609,7 +610,7 @@ $(document).ready(function () {
             var animationType = $(this).hasClass('block--full-media--wave') ? 'wave' : 'numeric';
             var isHeader = $(this).hasClass('header');
 
-            if(!isHeader){
+            
                 if(animationType == 'wave'){
                     var $thisTextSplit = new SplitText($thisText, {type: 'chars'});
 
@@ -643,7 +644,7 @@ $(document).ready(function () {
                     });
                     
                 };
-            };
+            
 
 
             let imgParallax = gsap.timeline({
@@ -675,7 +676,7 @@ $(document).ready(function () {
                     // markers: true,
                     trigger: $this,
                     start: 'top bottom',
-                    start: ()=>{ return !isHeader ?  'top bottom' : 'top top' },
+                    start: 'top top',
                     end: 'bottom top',
                     scrub: .01,
                 }

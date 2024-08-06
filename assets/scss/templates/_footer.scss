@@ -18,6 +18,15 @@
         }
     }
     
+    a {
+        transition: font-weight 0.2s ease-in-out;
+        
+        &:hover,
+        &:focus {
+            font-weight: 600;
+        }
+    }
+
     @media (max-width: $xl){
         @include fs-xs;
     }

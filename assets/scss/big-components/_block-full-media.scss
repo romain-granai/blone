@@ -68,7 +68,7 @@
 
     }
 
-    @media (orientation: portrait) {
+    @media (orientation: portrait) and (max-width: 992px) {
 
         &:not(header){
             height: unset;
@@ -90,28 +90,27 @@
     padding: $gutter*2;
     z-index: 3;
 
-    .header & {
-        padding: calc($gutter*2 + var(--topBarH)) $gutter*2 $gutter*2 $gutter*2;
-    }
+
 
     @media (max-width: $xl){
         padding: $gutter;
-
-        .header & {
-            padding: calc($gutter + var(--topBarH)) $gutter $gutter $gutter;
-        }
     }
 
     @media (max-width: $lg){
         padding: $gutter/2;
+    }
 
-        .header & {
-            padding: calc($gutter + var(--topBarH)) $gutter/2 $gutter/2 $gutter/2;
-        }
+    @media (max-width: $lg){
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
     }
 }
+
 .block--full-media__text {
     width: max-content;
+    line-height: inherit;
+    @include fs-big;
 
     .block--full-media--numeric & {
         display: flex;
@@ -160,14 +159,6 @@
     }
 }
 
-.block--full-media__text {
-    // position: absolute;
-    line-height: inherit;
-    @include fs-big;
-}
-
-
-
 .block--full-media--cta-tr {
 
     .btn {
@@ -204,5 +195,20 @@
         grid-column: left;
         grid-row: bottom;
         align-self: flex-end;
+    }
+}
+
+.block--full-media__front .block--full-media__text {
+    @media (max-width: $lg){
+        align-self: unset;
+        justify-self: unset;
+        margin-bottom: $gutter/2;
+    }
+}
+
+.block--full-media__front .btn {
+    @media (max-width: $lg){
+        align-self: unset;
+        justify-self: unset;
     }
 }
