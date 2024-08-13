@@ -9,6 +9,68 @@
 
 <body <?php body_class(); ?> data-barba="wrapper">
     <?php wp_body_open(); ?>
+
+    <?php
+
+        // Define custom query arguments
+        $args = array(
+            'post_type'      => 'product',
+            'posts_per_page' => -1, // To retrieve all products, use -1. You can specify a number to limit the posts.
+            'post_status'    => 'publish'
+        );
+
+        // Instantiate the custom query
+        $loop = new WP_Query( $args );
+
+        // Initialize the JavaScript object as a string
+        $products_js = 'let products = [';
+
+        // Start the loop
+        if ( $loop->have_posts() ) :
+            $is_first_product = true;
+            while ( $loop->have_posts() ) : $loop->the_post();
+                global $product;
+                
+                // Get product title
+                $product_title = get_the_title();
+                
+                // Get product permalink
+                $permalink = get_permalink();
+
+                // Initialize colors array
+                $colors_array = [];
+
+                // Fetch ACF color fields
+                for ($i = 1; $i <= 4; $i++) {
+                    $color = get_field('color_' . $i);
+                    if ($color) {
+                        $colors_array[] = $color;
+                    }
+                }
+
+                // Append to the JavaScript object string
+                $products_js .= '{';
+                $products_js .= '"productTitle": "' . esc_js($product_title) . '",';
+                $products_js .= '"colors": ' . json_encode($colors_array) . ',';
+                $products_js .= '"permalink": "' . esc_url($permalink) . '"';
+                $products_js .= '},';
+
+
+            endwhile;
+
+            // Remove the trailing comma and close the array
+            $products_js = rtrim($products_js, ',') . '];';
+        else :
+            $products_js = 'let products = [];';
+        endif;
+
+        // Restore original Post Data
+        wp_reset_postdata();
+    ?>
+    <script type="text/javascript">
+        <?php echo $products_js; ?>
+    </script>
+
     <div class="curtain"></div>
     <?php get_template_part( 'template-parts/topbar-navigation' ); ?>
     <?php 

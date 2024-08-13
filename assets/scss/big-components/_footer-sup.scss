@@ -86,4 +86,8 @@
     .email {
         flex: 1 1 100%;
     }
+
+    @media (max-width: $md){
+        gap: $gutter/4;
+    }
 }

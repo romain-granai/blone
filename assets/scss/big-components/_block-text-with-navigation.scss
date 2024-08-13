@@ -36,6 +36,9 @@
     ul {
         margin-block: 0;
         @include clean-list;
+        display: flex;
+        flex-direction: column;
+        gap: .5em;
         width: 100%;
         overflow-y: auto;
         overflow-y: hidden;
@@ -70,7 +73,7 @@
         }
 
         ul {
-            display: flex;
+            flex-direction: row;
             gap: $gutter;
             padding: 0 $gutter/2;
         }

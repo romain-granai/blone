@@ -18,6 +18,8 @@
 }
 
 .dropdown__trigger {
+    display: flex;
+    justify-content: space-between;
     width: 100%;
     border: none;
     border-radius: 0;
@@ -27,6 +29,39 @@
     text-transform: uppercase;
     font-weight: 700;
     padding: 1em 0;
+
+    &__plus {
+        position: relative;
+        display: block;
+        height: 1em;
+        aspect-ratio: 1;
+        @include transition;
+        // background-color: red;
+
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: calc(50% - 1px);
+            width: 2px;
+            height: 100%;
+            background-color: black;
+            @include transition;
+        }
+
+        &:after {
+            transform: rotate(90deg);
+        }
+    }
+
+    .dropdown--is-open & {
+        &__plus {
+            &:before {
+                transform: rotate(90deg);
+            }
+        }
+    }
 }
 
 .dropdown__content {
@@ -46,7 +81,7 @@
         
 
         >div {
-            padding: $gutter/4;
+            padding: 0 0 $gutter/4 0;
         }
     }
 }

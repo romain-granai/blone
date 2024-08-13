@@ -1,0 +1,93 @@
+input[type=text],
+input[type=email],
+input[type=tel],
+input[type=password],
+textarea {
+    appearance: none;
+    border: 1px solid black;
+    border-radius: unset;
+    // padding: .85em;
+    padding: .55em;
+    font-variant-numeric: lining-nums;
+    @include fs-sm;
+
+    &:focus {
+        outline: none;
+        border: 1px solid blue;
+    }
+}
+
+// input[type=checkbox] {
+//     appearance: none;
+//     width: 1em;
+//     aspect-ratio: 1;
+//     border: 1px solid black;
+// }
+
+textarea {
+    resize: none;
+    // border-radius: 0;
+}
+
+select {
+    // appearance: none;
+    border: 1px solid black;
+    border-radius: unset;
+    background-color: white;
+    // padding: 0.85em;
+    padding: .55em;
+}
+
+fieldset {
+    padding: 0;
+    border: none;
+}
+
+.mail-and-subscribe .email {
+    
+
+    &::placeholder {
+        text-transform: uppercase;
+        color: black;
+        opacity: 1;
+    }
+}
+
+.mc-field-group {
+    margin-bottom: 1em;
+}
+
+#mc_embed_signup input.mce_inline_error {
+    border-color: black!important;
+}
+
+#mc_embed_signup div.mce_inline_error {
+    margin: 0 0 0 0!important;
+    padding: .5em 0 0 0!important;
+    color: #8c0000!important;
+    background-color: transparent!important;
+}
+
+.select2-container--default .select2-selection--single {
+    border-radius: 0;
+    border: 1px solid black;
+    height: unset;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    padding: .5em 1em!important;
+    line-height: unset;
+}
+
+.select2-container {
+    @include fs-sm;
+}
+
+.select2-dropdown {
+    border: 1px solid black;
+    border-radius: 0px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+}

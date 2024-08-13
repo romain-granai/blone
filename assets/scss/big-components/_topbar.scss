@@ -5,7 +5,7 @@
 	width: 100%;
     @include fs-sm;
     text-transform: uppercase;
-	z-index: 100;
+	z-index: 10000;
 	transition: transform .8s cubic-bezier(.5,.5,0,1);
 
 	&--is-hidden {
@@ -186,5 +186,40 @@
 		}
 	}
 }
+
+[data-cart-item-count] {
+	position: relative;
+
+	&:after {
+		content: attr(data-cart-item-count);
+		display: flex;
+		position: absolute;
+		bottom: 80%;
+		left: 100%;
+		font-size: 0.5em;
+		padding: 0.1em;
+		border-radius: 50px;
+		background-color: green;
+		width: 10px;
+		aspect-ratio: 1;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		line-height: 1;
+		opacity: 1;
+		@include transition;
+
+		@starting-style {
+			opacity: 0;
+		}
+	}
+}
+
+// @starting-style {
+// 	[data-cart-item-count]:after {
+		
+		
+// 	}
+// }
 
 

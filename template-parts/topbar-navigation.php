@@ -35,7 +35,6 @@
 		</div>
 		
 		<nav class="nav nav--utils">
-
 			<?php wp_nav_menu( array('theme_location' => 'tools', 'container' => false, 'menu_class' => 'nav-list') ); ?>
 		</nav>
 		<button class="burger">

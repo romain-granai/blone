@@ -18,6 +18,12 @@
 
     }
 
+    .single-product__main + & {
+        @media (orientation: portrait) and (max-width: $lg) {
+            margin-top: 0;
+        }
+    }
+
     @media (max-width: $xl){
         grid-template-columns: repeat(2, 1fr); 
         gap: $gutter;
@@ -32,9 +38,12 @@
 .block--text-n-media__media {
     grid-column: span 2;
     
-
     .block--text-n-media--left & {
         order: 2;
+
+        @media (orientation: portrait) and (max-width: $lg) {
+            order: 1
+        }
     }
 
     .block--text-n-media--right & {
@@ -56,8 +65,12 @@
             z-index: 2;
             backdrop-filter: blur(var(--blur)) brightness(var(--brightness));
         }
-    }
 
+        @media (orientation: portrait) and (max-width: $lg) {
+            aspect-ratio: 36/24;
+        }
+    }
+    
     @media (max-width: $xl){
         grid-column: span 1;
     }
@@ -91,6 +104,7 @@
         @media (orientation: portrait) and (max-width: $lg) {
             padding-left: $gutter;
             padding-right: $gutter;
+            order: 2
         }
     }
 
@@ -107,6 +121,10 @@
             padding-right: $gutter;
         }
     }
+
+    // @media (orientation: portrait) and (max-width: $lg) {
+    //     order: 2;
+    // }
 
 
 }

@@ -45,7 +45,7 @@ function blone_display_acf_dropdowns(){
             $content = get_sub_field('content');
 
             echo '<li class="dropdown">';
-            echo    '<button class="dropdown__trigger">'. $title .'</button>';
+            echo    '<button class="dropdown__trigger">'. $title .'<span class="dropdown__trigger__plus"></span></button>';
             echo    '<div class="dropdown__content">';
             echo        '<div>'. $content .'</div>';
             echo    '</div>';
@@ -65,15 +65,14 @@ remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
 
 
 
-function blone_add_image_into_product_loop(){
+function blone_add_image_into_product_loop($loop_name){
 
     if(is_shop()){
-        
         $image = get_field('product_list_image', get_option('woocommerce_shop_page_id'));
 
         echo '<li class="product-list__image"><div class="media"><img src="' . $image['url'] . '" alt="' . $image['alt'] . '" /></div></li>';
     }
-    
+
 }
 
 add_action('loop_start', 'blone_add_image_into_product_loop');
@@ -165,6 +164,24 @@ function wrap_product_elements_open() {
 add_action('woocommerce_after_shop_loop_item_title', 'wrap_product_elements_close', 15);
 function wrap_product_elements_close() {
     echo '</div>';
+}
+
+add_action('woocommerce_after_shop_loop_item_title', 'add_volume_and_perfume', 7);
+function add_volume_and_perfume() {
+    $perfume = get_field('product_perfume');
+    $volume = get_field('product_volume');
+    
+    if($perfume || $volume){
+        echo '<div class="product-item__details"><span>'. $perfume .'</span> - <span>'. $volume .'</span></div>';
+    }
+
+};
+
+// Remove the default product title from the shop loop
+add_action('woocommerce_before_shop_loop_item_title', 'remove_woocommerce_template_loop_product_title', 5);
+
+function remove_woocommerce_template_loop_product_title() {
+    remove_action('woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10);
 }
 
 // Wrap add to cart button in a div
@@ -536,17 +553,40 @@ function blone_display_cat_page_shop(){
 
     if(is_shop() && $familyQuery->have_posts()): ?>
         <div class="title title--center title--section"><h2>Nos Familles olfactives</h2></div>
-        <ul class="cat-list cat-list--v1">
+        <ul class="cat-list">
+            <?php $index = 0; ?>
             <?php while ($familyQuery->have_posts()) : $familyQuery->the_post(); 
+                $desc = get_field('family_description');
+                $img = get_the_post_thumbnail_url(get_the_ID(), 'large'); 
                 $relatedProduct = get_field('related_product')[0];
                 $theProductTitle = get_the_title($relatedProduct);
                 $theProductPermalink = get_the_permalink($relatedProduct);
-                // print_r($relatedProduct);
+                $isOpenClass = $index == 0 ? 'cat-item__dropdown--is-open' : '';
+
+                $index++;
             ?>
             <li class="cat-item">
                 <div class="cat-item__main">
-                    <a href="#" class="cat-item__link" title=""><span><?php echo the_title(); ?></span></a>
+                    <button class="cat-item__trigger"> <?php echo the_title(); ?><span class="cat-item__trigger__plus"></span></button>
+                    <a href="#" class="cat-item__link" title="<?php echo the_title(); ?>"><span><?php echo the_title(); ?></span></a>
                     <h3 class="cat-item__title"><?php echo the_title(); ?></h3>
+
+                    <div class="cat-item__dropdown <?php echo $isOpenClass; ?>">
+                        <div>
+                            <div class="cat-item__dropdown__top">
+                                <?php if($img): ?>
+                                <div class="cat-item__dropdown__media">
+                                    <img src="<?php echo $img; ?>" alt="">
+                                </div>
+                                <?php endif; ?>
+                                <?php echo $desc; ?>
+                            </div>
+                            <div class="cat-item__dropdown__bottom">
+                                <p>Notre parfum <?php echo $theProductTitle; ?> a des notes lorem ipsum</p>
+                                <a href="<?php echo $theProductPermalink; ?>" class="btn btn--dark-neg">Voir <?php echo $theProductTitle; ?></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="cat-item__info">
                     <p>Notre parfum <?php echo $theProductTitle; ?> a des notes lorem ipsum</p>
@@ -554,10 +594,10 @@ function blone_display_cat_page_shop(){
                 </div>
                 <div class="cat-item__details">
                     <div class="cat-item__details__media">
-                        <img src="https://assets.codepen.io/225413/blone-flower.png" alt="">
+                        <img src="<?php echo $img; ?>" alt="">
                     </div>
                     <div class="cat-item__details__text">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium illo quod ad eos totam iste corporis quasi? Eos odio assumenda ratione quo dolor a nisi? Cum molestias inventore exercitationem obcaecati.</p>
+                        <?php echo $desc; ?>
                     </div>
                 </div>
             </li>
@@ -649,6 +689,11 @@ add_action( 'woocommerce_after_account_navigation', 'end_myaccount_navigation_wr
 
 function custom_menu_items($items, $menu, $args) {
     // Loop through each menu item
+    $helloLabel = get_field('hello_label', 'option');
+    $loginLabel = get_field('login_label', 'option');
+    $currentUser = wp_get_current_user();
+
+
     foreach ($items as $item) {
         // Check if the menu item URL is the My Account URL
         // if (strpos($item->url, wc_get_page_permalink('myaccount')) !== false) {
@@ -656,9 +701,13 @@ function custom_menu_items($items, $menu, $args) {
             
             // Change the title based on login status
             if (is_user_logged_in()) {
-                $item->title = 'My Account';
+
+                $username = $currentUser->user_login;
+
+                // $item->title = 'My Account';
+                $item->title =  $helloLabel. ' ' .$username;
             } else {
-                $item->title = 'Login';
+                $item->title = $loginLabel;
                 // Optionally, you can change the URL to the login page if needed
                 // $item->url = wp_login_url(); // Redirect to the login page
             }
@@ -691,6 +740,19 @@ function remove_additional_information_tab( $tabs ) {
 
  return $tabs;
 
+};
+
+// Add this code to your theme's functions.php or a custom plugin
+add_action('wp_ajax_get_cart_item_count', 'get_cart_item_count');
+add_action('wp_ajax_nopriv_get_cart_item_count', 'get_cart_item_count');
+
+function get_cart_item_count() {
+    if ( WC()->cart ) {
+        $cart_count = WC()->cart->get_cart_contents_count();
+        wp_send_json_success( array( 'count' => $cart_count ) );
+    } else {
+        wp_send_json_error();
+    }
 }
 
 

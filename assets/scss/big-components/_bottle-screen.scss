@@ -7,7 +7,8 @@
     --color-4: #fcdfe5;
     position: relative;
 	width: 100%;
-	height: 110svh;
+	// height: 110svh;
+    height: 100svh;
 	overflow: hidden;
     // background-color: red;
 
@@ -40,6 +41,10 @@
     background-color: white;
     mix-blend-mode: color-burn;
     opacity: 0;
+
+    @media (max-width: $lg){
+        display: none;
+	}
 }
 
 .bottle-screen__number {
@@ -74,7 +79,7 @@
 }
 
 .bottle-screen__model {
-    grid-area: 1/1/2/2;
+    // grid-area: 1/1/2/2;
     mix-blend-mode: luminosity;
 }
 
@@ -98,6 +103,7 @@
     font-size: 20vmax;
 	mix-blend-mode: difference;
     color: #fff;
+    pointer-events: none;
 }
 
 .bottle-screen__ctas {
@@ -105,7 +111,8 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: 0 $gutter*2 $gutter*2;
+    padding: 0 $gutter*2 0;
+    margin-bottom: $gutter*2;
     display: flex;
     justify-content: center;
     gap: $gutter/2;
