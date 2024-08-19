@@ -633,19 +633,20 @@ $(document).ready(function () {
                     textAnimIn.from($thisTextSplit.chars, {autoAlpha: 0, 'font-weight': 100, xPercent: 25, yPercent: 25, stagger: .1, easing: 'none'});
                 } else {
                     $textLine = $thisText.find('span');
+
                     let textScrambleIn = gsap.timeline({
                         scrollTrigger: {
                             // markers: true,
                             trigger: $thisText,
                             endTrigger: $this,
-                            start: 'top bottom', // when the top of the trigger hits the top of the viewport
-                            end: 'bottom bottom', // end after scrolling 500px beyond the start
-                            scrub: true,
-                        }
+                            start: 'center bottom',
+                            end: 'bottom bottom',
+                            scrub: true
+                        },
                     });
 
                     $textLine.each(function(){
-                        textScrambleIn.to($(this), {scrambleText:{text:$(this)[0].textContent, chars:' 0123456789'}}, );
+                        textScrambleIn.fromTo($(this), {scrambleText:{text: ''}}, {scrambleText:{text:$(this)[0].textContent, chars:' 0123456789'}});
                     });
                     
                 };
@@ -860,7 +861,7 @@ $(document).ready(function () {
             
             var leaveVPAnim = gsap.timeline({
                 onStart: function(){$(this).removeClass('.cat-item--ready')},
-            scrollTrigger: {
+                scrollTrigger: {
                         // markers: true,
                         onEnter: function(){$this.removeClass('cat-item--ready')},
                         onLeaveBack: function(){$this.addClass('cat-item--ready')},
@@ -868,7 +869,7 @@ $(document).ready(function () {
                 start: 'top 5%', // when the top of the trigger hits the top of the viewport
                 end: 'top -15%', // end after scrolling 500px beyond the start
                 scrub: true, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
-                    }
+                }
             });
             
             enterVPAnim.from(thisTitleSplit.chars, {autoAlpha: 0, 'font-weight': 100, xPercent: 25, yPercent: 25, stagger: .1, easing: 'none'});

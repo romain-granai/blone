@@ -17,6 +17,23 @@ textarea {
     }
 }
 
+input[type="checkbox"] {
+    appearance: none;
+    width: 1em;
+    aspect-ratio: 1;
+    border: 1px solid black;
+    padding: .25%;
+    background-clip: content-box;
+
+    &:checked {
+        background-color: black;
+    }
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
 // input[type=checkbox] {
 //     appearance: none;
 //     width: 1em;
@@ -36,6 +53,7 @@ select {
     background-color: white;
     // padding: 0.85em;
     padding: .55em;
+    @include fs-sm;
 }
 
 fieldset {
@@ -75,7 +93,7 @@ fieldset {
 }
 
 .select2-container .select2-selection--single .select2-selection__rendered {
-    padding: .5em 1em!important;
+    padding: .2em 1em!important;
     line-height: unset;
 }
 

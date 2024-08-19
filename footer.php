@@ -4,6 +4,7 @@
                 <div class="footer-sup__side">
                     <div class="footer-sup__in">
                         <?php 
+
                             $newsletterTitle = get_field('newsletter_title', 'option');
                             $newsletterText = get_field('newsletter_text', 'option');
                             $newsletterEmailFieldLabel = get_field('newsletter_email_field_label', 'option');
@@ -12,6 +13,9 @@
 
                             $footerSupRightTitle = get_field('footer_sup_right_title', 'option');
                             $footerSupRightText = get_field('footer_sup_right_text', 'option');
+                            $footerSupRightBtnLink = get_field('footer_sup_right_button', 'option');
+                            $footerSupRightBtnLabel = get_field('footer_sup_right_button_label', 'option');
+
                         ?>
                         <div>
                             <?php 
@@ -28,13 +32,11 @@
                         <div id="mc_embed_signup">
                             <form action="https://gmail.us21.list-manage.com/subscribe/post?u=f9138a877b7e33863a21294d7&amp;id=6d661aae6f&amp;f_id=00e867e1f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
                                 <div id="mc_embed_signup_scroll">
-                                    <!-- <div class="indicates-required"><span class="asterisk">*</span> indicates required</div> -->
-
                                     <div class="mc-field-group">
                                         <label for="mce-EMAIL" class="d-none">Email Address<span class="asterisk">*</span></label>
                                         <div class="mail-and-subscribe">
                                             <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="Adresse Mail" required="" value="">
-                                            <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="btn btn--dark" data-text="Subscribe"><span>Subscribe</span></button>
+                                            <button type="submit" name="subscribe" id="mc-embedded-subscribe" class="btn btn--dark" data-text="<?php echo $newsletterSubscribeLabel; ?>"><span><?php echo $newsletterSubscribeLabel; ?></span></button>
 
                                         </div>
                                         
@@ -83,7 +85,11 @@
                                 }
                             ?>
                         </div>
-                        <div class="cta cta--start"><a href="#" class="btn btn--dark" data-text="En Savoir Plus"><span>En Savoir Plus</span></a></div>
+                        <?php if($footerSupRightBtnLink): 
+                            $url = $footerSupRightBtnLink['url'];    
+                        ?>
+                        <div class="cta cta--start"><a href="<?php echo $url; ?>" class="btn btn--dark" data-text="<?php echo $footerSupRightBtnLabel; ?>"><span><?php echo $footerSupRightBtnLabel; ?></span></a></div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

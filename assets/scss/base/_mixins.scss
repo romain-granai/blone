@@ -156,6 +156,7 @@
     padding: .5em 1em;
     border-radius: 3px;
     cursor: pointer;
+    white-space: nowrap;
     transition: color .2s ease-in-out, background-color .2s ease-in-out;
 
     @if $isBig {

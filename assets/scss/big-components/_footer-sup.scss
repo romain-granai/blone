@@ -81,13 +81,13 @@
 .mail-and-subscribe {
     display: flex;
     align-items: flex-end;
-    gap: $gutter/2;
+    gap: $gutter/4;
 
     .email {
         flex: 1 1 100%;
     }
 
-    @media (max-width: $md){
-        gap: $gutter/4;
-    }
+    // @media (max-width: $md){
+    //     gap: $gutter/4;
+    // }
 }

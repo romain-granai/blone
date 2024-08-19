@@ -1,6 +1,7 @@
 .woocommerce:not(body),
 .wp-block-woocommerce-cart {
-    font-size: 16px;
+    // font-size: 16px;
+    @include fs-sm;
     padding: $gutter*2;
 
     @media (max-width: $xl){
@@ -62,12 +63,14 @@
 .woocommerce {
    .form-row {
         display: grid;
+
+        label {
+            @include fs-sm;
+            margin-bottom: .3em;
+        }
     }
 
-    label {
-        @include fs-sm;
-        margin-bottom: .5em;
-    }
+
 
     span em {
         @include fs-xs;
@@ -157,19 +160,26 @@
 
 .woocommerce-MyAccount-content,
 .woocommerce-form-login {
-    max-width: 50%;
+    width: 100%;
+    max-width: 750px;
+    
 
     a {
         text-decoration: underline;;
     }
 
-    @media (max-width: $xxl){
-        max-width: 75%;
-    }
+    // @media (max-width: $xxl){
+    //     max-width: 75%;
+    // }
 
-    @media (max-width: $lg){
-        max-width: 100%;
-    }
+    // @media (max-width: $lg){
+    //     max-width: 100%;
+    // }
+}
+
+.woocommerce-form-login,
+.woocommerce form.login {
+    margin: 0 auto;
 }
 
 .woocommerce-MyAccount-navigation-link--customer-logout {
@@ -222,7 +232,7 @@
         margin: 0;
         width: 100%;
 
-        input {
+        input:not([type="checkbox"]):not([type="radio"]) {
             width: 100%;
         }
     } 
@@ -240,6 +250,8 @@
     }
 
     fieldset {
+        display: grid;
+        gap: 2rem;
         grid-column: 1 / span 2;
         width: 100%;
     }
@@ -441,6 +453,37 @@ form.woocommerce-checkout {
 .woocommerce form.checkout_coupon, .woocommerce form.login, .woocommerce form.register {
     padding: 0;
     border: none;
+}
+
+.woocommerce table.shop_table,
+.woocommerce .woocommerce-customer-details address,
+.woocommerce .woocommerce-customer-details :last-child {
+    border-radius: 0;
+    margin-bottom: 2em;
+    border-width: 1px;
+
+    p {
+        font-size: inherit;
+        padding: 0;
+
+        &:before {
+            display: none;
+        }
+    }
+}
+
+.woocommerce .woocommerce-customer-details address {
+    padding: 11px 12px;
+}
+
+.woocommerce-order h2,
+legend {
+    margin-bottom: 1em;
+    font-weight: 700;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-results__option--highlighted[data-selected] {
+    background-color: black;
 }
 
 
