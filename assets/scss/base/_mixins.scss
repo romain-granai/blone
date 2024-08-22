@@ -148,15 +148,17 @@
     align-items: center;
     justify-content: center;
     line-height: 1;
-    font-size: 18px;
-    font-weight: 400;
+    @include fs-smallest;
+    font-weight: 700;
     width: fit-content;
     text-decoration: none!important;
     text-align: center;
-    padding: .5em 1em;
+    padding: 1.7em 1.4em;
     border-radius: 3px;
     cursor: pointer;
     white-space: nowrap;
+    min-height: unset!important;
+    text-transform: uppercase;
     transition: color .2s ease-in-out, background-color .2s ease-in-out;
 
     @if $isBig {
@@ -164,7 +166,7 @@
         padding: 2em 4em;
 
         @media (max-width: $xl){
-            font-size: 18px;
+            @include fs-smallest;
             padding: 1em 2em;
         }
     }

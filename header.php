@@ -102,11 +102,13 @@
 
                 <header class="header <?php echo $headerSizeClass; ?>">
                     <h1 class="d-none"><?php echo get_the_title($pageID); ?></h1>
-                    <div class="header__media">
-                        <?php if(!empty( $headerImg )): ?>
-                            <img src="<?php echo esc_url($headerImg['url']); ?>" alt="<?php echo esc_attr($headerImg['alt']); ?>" />
-                        <?php endif; ?>
-                    </div>
+                    <?php if(!is_account_page() && !is_cart() && !is_checkout()): ?>
+                        <div class="header__media">
+                            <?php if(!empty( $headerImg )): ?>
+                                <img src="<?php echo esc_url($headerImg['url']); ?>" alt="<?php echo esc_attr($headerImg['alt']); ?>" />
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                     <?php if($headerText): ?>
                         <div class="header__front"> 
                             <h2 class="header__text"><?php echo $headerText; ?></h2>

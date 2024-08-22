@@ -72,6 +72,7 @@ $(document).ready(function () {
                     blockFullMedia();
                     blockTextWithNavigation();
                     homeSliderBottle();
+                    // relatedProductsSwiper();
                     preventSamePageReload();
                     preventBarbaOnSomeLinks();
                 },
@@ -87,6 +88,7 @@ $(document).ready(function () {
                     blockFullMedia();
                     blockTextWithNavigation();
                     homeSliderBottle();
+                    // relatedProductsSwiper();
                     preventSamePageReload();
                     preventBarbaOnSomeLinks();
 
@@ -122,6 +124,7 @@ $(document).ready(function () {
             afterEnter(){
                 console.log('AFTER ENTER Single Product');
                 singleProductImages();
+                relatedProductsSwiper();
             }
         },{
             namespace: 'cart',
@@ -312,7 +315,9 @@ $(document).ready(function () {
         var currentPerfumeIndex = 0;
         var rotationSpeed = 0.01;
         var isAnimating = false;
-    
+        
+        console.log($('.bottle-screen__number').length);
+
         if (modelContainer == null) {
             return;
         };
@@ -327,7 +332,7 @@ $(document).ready(function () {
             },
             onStart: () => {
                 isAnimating = true;
-                gsap.set('.bottle-screen__bg', { autoAlpha: 0.5 });
+                gsap.set('.bottle-screen__bg', { autoAlpha: 0.3 });
             }
         });
     
@@ -524,7 +529,7 @@ $(document).ready(function () {
                 var scale = gsap.utils.mapRange(0, maxDistance, .5, 0, distance);
     
                 gsap.to($(this), {
-                    autoAlpha: opacity,
+                    autoAlpha: opacity/1.5,
                     duration: .2,
                     ease: 'expo.inout',
                 });
@@ -613,7 +618,7 @@ $(document).ready(function () {
             var $thisText = $this.find('.block--full-media__text');
             var hasVid = $this.find('video').length;
             var animationType = $(this).hasClass('block--full-media--wave') ? 'wave' : 'numeric';
-            var isHeader = $(this).hasClass('header');
+            // var isHeader = $(this).hasClass('header');
 
             
                 if(animationType == 'wave'){
@@ -682,13 +687,13 @@ $(document).ready(function () {
                     // markers: true,
                     trigger: $this,
                     start: 'top bottom',
-                    start: 'top top',
+                    // start: 'top top',
                     end: 'bottom top',
                     scrub: .01,
                 }
             });
             
-            if(!isHeader){
+            // if(!isHeader){
                 let imgBlurIn = gsap.timeline({
                     scrollTrigger: {
                         // markers: true,
@@ -700,7 +705,7 @@ $(document).ready(function () {
                 });
 
                 imgBlurIn.from($this, {'--blur': 40, '--brightness': .25, ease: 'none'});
-            };
+            // };
 
 
 
@@ -846,34 +851,49 @@ $(document).ready(function () {
         $('.cat-item').each(function(){
             var $this = $(this);
             var thisTitle = $(this).find('.cat-item__title');
-            var thisTitleSplit = new SplitText(thisTitle, {type: 'chars'});
+            // vat thisTitleText = 
+            // var thisTitleSplit = new SplitText(thisTitle, {type: 'chars'});
             
-            var enterVPAnim = gsap.timeline({
-            scrollTrigger: {
-                onLeave: function(){$this.addClass('cat-item--ready')},
-                onEnterBack: function(){$this.removeClass('cat-item--ready')},
-                trigger: $(this),
-                start: 'top bottom', // when the top of the trigger hits the top of the viewport
-                end: 'bottom 80%', // end after scrolling 500px beyond the start
-                scrub: true, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
-                }
-            });
-            
-            var leaveVPAnim = gsap.timeline({
-                onStart: function(){$(this).removeClass('.cat-item--ready')},
+            let catScrambleIn = gsap.timeline({
                 scrollTrigger: {
-                        // markers: true,
-                        onEnter: function(){$this.removeClass('cat-item--ready')},
-                        onLeaveBack: function(){$this.addClass('cat-item--ready')},
-                trigger: $(this),
-                start: 'top 5%', // when the top of the trigger hits the top of the viewport
-                end: 'top -15%', // end after scrolling 500px beyond the start
-                scrub: true, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
-                }
+                    // markers: true,
+                    trigger: $this,
+                    // endTrigger: $this,
+                    start: 'bottom bottom',
+                    end: 'bottom 80%',
+                    scrub: true
+                },
             });
+
+            catScrambleIn.fromTo(thisTitle, {scrambleText:{text: ''}}, {scrambleText:{text: thisTitle[0].textContent, chars:' 0123456789'}});
             
-            enterVPAnim.from(thisTitleSplit.chars, {autoAlpha: 0, 'font-weight': 100, xPercent: 25, yPercent: 25, stagger: .1, easing: 'none'});
-            leaveVPAnim.to(thisTitleSplit.chars, {autoAlpha: 0, 'font-weight': 100, yPercent: -25, stagger: .1, easing: 'none'});
+
+            // var enterVPAnim = gsap.timeline({
+            // scrollTrigger: {
+            //     onLeave: function(){$this.addClass('cat-item--ready')},
+            //     onEnterBack: function(){$this.removeClass('cat-item--ready')},
+            //     trigger: $(this),
+            //     start: 'top bottom', // when the top of the trigger hits the top of the viewport
+            //     end: 'bottom 80%', // end after scrolling 500px beyond the start
+            //     scrub: true, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+            //     }
+            // });
+            
+            // var leaveVPAnim = gsap.timeline({
+            //     onStart: function(){$(this).removeClass('.cat-item--ready')},
+            //     scrollTrigger: {
+            //             // markers: true,
+            //             onEnter: function(){$this.removeClass('cat-item--ready')},
+            //             onLeaveBack: function(){$this.addClass('cat-item--ready')},
+            //     trigger: $(this),
+            //     start: 'top 5%', // when the top of the trigger hits the top of the viewport
+            //     end: 'top -15%', // end after scrolling 500px beyond the start
+            //     scrub: true, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+            //     }
+            // });
+            
+            // enterVPAnim.from(thisTitleSplit.chars, {autoAlpha: 0, 'font-weight': 100, xPercent: 25, yPercent: 25, stagger: .1, easing: 'none'});
+            // leaveVPAnim.to(thisTitleSplit.chars, {autoAlpha: 0, 'font-weight': 100, yPercent: -25, stagger: .1, easing: 'none'});
         });
         
         $('.cat-list').on('mouseenter, mousemove', function(e){
@@ -1307,6 +1327,66 @@ $(document).ready(function () {
                 // console.error('AJAX request failed.');
             }
         });
+    };
+
+    function relatedProductsSwiper(){
+        console.log('SWIIIIIIIIIPER');
+
+        var swiperMain = $('.related.products');
+        var swiperWrapper = swiperMain.find('ul');
+        var swiperItem = swiperMain.find('li');
+
+        swiperMain.addClass('swiper');
+        swiperWrapper.addClass('swiper-wrapper');
+        swiperItem.addClass('swiper-slide');
+
+        // const swiper = new Swiper('.related', {
+        //     // speed: 400,
+        //     // spaceBetween: 100,
+        //     slidesPerView: 1.5,
+        //     freeMode: {
+        //         enabled: true
+        //     },
+        // });
+
+        // console.log(swiper);
+
+        // Swiper instance variable
+        let swiperInstance = null;
+
+        // Function to initialize or destroy Swiper based on screen size
+        function handleSwiper() {
+            const screenWidth = window.innerWidth;
+
+            if (screenWidth <= 768) {
+                // If screen is small and swiper is not initialized, initialize it
+                if (!swiperInstance) {
+
+                    swiperInstance = new Swiper('.related', {
+                        // speed: 400,
+                        // spaceBetween: 100,
+                        slidesPerView: 1.5,
+                        freeMode: {
+                            enabled: true
+                        },
+                    });
+
+                }
+            } else {
+                // If screen is large and swiper is initialized, destroy it
+                if (swiperInstance) {
+                    swiperInstance.destroy(true, true);
+                    swiperInstance = null; // Reset the instance
+                }
+            }
+        }
+
+        // Initial call to handle Swiper based on the current screen size
+        handleSwiper();
+
+        // Re-check on window resize
+        window.addEventListener('resize', handleSwiper);
+          
     };
 
     function observeCartChanges() {

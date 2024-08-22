@@ -270,7 +270,8 @@ function blone_content_block(){
                             <?php endif; ?>
                         <?php endif; ?>
                         <?php if($ctaLabel && $ctaLink): ?>
-                            <a href="<?php echo $ctaUrl ?>" class="btn btn--light-neg btn--big btn--rounded" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>" title="<?php echo $ctaTitle ?>"><span><?php echo $ctaLabel; ?></span></a>
+                            <!-- btn--big btn--rounded -->
+                            <a href="<?php echo $ctaUrl ?>" class="btn btn--light-neg btn--big" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>" title="<?php echo $ctaTitle ?>"><span><?php echo $ctaLabel; ?></span></a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -754,6 +755,29 @@ function get_cart_item_count() {
         wp_send_json_error();
     }
 }
+
+// Add .swiper class to the section.related.products
+
+// function add_custom_class_to_related_products_section( $template_name, $template_path, $located, $args ) {
+//     if ( 'single-product/related.php' === $template_name ) {
+//         ob_start(); // Start output buffering
+//     }
+// }
+// add_action( 'woocommerce_before_template_part', 'add_custom_class_to_related_products_section', 10, 4 );
+
+// function add_custom_class_to_related_products_section_end( $template_name, $template_path, $located, $args ) {
+//     if ( 'single-product/related.php' === $template_name ) {
+//         $output = ob_get_clean(); // Get the buffer content and clean it
+
+//         // Add your custom class
+//         $output = str_replace( 'related products', 'related products swiper', $output );
+
+//         echo $output; // Output the modified content
+//     }
+// }
+// add_action( 'woocommerce_after_template_part', 'add_custom_class_to_related_products_section_end', 10, 4 );
+
+
 
 
 

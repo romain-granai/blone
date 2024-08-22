@@ -6,8 +6,8 @@ textarea {
     appearance: none;
     border: 1px solid black;
     border-radius: unset;
-    // padding: .85em;
-    padding: .55em;
+    padding: .825em;
+    // padding: .55em;
     font-variant-numeric: lining-nums;
     @include fs-sm;
 
@@ -51,8 +51,8 @@ select {
     border: 1px solid black;
     border-radius: unset;
     background-color: white;
-    // padding: 0.85em;
-    padding: .55em;
+    padding: 0.825em;
+    // padding: .55em;
     @include fs-sm;
 }
 

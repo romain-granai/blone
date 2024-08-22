@@ -3,13 +3,17 @@
     height: 85svh;
     padding: calc($gutter*2 + var(--topBarH)) $gutter*2 $gutter*2 $gutter*2;
     background-color: rgb(220, 220, 220);
-    color: white;
+    color: black;
     overflow: hidden;
     display: flex;
     align-items: end;
 
     &--small {
         height: 50svh;
+    }
+
+    &:has(.header__media) {
+        color: white;
     }
 
     @media (orientation: portrait) {

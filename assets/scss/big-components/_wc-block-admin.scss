@@ -482,6 +482,16 @@ legend {
     font-weight: 700;
 }
 
+.woocommerce-error, 
+.woocommerce-info, 
+.woocommerce-message {
+    border-top-width: 1px;
+}
+
+.wc-block-components-form .wc-block-components-text-input input[type="email"], .wc-block-components-form .wc-block-components-text-input input[type="number"], .wc-block-components-form .wc-block-components-text-input input[type="tel"], .wc-block-components-form .wc-block-components-text-input input[type="text"], .wc-block-components-form .wc-block-components-text-input input[type="url"], .wc-block-components-text-input input[type="email"], .wc-block-components-text-input input[type="number"], .wc-block-components-text-input input[type="tel"], .wc-block-components-text-input input[type="text"], .wc-block-components-text-input input[type="url"] {
+    border-radius: 0;
+}
+
 .select2-container--default .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-results__option--highlighted[data-selected] {
     background-color: black;
 }

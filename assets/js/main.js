@@ -2,6 +2,7 @@
 //@prepros-append vendor/gsap.js
 //@prepros-append vendor/barba.js
 //@prepros-append vendor/barba-prefetch.js
+//@prepros-append vendor/swiper.js
 //@prepros-append vendor/ScrollTrigger.js
 //@prepros-append vendor/scrollToPlugin.js
 //@prepros-append vendor/Observer.js
