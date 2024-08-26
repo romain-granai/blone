@@ -678,10 +678,13 @@ $(document).ready(function () {
                     let textScrambleIn = gsap.timeline({
                         scrollTrigger: {
                             // markers: true,
-                            trigger: $thisText,
-                            endTrigger: $this,
-                            start: 'center bottom',
-                            end: 'bottom bottom',
+                            // trigger: $thisText,
+                            trigger: $textLine,
+                            // endTrigger: $this,
+                            // start: 'center bottom',
+                            // end: 'bottom bottom',
+                            start: 'bottom bottom',
+                            end: 'bottom 80%',
                             scrub: true
                         },
                     });
