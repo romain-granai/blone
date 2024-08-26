@@ -19,31 +19,37 @@ $(document).ready(function () {
     });
       
     requestAnimationFrame(raf);
+
     barba.use(barbaPrefetch);
 
-    // Initialize Barba
     barba.init({
         preventRunning: true,
-        prevent: ({ el }) => el.classList && (el.classList.contains('added_to_cart') || el.classList.contains('wc-block-cart__submit-button')),
+        // prevent: ({ el }) => el.classList && (el.classList.contains('added_to_cart') || el.classList.contains('wc-block-cart__submit-button')),
+        prevent: ({el, event, href}) => {
+            const hrefToReload = ['account', 'checkout', 'cart', 'paiement', 'mon-compte', 'panier'];
+            let currentUrl = window.location.href;
+
+            return hrefToReload.some(url => href.includes(url)) || hrefToReload.some(url => currentUrl.includes(url));
+        },
         transitions: [
             {
                 name: 'fade',
-                to: {
-                    namespace: [
-                        'shop',
-                        'home',
-                        'single-product',
-                        'page'
-                    ]
-                },
-                from: {
-                    namespace: [
-                        'shop',
-                        'home',
-                        'single-product',
-                        'page'
-                    ]
-                },
+                // to: {
+                //     namespace: [
+                //         'shop',
+                //         'home',
+                //         'single-product',
+                //         'page'
+                //     ]
+                // },
+                // from: {
+                //     namespace: [
+                //         'shop',
+                //         'home',
+                //         'single-product',
+                //         'page'
+                //     ]
+                // },
                 leave({current, next, trigger}) {
                     console.log('GLOBAL LEAVE');
 
@@ -89,7 +95,8 @@ $(document).ready(function () {
                     homeSliderBottle();
                     // relatedProductsSwiper();
                     preventSamePageReload();
-                    preventBarbaOnSomeLinks();
+                    disableBarbaOnAdminBar();
+                    // preventBarbaOnSomeLinks();
                 },
                 afterEnter(){
                     console.log('GLOBAL AFTER ENTER');
@@ -103,9 +110,9 @@ $(document).ready(function () {
                     blockFullMedia();
                     blockTextWithNavigation();
                     homeSliderBottle();
-                    // relatedProductsSwiper();
                     preventSamePageReload();
-                    preventBarbaOnSomeLinks();
+                    disableBarbaOnAdminBar();
+                    // preventBarbaOnSomeLinks();
 
                 },
                 beforeLeave(){
@@ -158,15 +165,6 @@ $(document).ready(function () {
             afterEnter(){
                 console.log('AFTER ENTER Account');
                 // $('a').attr('data-barba-prevent', true);
-                // $('.woocommerce-MyAccount-navigation').attr('data-lenis-prevent', true);
-                // $('.select2-results__options').attr('data-lenis-prevent', true);
-                
-            }
-        },{
-            namespace: 'checkout',
-            afterEnter(){
-                // $('a').attr('data-barba-prevent', true);
-                // preventBarbaOnSomeLinks();
             }
         }]
     });
@@ -187,23 +185,6 @@ $(document).ready(function () {
     // dropdowns();
     // blockTextWithNavigation();
     // preventBarbaOnSomeLinks();
-
-    topbar();
-    getCartItemCount();
-    nav();
-    mobileNav();
-    btn();
-    productList3d();
-    dropdowns();
-    mediaList();
-    customAddToCart();
-    blockTextNMedia();
-    blockFullMedia();
-    blockTextWithNavigation();
-    homeSliderBottle();
-    // relatedProductsSwiper();
-    preventSamePageReload();
-    preventBarbaOnSomeLinks();
     
 
     function raf(time) {
@@ -1457,6 +1438,19 @@ $(document).ready(function () {
         $('a[href*="cart"], a[href*="checkout"], a[href*="my-account"], a[href*="wp-login"], .add_to_cart_button, .wpml-ls-link, .wpml-ls-item a, .nav--utils a, .mobile-nav__tools a, .wc-block-cart__submit-button').each(function() {
             $(this).attr('data-barba-prevent', true);
         });
+    };
+
+    // function preventBarbaOnSomeLinks(){
+    //     $('.add_to_cart_button, .wpml-ls-link, .wpml-ls-item a, .nav--utils a, .mobile-nav__tools a, .wc-block-cart__submit-button').each(function() {
+    //         $(this).attr('data-barba-prevent', true);
+    //     });
+    // };
+
+
+    function disableBarbaOnAdminBar(){
+
+        $('#wpadminbar').attr('data-barba-prevent', 'all');
+
     };
 
     function killAllScrollTrigger() {

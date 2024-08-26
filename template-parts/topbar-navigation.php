@@ -34,7 +34,7 @@
 			<a href="<?php echo get_home_url(); ?>" class="topbar__logo"><img src="<?php echo get_template_directory_uri()?>/assets/media/img/blone-logo.svg" alt=""></a>
 		</div>
 		
-		<nav class="nav nav--utils">
+		<nav class="nav nav--utils" data-barba-prevent="all">
 			<?php wp_nav_menu( array('theme_location' => 'tools', 'container' => false, 'menu_class' => 'nav-list') ); ?>
 		</nav>
 		<button class="burger">
