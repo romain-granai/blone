@@ -161,7 +161,8 @@
 
 
 .product-item__details {
-    margin-bottom: $gutter/2;
+    margin-bottom: 2cqw;
+    // margin-bottom: clamp(.5em, 1cqw, 2em)
 }
 
 
@@ -179,14 +180,17 @@
   }
 
 .product-item__info {
+    container-type: inline-size;
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-	padding: 2em 1em;
+	// padding: 2em 1em;
+    padding: clamp(1em, 1cqw, 2em) clamp(.5em, 1cqw, 1em);
+    padding: 2cqw 1cqw;
     color: white;
     mix-blend-mode: difference;
-	transition: all .3s ease-out;
+	// transition: all .3s ease-out;
 }
 
 .product-item:has(a:not(.add_to_cart_button):hover) .product-item__info {

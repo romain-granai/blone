@@ -19,16 +19,31 @@ $(document).ready(function () {
     });
       
     requestAnimationFrame(raf);
-
     barba.use(barbaPrefetch);
 
     // Initialize Barba
     barba.init({
         preventRunning: true,
-        prevent: ({ el }) => el.classList && el.classList.contains('added_to_cart'),
+        prevent: ({ el }) => el.classList && (el.classList.contains('added_to_cart') || el.classList.contains('wc-block-cart__submit-button')),
         transitions: [
             {
                 name: 'fade',
+                to: {
+                    namespace: [
+                        'shop',
+                        'home',
+                        'single-product',
+                        'page'
+                    ]
+                },
+                from: {
+                    namespace: [
+                        'shop',
+                        'home',
+                        'single-product',
+                        'page'
+                    ]
+                },
                 leave({current, next, trigger}) {
                     console.log('GLOBAL LEAVE');
 
@@ -130,28 +145,27 @@ $(document).ready(function () {
             namespace: 'cart',
             afterEnter(){
                 console.log('AFTER ENTER CART');
-                $('a').attr('data-barba-prevent', true);
+                // $('a').attr('data-barba-prevent', true);
             }
         },{
             namespace: 'checkout',
             afterEnter(){
                 console.log('AFTER ENTER Checkout');
-                $('a').attr('data-barba-prevent', true);
+                // $('a').attr('data-barba-prevent', true);
             }
         },{
             namespace: 'account',
             afterEnter(){
                 console.log('AFTER ENTER Account');
-                $('a').attr('data-barba-prevent', true);
-                $('.woocommerce-MyAccount-navigation').attr('data-lenis-prevent', true);
+                // $('a').attr('data-barba-prevent', true);
+                // $('.woocommerce-MyAccount-navigation').attr('data-lenis-prevent', true);
                 // $('.select2-results__options').attr('data-lenis-prevent', true);
                 
             }
-        },
-        {
+        },{
             namespace: 'checkout',
             afterEnter(){
-                $('a').attr('data-barba-prevent', true);
+                // $('a').attr('data-barba-prevent', true);
                 // preventBarbaOnSomeLinks();
             }
         }]
@@ -174,6 +188,22 @@ $(document).ready(function () {
     // blockTextWithNavigation();
     // preventBarbaOnSomeLinks();
 
+    topbar();
+    getCartItemCount();
+    nav();
+    mobileNav();
+    btn();
+    productList3d();
+    dropdowns();
+    mediaList();
+    customAddToCart();
+    blockTextNMedia();
+    blockFullMedia();
+    blockTextWithNavigation();
+    homeSliderBottle();
+    // relatedProductsSwiper();
+    preventSamePageReload();
+    preventBarbaOnSomeLinks();
     
 
     function raf(time) {
@@ -307,6 +337,7 @@ $(document).ready(function () {
     };
 
     function homeSliderBottle() {
+        var bottleScreenH = $('.bottle-screen').innerHeight();
         var modelContainer = document.getElementById('model-container');
         var modelUrl = $('.bottle-screen').data('model');
         var cursorPos = { y: 0, x: 0 };
@@ -363,12 +394,14 @@ $(document).ready(function () {
         const bottleScene = new THREE.Scene();
     
         // Create a camera
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight/1.25), 0.1, 1000);
+        // const camera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight/1.25), 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / (bottleScreenH/1.25), 0.1, 1000);
         camera.position.z = 5;
     
         // Create the renderer with alpha to enable transparency
         const renderer = new THREE.WebGLRenderer({ alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight/1.25);
+        // renderer.setSize(window.innerWidth, window.innerHeight/1.25);
+        renderer.setSize(window.innerWidth, bottleScreenH/1.25);
         renderer.setClearColor(0x000000, 0);
     
         // Add the renderer to the HTML
@@ -432,9 +465,12 @@ $(document).ready(function () {
     
         // Handle window resize
         window.addEventListener('resize', function () {
-            camera.aspect = window.innerWidth / (window.innerHeight/1.25);
+            bottleScreenH = $('.bottle-screen').innerHeight();
+            // camera.aspect = window.innerWidth / (window.innerHeight/1.25);
+            camera.aspect = window.innerWidth / (bottleScreenH/1.25);
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight/1.25);
+            // renderer.setSize(window.innerWidth, window.innerHeight/1.25);
+            renderer.setSize(window.innerWidth, bottleScreenH/1.25);
         });
     
         let scrollTriggerBottle = gsap.timeline({
@@ -969,7 +1005,7 @@ $(document).ready(function () {
             var this3DContainer = $(this).find('.product-item__3d');
             var model3d = this3DContainer.data('model');
     
-            $(this).find('a').on('mouseenter mouseover', function () {
+            $(this).find('a').on('mouseenter mouseover focus', function () {
                 thisItemIsHovered = true;
             });
     
@@ -1079,11 +1115,11 @@ $(document).ready(function () {
             var this3DContainer = $(this).find('.product-item__3d');
             var model3d = this3DContainer.data('model');
     
-            $(this).find('a').on('mouseenter mouseover', function () {
+            $(this).find('a').on('mouseenter mouseover focus', function () {
                 thisItemIsHovered = true;
             });
     
-            $(this).find('a').on('mouseleave', function () {
+            $(this).find('a').on('mouseleave blur', function () {
                 thisItemIsHovered = false;
             });
     
@@ -1415,7 +1451,7 @@ $(document).ready(function () {
     });    
 
     function preventBarbaOnSomeLinks(){
-        $('a[href*="cart"], a[href*="checkout"], a[href*="my-account"], a[href*="wp-login"], .add_to_cart_button, .wpml-ls-link, .wpml-ls-item a, .nav--utils a, .mobile-nav__tools a').each(function() {
+        $('a[href*="cart"], a[href*="checkout"], a[href*="my-account"], a[href*="wp-login"], .add_to_cart_button, .wpml-ls-link, .wpml-ls-item a, .nav--utils a, .mobile-nav__tools a, .wc-block-cart__submit-button').each(function() {
             $(this).attr('data-barba-prevent', true);
         });
     };

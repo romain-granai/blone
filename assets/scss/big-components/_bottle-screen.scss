@@ -143,6 +143,12 @@
     justify-content: space-between;
     transform: translate3d(-50%, -50%, 0);
     width: calc(20vmax * 3);
+    @include fs-lg;
+
+    @media (max-width: $lg){
+        width: calc(20vmax * 2.5);
+        @include fs-sm;
+	}
 }
 
 .prev-next {
@@ -153,7 +159,7 @@
     background-color: transparent;
     cursor: pointer;
     font-weight: 700;
-    @include fs-lg;
+    
 }
 
 
