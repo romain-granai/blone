@@ -114,8 +114,11 @@
     pointer-events: none;
 }
 
-.bottle-screen__ctas {
+.bottle-screen__bottom {
     position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -132,6 +135,12 @@
         transform: translate3d(0,-25%, 0);
         opacity: 0;
 
+    }
+
+    h3 {
+        text-transform: uppercase;
+        @include fs-md;
+        font-weight: 700;
     }
 }
 

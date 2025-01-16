@@ -1,0 +1,53 @@
+.block--form {
+    padding-top: $gutter*2;
+    padding-bottom: $gutter*2;
+    background-color: #F4F4F4;
+
+    >div {
+        display: grid;
+        gap: $gutter/2;
+        grid-template-columns: repeat(12, 1fr);
+
+        @media (max-width: $xl){
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: $md){
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+
+
+    // @media (max-width: $lg){
+	// 	padding: $gutter;
+	// }
+}
+
+.block--form__left {
+    grid-column: 2 / span 5;
+    text-wrap: balance;
+
+    @media (max-width: $xl){
+		grid-column: unset;
+	}
+
+    .title {
+        @include fs-xl;
+    }
+
+    .uppercase.bold {
+        @include fs-md;
+    }
+}
+
+.block--form__right {
+    grid-column: 8 / span 4;
+    max-width: 600px;
+    justify-self: center;
+
+    @media (max-width: $xl){
+		grid-column: unset;
+	}
+}

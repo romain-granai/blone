@@ -1,0 +1,41 @@
+.list {
+    --col: 3;
+    display: grid;
+    grid-template-columns: repeat(var(--col), 1fr);
+    @include clean-list;
+
+
+    .block--list & {
+        grid-column: 3 / span 8;
+        gap: $gutter;
+    
+        @media (max-width: $xxl){
+            grid-column: 2 / span 10;
+        }
+    
+        @media (max-width: $xl){
+            grid-column: span 12;
+        }
+    
+        @media (max-width: $lg){
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}
+
+.list__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.list__item__title {
+    text-transform: uppercase;
+    @include fs-md;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.22;
+    margin-bottom: 2em;
+}

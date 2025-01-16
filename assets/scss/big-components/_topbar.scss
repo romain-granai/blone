@@ -50,6 +50,19 @@
 	justify-content: center;
 }
 
+.topbar__logo {
+	width: 100px;
+
+	svg {
+		display: block;
+		width: 100%;
+	}
+
+	path {
+		fill: black;
+	}
+}
+
 .topbar__sub {
 	position: absolute;
 	bottom: 0;

@@ -15,6 +15,8 @@
         $first_product_title = '';
         $first_product_colors = [];
         $first_product_permalink = '';
+        $first_product_perfume = '';
+        $first_product_volume = '';
 
         // Start the loop
         if ( $loop->have_posts() ) :
@@ -31,6 +33,9 @@
                 // Initialize colors array
                 $colors_array = [];
 
+                $perfume = get_field('product_perfume');
+                $volume = get_field('product_volume');
+
                 // Fetch ACF color fields
                 for ($i = 1; $i <= 4; $i++) {
                     $color = get_field('color_' . $i);
@@ -44,6 +49,8 @@
                     $first_product_title = $product_title;
                     $first_product_colors = $colors_array;
                     $first_product_permalink = $permalink;
+                    $first_product_perfume = $perfume;
+                    $first_product_volume = $volume;
                     $is_first_product = false;
                 }
 
@@ -968,7 +975,14 @@
             <button class="prev-next prev-next--prev" data-text="Prev"><span><</span></button>
             <button class="prev-next prev-next--next" data-text="next"><span>></span></button>
         </div>
-        <div class="bottle-screen__ctas">
-            <a href="<?php echo $first_product_permalink; ?>" class="btn btn--dark-neg btn--big" title="See Product" data-text="See Product"><span>See Product</span></a>
+        
+        <div class="bottle-screen__bottom">
+            <h3><?php echo $first_product_title; ?></h3>
+            <div class="bottle-screen__more-info">
+                <span class="perfume"><?php echo $first_product_perfume; ?></span> - <span class="volume"><?php echo $first_product_volume; ?></span>
+            </div>
+            <div class="bottle-screen__ctas">
+                <a href="<?php echo $first_product_permalink; ?>" class="btn btn--dark-neg btn--big" title="See Product" data-text="See Product"><span>See Product</span></a>
+            </div>
         </div>
     </div>

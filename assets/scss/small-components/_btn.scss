@@ -1,3 +1,12 @@
+.btn,
+.wpcf7-submit {
+    @include btn;
+}
+
+.wpcf7-submit {
+    width: 100%;
+}
+
 button {
     color: inherit;
 }
@@ -99,4 +108,24 @@ button {
 :where(body:not(.woocommerce-block-theme-has-button-styles)) .woocommerce button.button.alt, 
 :where(body:not(.woocommerce-block-theme-has-button-styles)) .woocommerce input.button.alt {
     @include btn;
+}
+
+.sound-trigger {
+    width: 20px;
+    height: 20px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+
+    &--is-playing {
+        background-image: url(../media/img/sound-on.jpg);
+    }
+
+    &--is-not-playing {
+        background-image: url(../media/img/sound-off.jpg);
+    }
 }

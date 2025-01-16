@@ -9,6 +9,7 @@
     font-weight: 520;
     line-height: .82;
     text-transform: uppercase;
+    padding: 0;
 
     &--viewport {
         height: 100svh;
@@ -115,6 +116,10 @@
     .block--full-media--numeric & {
         display: flex;
         flex-direction: column;
+    }
+
+    .block--full-media--light & {
+        text-shadow: 0 0 .1em rgba($black, 0.25);
     }
 
     > span {

@@ -9,11 +9,18 @@ textarea {
     padding: .825em;
     // padding: .55em;
     font-variant-numeric: lining-nums;
+    width: 100%;
     @include fs-sm;
 
     &:focus {
         outline: none;
         border: 1px solid blue;
+    }
+
+    &::placeholder {
+        text-transform: uppercase;
+        color: rgba(0,0,0,.5);
+        opacity: 1;
     }
 }
 
@@ -22,8 +29,9 @@ input[type="checkbox"] {
     width: 1em;
     aspect-ratio: 1;
     border: 1px solid black;
-    padding: .25%;
+    padding: 1px;
     background-clip: content-box;
+    border-radius: 0;
 
     &:checked {
         background-color: black;
@@ -53,7 +61,19 @@ select {
     background-color: white;
     padding: 0.825em;
     // padding: .55em;
+    text-transform: uppercase;
+    width: 100%;
     @include fs-sm;
+    line-height: 1.5;
+    -webkit-appearance: initial;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 11px;
+
+    &:has(option:checked[value=""]) {
+        color: rgba(0,0,0,.5);
+    }
 }
 
 fieldset {
@@ -93,7 +113,7 @@ fieldset {
 }
 
 .select2-container .select2-selection--single .select2-selection__rendered {
-    padding: 0.825em!important;
+    padding: 0.72em!important;
     line-height: unset;
 }
 
@@ -108,4 +128,85 @@ fieldset {
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 100%;
+}
+
+.select2-container .select2-selection--single {
+    margin: 0 0 -1px;
+}
+
+.label__label {
+    display: none;
+}
+
+.wpcf7 {
+
+    p {
+        margin: 0;
+    
+        &:has([data-name="acceptance"]){
+            margin-block: $gutter/2;
+
+            label {
+                display: flex;
+                align-items: flex-start;
+                gap: $gutter/4;
+            }
+
+            input[type="checkbox"]{
+                width: 3.5em;
+            }
+        }
+
+        &:has(.has-spinner) {
+            position: relative;
+            text-align: right;
+        }
+    }
+}
+
+.wpcf7-list-item {
+    margin: 0;
+}
+
+.wpcf7-acceptance {
+    @include fs-smallest;
+}
+
+.wpcf7-not-valid-tip {
+    @include fs-xs;
+    margin-top: .5em;
+}
+
+.wpcf7 form  .wpcf7-response-output {
+    margin: $gutter/4 0 0 0;
+    text-align: right;
+    padding: 1em;
+    border-width: 1px;
+}
+
+.wpcf7-spinner {
+    margin: 0;
+    border: 2px solid white;
+    background-color: transparent;
+    position: absolute;
+    right: 10px;
+    top: calc(50% - 12px);
+
+    &:before {
+        position: absolute;
+        background-color: #000;
+        top: -1px;
+        left: -1px;
+        border-radius: 100%;
+        transform-origin: 11px 11px;
+
+    }
+
+    .has-spinner:hover + &{
+        border: 2px solid black;
+
+        &:before {
+            background-color: $white;
+        }
+    }
 }

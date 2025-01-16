@@ -1,0 +1,15 @@
+.block {
+    padding: $gutter/2 $gutter*2;
+
+    @media (max-width: $xl){
+		padding: $gutter/2 $gutter;
+	}
+
+    @media (max-width: $lg){
+		padding: $gutter/4 $gutter;
+	}
+
+	@media (max-width: $md){
+		padding: $gutter/4 $gutter/2;
+	}
+}

@@ -120,7 +120,8 @@ $(document).ready(function () {
                     $('.topbar__sub').removeClass('topbar__sub--is-active');
                     $('.topbar').removeClass('topbar--is-hidden');
                 },
-                beforeEnter(){
+                beforeEnter(data){
+                    var cf7Form = $(data.next.container).find('.wpcf7-form')[0];
 
                     $mobileNav.removeClass('mobile-nav--is-open');
                     mobileNavIsOpen = false;
@@ -130,6 +131,11 @@ $(document).ready(function () {
                     killAllScrollTrigger();
                     preventSamePageReload();
 
+                    // if(!cf7Form.length) return;
+
+                    setTimeout(function(){
+                        reInitCF7(cf7Form);
+                    }, 200);
                 }
 
             }
@@ -328,7 +334,7 @@ $(document).ready(function () {
         var rotationSpeed = 0.01;
         var isAnimating = false;
         
-        console.log($('.bottle-screen__number').length);
+        // console.log($('.bottle-screen__number').length);
 
         if (modelContainer == null) {
             return;
@@ -339,7 +345,7 @@ $(document).ready(function () {
             onComplete: () => {
                 prevNextWave.restart().pause();
                 isAnimating = false;
-                gsap.set('.number', { clearProps: 'all' });
+                // gsap.set('.number', { clearProps: 'all' });
                 gsap.set('.bottle-screen__bg', { autoAlpha: 0 });
             },
             onStart: () => {
@@ -482,10 +488,10 @@ $(document).ready(function () {
                 end: 'bottom 10%',
                 scrub: true,
                 onEnter: (self) => {
-                    $('.bottle-screen__ctas').addClass('bottle-screen__ctas--is-hidden');
+                    $('.bottle-screen__bottom').addClass('bottle-screen__bottom--is-hidden');
                 },
                 onLeaveBack: (self) => {
-                    $('.bottle-screen__ctas').removeClass('bottle-screen__ctas--is-hidden');
+                    $('.bottle-screen__bottom').removeClass('bottle-screen__bottom--is-hidden');
                 }
             }
         });
@@ -496,7 +502,7 @@ $(document).ready(function () {
         let stopTimeout;
     
         const cursorStopped = () => {
-            console.log('Cursor has stopped moving.');
+            // console.log('Cursor has stopped moving.');
             gsap.to('.bottle-screen__bg', { autoAlpha: 0, duration: .2 });
             isAnimating = false;
         };
@@ -592,13 +598,16 @@ $(document).ready(function () {
             if (nextOrPrev == 'next') {
                 currentPerfumeIndex = (currentPerfumeIndex + 1) % products.length;
     
-                gsap.to('.bottle-screen__current-number', {
+                gsap.to('.bottle-screen__current-number, .bottle-screen__bottom h3', {
                     duration: 1,
                     scrambleText: { text: products[currentPerfumeIndex].productTitle, chars: '0123456789' }
                 });
                 gsap.to(object.rotation, { y: '+=3.14', duration: 1 });
                 $('.bottle-screen__ctas a').attr('href', products[currentPerfumeIndex].permalink);
-    
+                $('.bottle-screen__bottom .perfume').html(products[currentPerfumeIndex].perfume);
+                $('.bottle-screen__bottom .volume').html(products[currentPerfumeIndex].volume);
+
+
                 gsap.to('.bottle-screen', { '--color-1': products[currentPerfumeIndex].colors[0] });
                 gsap.to('.bottle-screen', { '--color-3': products[currentPerfumeIndex].colors[2], delay: .1 });
                 gsap.to('.bottle-screen', { '--color-2': products[currentPerfumeIndex].colors[1], delay: .2 });
@@ -608,13 +617,15 @@ $(document).ready(function () {
             } else {
                 currentPerfumeIndex = (currentPerfumeIndex - 1 + products.length) % products.length;
     
-                gsap.to('.bottle-screen__current-number', {
+                gsap.to('.bottle-screen__current-number, .bottle-screen__bottom h3', {
                     duration: 1,
                     scrambleText: { text: products[currentPerfumeIndex].productTitle, chars: '0123456789' }
                 });
                 gsap.to(object.rotation, { y: '-=3.14', duration: 1 });
                 $('.bottle-screen__ctas a').attr('href', products[currentPerfumeIndex].permalink);
-    
+                $('.bottle-screen__bottom .perfume').html(products[currentPerfumeIndex].perfume);
+                $('.bottle-screen__bottom .volume').html(products[currentPerfumeIndex].volume);
+                
                 gsap.to('.bottle-screen', { '--color-1': products[currentPerfumeIndex].colors[0] });
                 gsap.to('.bottle-screen', { '--color-2': products[currentPerfumeIndex].colors[1], delay: .1 });
                 gsap.to('.bottle-screen', { '--color-3': products[currentPerfumeIndex].colors[2], delay: .2 });
@@ -1349,65 +1360,111 @@ $(document).ready(function () {
         });
     };
 
-    function relatedProductsSwiper(){
-        console.log('SWIIIIIIIIIPER');
+    // function relatedProductsSwiper(){
+    
+    //     console.log('SWIIIIIIIIIPER');
 
+    //     var swiperMain = $('.related.products');
+    //     var swiperWrapper = swiperMain.find('ul');
+    //     var swiperItem = swiperMain.find('li');
+
+    //     swiperMain.addClass('swiper');
+    //     swiperWrapper.addClass('swiper-wrapper');
+    //     swiperItem.addClass('swiper-slide');
+
+    //     // const swiper = new Swiper('.related', {
+    //     //     // speed: 400,
+    //     //     // spaceBetween: 100,
+    //     //     slidesPerView: 1.5,
+    //     //     freeMode: {
+    //     //         enabled: true
+    //     //     },
+    //     // });
+
+    //     // console.log(swiper);
+
+    //     // Swiper instance variable
+    //     let swiperInstance = null;
+
+    //     // Function to initialize or destroy Swiper based on screen size
+    //     function handleSwiper() {
+    //         const screenWidth = window.innerWidth;
+
+    //         if (screenWidth <= 768) {
+    //             // If screen is small and swiper is not initialized, initialize it
+    //             if (!swiperInstance) {
+
+    //                 swiperInstance = new Swiper('.related', {
+    //                     // speed: 400,
+    //                     // spaceBetween: 100,
+    //                     slidesPerView: 1.5,
+    //                     freeMode: {
+    //                         enabled: true
+    //                     },
+    //                 });
+
+    //             }
+    //         } else {
+    //             // If screen is large and swiper is initialized, destroy it
+    //             if (swiperInstance) {
+    //                 swiperInstance.destroy(true, true);
+    //                 swiperInstance = null; // Reset the instance
+    //             }
+    //         }
+    //     }
+
+    //     // Initial call to handle Swiper based on the current screen size
+    //     handleSwiper();
+
+    //     // Re-check on window resize
+    //     window.addEventListener('resize', handleSwiper);
+          
+    // };
+
+    function relatedProductsSwiper() {
+        console.log('SWIIIIIIIIIPER');
+    
         var swiperMain = $('.related.products');
         var swiperWrapper = swiperMain.find('ul');
         var swiperItem = swiperMain.find('li');
-
+    
         swiperMain.addClass('swiper');
         swiperWrapper.addClass('swiper-wrapper');
         swiperItem.addClass('swiper-slide');
-
-        // const swiper = new Swiper('.related', {
-        //     // speed: 400,
-        //     // spaceBetween: 100,
-        //     slidesPerView: 1.5,
-        //     freeMode: {
-        //         enabled: true
-        //     },
-        // });
-
-        // console.log(swiper);
-
+    
         // Swiper instance variable
         let swiperInstance = null;
-
+    
         // Function to initialize or destroy Swiper based on screen size
         function handleSwiper() {
             const screenWidth = window.innerWidth;
-
+    
             if (screenWidth <= 768) {
                 // If screen is small and swiper is not initialized, initialize it
-                if (!swiperInstance) {
-
+                if (!swiperInstance || !(swiperInstance instanceof Swiper)) {
                     swiperInstance = new Swiper('.related', {
-                        // speed: 400,
-                        // spaceBetween: 100,
                         slidesPerView: 1.5,
                         freeMode: {
                             enabled: true
                         },
                     });
-
                 }
             } else {
                 // If screen is large and swiper is initialized, destroy it
-                if (swiperInstance) {
+                if (swiperInstance && swiperInstance instanceof Swiper) {
                     swiperInstance.destroy(true, true);
                     swiperInstance = null; // Reset the instance
                 }
             }
         }
-
+    
         // Initial call to handle Swiper based on the current screen size
         handleSwiper();
-
+    
         // Re-check on window resize
         window.addEventListener('resize', handleSwiper);
-          
     };
+    
 
     function observeCartChanges() {
         var cartContent = document.querySelector('.wp-block-woocommerce-cart');
@@ -1493,6 +1550,16 @@ $(document).ready(function () {
             timeout = setTimeout(later, wait);
             if (callNow) func.apply(context, args);
         };
+    };
+
+    function reInitCF7(form){
+        if(form){
+            try {
+                wpcf7.reset(form);
+            } catch (ev) {
+                wpcf7.init(form);
+            };
+        }
     };
 
 });

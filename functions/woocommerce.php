@@ -222,6 +222,8 @@ function blone_content_block(){
             <?php if( get_row_layout() == 'full_media' ): 
                 $mainTitle = get_sub_field('main_title');
                 $animationTypeClass = 'block--full-media--'.get_sub_field('animation_type');
+                $tone = get_sub_field('tone');
+                $toneClass = 'block--full-media--'. $tone;
                 $typeClass = ' ' . get_sub_field('type');
                 $textPositionClass = ' ' . get_sub_field('text_position');
                 $ctaPositionClass = ' ' . get_sub_field('cta_position');
@@ -242,7 +244,7 @@ function blone_content_block(){
                     <div class="title title--center title--section"><h2><?php echo $mainTitle; ?></h2></div>
                 <?php endif; ?>
 
-                <div class="block block--full-media <?php echo $animationTypeClass . ' ' . $textPositionClass . ' ' . $ctaPositionClass . ' ' . $typeClass . ' ' . $marginTopClass . ' ' . $marginBottomClass; ?>"> 
+                <div class="block block--full-media <?php echo $animationTypeClass . ' ' . $textPositionClass . ' ' . $ctaPositionClass . ' ' . $typeClass . ' ' . $marginTopClass . ' ' . $marginBottomClass . ' ' . $toneClass; ?>"> 
                     <div class="media">
                         <?php if($mediaType == 'image'): ?>
                             <?php if(!empty( $img )): ?>
@@ -271,7 +273,11 @@ function blone_content_block(){
                         <?php endif; ?>
                         <?php if($ctaLabel && $ctaLink): ?>
                             <!-- btn--big btn--rounded -->
-                            <a href="<?php echo $ctaUrl ?>" class="btn btn--light-neg btn--big" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>" title="<?php echo $ctaTitle ?>"><span><?php echo $ctaLabel; ?></span></a>
+                            <?php if($tone == 'light'): ?>
+                                <a href="<?php echo $ctaUrl ?>" class="btn btn--dark-neg btn--big" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>" title="<?php echo $ctaTitle ?>"><span><?php echo $ctaLabel; ?></span></a>
+                            <?php else: ?>
+                                <a href="<?php echo $ctaUrl ?>" class="btn btn--light-neg btn--big" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>" title="<?php echo $ctaTitle ?>"><span><?php echo $ctaLabel; ?></span></a>
+                            <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -350,9 +356,10 @@ function blone_content_block(){
                 $title = get_sub_field('title');
                 $theTitle = '<'. $level .'>'. $title . '</'. $level .'>';
                 $alignmentClass = 'title--' . get_sub_field('alignment');
+                $widthAlignmentClass = 'title--width-' . get_sub_field('width');
             ?>
 
-                <div class="title <?php echo $alignmentClass; ?> title--section"><?php echo $theTitle; ?></div>
+                <div class="title <?php echo $alignmentClass; echo ' ' . $widthAlignmentClass;  ?> title--section"><?php echo $theTitle; ?></div>
 
             <?php elseif( get_row_layout() == 'media_list' ): 
                 $mainTitle = get_sub_field('main_title');
@@ -433,6 +440,107 @@ function blone_content_block(){
                         </div>
                     <?php endif; ?>
                 </div>
+            <?php elseif( get_row_layout() == 'form' ): 
+                $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
+                $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
+                $formTitle = get_sub_field('form_title'); 
+                $formText = get_sub_field('form_text');    
+            ?>
+                <div class="block block--form <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                    <div>
+                        <div class="block--form__left">
+                            <?php if($formTitle): ?>
+                                <h3 class="title"><?php echo $formTitle; ?></h3>
+                            <?php endif; ?>
+                            <?php if($formText): ?>
+                                <?php echo $formText; ?>
+                            <?php endif; ?>
+                        </div>
+                        <div class="block--form__right">
+                            <?php $formField = get_sub_field('form'); ?>
+                            <?php echo do_shortcode($formField); ?>
+                        </div>
+                    </div>
+                </div>
+            <?php elseif( get_row_layout() == 'list' ): 
+                $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
+                $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
+                $gridTemplate = get_sub_field('grid');
+            ?>
+
+                <div class="block block--list <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                    <?php if( have_rows('list') ): ?>
+                        <!-- <div> -->
+                            <ul class="list" style="--col: <?php echo $gridTemplate; ?>">
+                                <?php while( have_rows('list') ): the_row(); 
+                                    $title = get_sub_field('title');
+                                    $text = get_sub_field('text');
+                                ?>
+                                <li class="list__item">
+                                    <?php if($title): ?>
+                                        <h3 class="list__item__title"><?php echo $title; ?></h3>
+                                    <?php endif; ?>
+                                    <?php if($text): ?>
+                                    <div class="list__item__content">
+                                        <?php echo $text; ?>
+                                    </div>
+                                    <?php endif; ?>
+                                </li>
+                                <?php endwhile; ?>
+                            </ul>
+                        <!-- </div> -->
+                    <?php endif; ?>
+                </div>
+            
+            <?php elseif( get_row_layout() == 'download_list' ): 
+                $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
+                $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
+                $content = get_sub_field('text_content');
+            ?>
+                <div class="block block--download <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                    <div class="download">
+                        <?php if($content): ?>
+                            <div class="download__side">
+                                <?php echo $content; ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if( have_rows('download_list') ): ?>
+                            <div class="download__side">
+                                <ul class="download__list">
+
+                                    <?php while( have_rows('download_list') ): the_row(); 
+                                        $title = get_sub_field('title');
+                                        $file = get_sub_field('file');
+                                        $label = get_sub_field('button_label');
+                                    ?>
+
+                                        <li class="download__item">
+                                            <?php if($title): ?><h3><?php echo $title; ?></h3><?php endif; ?>
+                                            <a href="<?php echo $file['url']; ?>" class="btn btn--dark" title="<?php echo $label . ' ' . $file['filename']; ?>" download><?php echo $label; ?></a>
+                                        </li>
+
+                                    <?php endwhile; ?>
+
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php elseif( get_row_layout() == 'contact_form' ): 
+                $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
+                $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
+                $title = get_sub_field('title');
+                $form = get_sub_field('form');
+            ?>
+                <?php if($title): ?>
+                <div class="title title--left title--section">
+                    <h2><?php echo $title; ?></h2>
+                </div>
+                <?php endif; ?>
+                <div class="block block--contact-form <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                    <?php echo do_shortcode($form); ?>
+                </div>
+
             <?php endif; ?>
 
         <?php endwhile; ?>
@@ -482,14 +590,16 @@ function custom_display_product_images() {
 
     $attachment_ids = $product->get_gallery_image_ids();
     
+
     if ( $attachment_ids && $product->get_image_id() ) {
         array_unshift( $attachment_ids, $product->get_image_id() );
     }
 
     if ( $attachment_ids && has_post_thumbnail() ) {
+        $attachment_count = count($attachment_ids) > 4 ? 4 : count($attachment_ids);
         echo '<div class="single-product__images">';
 
-            echo '<div class="single-product__thumbnails">';
+            echo '<div class="single-product__thumbnails" style="--grid-div: '.$attachment_count.'">';
             $counter = 0;
             foreach ( $attachment_ids as $attachment_id ) {
                 $image_url = wp_get_attachment_image_url( $attachment_id, 'medium' );

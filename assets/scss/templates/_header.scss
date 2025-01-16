@@ -12,6 +12,13 @@
         height: 50svh;
     }
 
+    &--minimal {
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        height: 33svh;
+    }
+
     &:has(.header__media) {
         color: white;
     }
@@ -58,4 +65,12 @@
     line-height: .82;
     font-weight: 520;
     @include fs-big;
+
+    .header--minimal & {
+        text-transform: uppercase;
+        @include fs-md;
+        font-weight: 700;
+        text-align: center;
+        line-height: 1.22;
+    }
 }

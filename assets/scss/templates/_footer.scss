@@ -3,7 +3,7 @@
     flex-direction: column;
     color: $white;
     background-color: $black;
-    height: 50svh;
+    min-height: 50svh;
     @include fs-sm;
     text-transform: uppercase;
 
@@ -48,6 +48,10 @@
         gap: $gutter;
         // align-items: center;
 	}
+
+    @media (max-width: $md){
+        padding: $gutter $gutter/2;
+    }
 }
 
 .footer__logo {
@@ -56,21 +60,33 @@
     align-items: center;
 
     a {
-
+        display: block;
+        width: 13rem;
     }
 
-    img {
+    svg {
+        display: block;
+        width: 100%;
+    }
 
+    path {
+        fill: $white;
     }
 }
 
 .footer__nav {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
     gap: $gutter;
+    flex: 1 1 100%;
 
-    >div {
-        flex: 0 0 calc(16.66% - 3.3rem);
+    > div {
+        display: grid;
+        grid-column: 2/span 10;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4rem;
+        width: 100%;
+        align-self: center;
     }
 
     span {
@@ -79,20 +95,26 @@
 
     @media (max-width: $xl){
         gap: $gutter/2;
+
         > div {
-            flex: 0 0 calc(20% - 3.3rem);
+            grid-template-columns: repeat(4, 1fr);
         }
 	}
 
     @media (max-width: $lg){
-        display: grid;
-        row-gap: $gutter;
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+
+        > div {
+            grid-template-columns: repeat(3, 1fr);
+        }
 	}
 
     @media (max-width: $md){
-        grid-template-columns: repeat(2, 1fr);
+        > div {
+            grid-template-columns: repeat(2, 1fr);
+        }
 	}
+
 }
 
 .footer__contact {

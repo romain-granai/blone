@@ -141,12 +141,12 @@
     // justify-content: center;
     // justify-content: flex-start;
     display: grid;
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(var(--grid-div, 3), 1fr);
     gap: $gutter/2;
 
     @media (max-width: $lg){
         grid-template-rows: unset;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(var(--grid-div, 3), 1fr);
         order: 2;
     }
 }

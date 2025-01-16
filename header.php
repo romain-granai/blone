@@ -40,6 +40,9 @@
                 // Initialize colors array
                 $colors_array = [];
 
+                $perfume = get_field('product_perfume');
+                $volume = get_field('product_volume');
+
                 // Fetch ACF color fields
                 for ($i = 1; $i <= 4; $i++) {
                     $color = get_field('color_' . $i);
@@ -51,6 +54,8 @@
                 // Append to the JavaScript object string
                 $products_js .= '{';
                 $products_js .= '"productTitle": "' . esc_js($product_title) . '",';
+                $products_js .= '"perfume": "' . esc_js($perfume) . '",';
+                $products_js .= '"volume": "' . esc_js($volume) . '",';
                 $products_js .= '"colors": ' . json_encode($colors_array) . ',';
                 $products_js .= '"permalink": "' . esc_url($permalink) . '"';
                 $products_js .= '},';
@@ -103,11 +108,11 @@
                 <header class="header <?php echo $headerSizeClass; ?>">
                     <h1 class="d-none"><?php echo get_the_title($pageID); ?></h1>
                     <?php if(!is_account_page() && !is_cart() && !is_checkout()): ?>
-                        <div class="header__media">
-                            <?php if(!empty( $headerImg )): ?>
+                        <?php if(!empty( $headerImg )): ?>
+                            <div class="header__media">
                                 <img src="<?php echo esc_url($headerImg['url']); ?>" alt="<?php echo esc_attr($headerImg['alt']); ?>" />
-                            <?php endif; ?>
-                        </div>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <?php if($headerText): ?>
                         <div class="header__front"> 

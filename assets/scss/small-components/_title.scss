@@ -26,6 +26,16 @@
         justify-content: flex-end;
     }
 
+    &--width-sm {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: $gutter;
+
+        >* {
+            grid-column: 2/span 10;
+        }
+    }
+
     @media (max-width: $xl){
 
         &--section {
@@ -35,6 +45,17 @@
     }
 
     @media (max-width: $lg){
+
+        // &--section {
+        //     padding: 0 $gutter/2;
+        // }
+        
+        &--width-sm {
+            display: flex;
+        }
+    }
+
+    @media (max-width: $md){
 
         &--section {
             padding: 0 $gutter/2;

@@ -84,6 +84,15 @@
 
 }
 
+.wpcf7 {
+    label {
+        @include fs-sm;
+        margin-bottom: .3em;
+        margin-bottom: 0;
+        line-height: unset;
+    }
+}
+
 .woocommerce-MyAccount-navigation {
     position: relative;
     background-color: $black;

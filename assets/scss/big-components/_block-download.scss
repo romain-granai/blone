@@ -1,0 +1,58 @@
+.block--download {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: $gutter;
+
+    @media (max-width: $lg){
+        gap: $gutter/2;
+    }
+}
+
+.download {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column: 3 / span 8;
+    gap: $gutter;
+
+    @media (max-width: $xxl){
+        grid-column: 2 / span 10;
+    }
+
+    @media (max-width: $xl){
+        grid-column: span 12;
+    }
+
+    @media (max-width: $lg){
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.download__side {
+
+}
+
+.download__list {
+    @include clean-list;
+    display: flex;
+    flex-direction: column;
+    gap: $gutter/2;
+}
+
+.download__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $gutter/2;
+
+    h3 {
+        text-transform: uppercase;
+        @include fs-md;
+        font-weight: 700;
+        line-height: 1.22;
+    }
+
+    .btn {
+        flex: 0 0 50%;
+    }
+}

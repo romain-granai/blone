@@ -1,0 +1,9 @@
+.block--list {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: $gutter;
+
+    @media (max-width: $lg){
+        gap: $gutter/2;
+    }
+}
