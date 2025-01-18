@@ -281,7 +281,8 @@ function blone_content_block(){
                         <?php endif; ?>
                     </div>
                 </div>
-
+            <?php elseif(get_row_layout() == 'bottle_block'): ?>
+                <?php get_template_part( 'template-parts/home-bottle-screen' ); ?>
             <?php elseif( get_row_layout() == 'text_and_media' ): 
                 $mainTitle = get_sub_field('main_title');
                 $alignmentClass = get_sub_field('alignment');

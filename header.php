@@ -9,6 +9,7 @@
 
 <body <?php body_class(); ?> data-barba="wrapper">
     <?php wp_body_open(); ?>
+    
 
     <?php
 
@@ -76,7 +77,7 @@
         <?php echo $products_js; ?>
     </script>
 
-    <div class="curtain"></div>
+    <?php get_template_part( 'template-parts/curtain' ); ?>
     <?php get_template_part( 'template-parts/topbar-navigation' ); ?>
     <?php 
         $namespace;

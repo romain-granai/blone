@@ -5,7 +5,7 @@
         <?php the_content(); ?>
     <?php endwhile; endif; ?>
 
-    <?php get_template_part( 'template-parts/home-bottle-screen' ); ?>
+    
 
     <?php blone_content_block(); ?>
 

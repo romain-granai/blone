@@ -80,6 +80,7 @@ $(document).ready(function () {
                      });
                 },
                 once(){
+                    intro();
                     topbar();
                     getCartItemCount();
                     nav();
@@ -197,6 +198,69 @@ $(document).ready(function () {
         lenis.raf(time)
         requestAnimationFrame(raf)
     }
+
+    function intro(){
+        console.log('INTRO');
+        // if($('.header--home').length){
+            // var headerH1 = $('.header h1');
+            // var headerH2 = $('.header h2');
+            // var headerH2Spans = headerH2.find('span');
+    
+            var introTlShow = gsap.timeline({paused: true, delay: .5, onComplete: ()=>{
+                // lenis.start();
+                // ScrollTrigger.refresh();
+                // introTlHide.play();
+            }});
+            
+            var introTlHide = gsap.timeline({paused: true, onComplete: ()=>{
+                lenis.start();
+                ScrollTrigger.refresh();
+            }});
+
+            introTlShow 
+            
+                    // .to('.curtain', {'--topRight': '100%', ease: 'power2.inOut'}, 'step1')
+                    // .to('.curtain', {'--bottomRight': '100%', ease: 'power2.inOut'}, 'step1+=.025')
+                    .set('.curtain__logo', {display: 'block', autoAlpha: 1})
+                    .from('.curtain__logo__line', {duration: 1.5, drawSVG: 0, ease: 'expo.inOut'})
+                    .to('.curtain .btn', {autoAlpha: 1, display: 'block'})
+                    // .to('.curtain', {'--topLeft': '100%', ease: 'power2.inOut'}, 'step2-=.15')
+                    // .to('.curtain', {'--bottomLeft': '100%', ease: 'power2.inOut'}, 'step2-=.125')
+                    
+
+            
+            introTlHide .to('.curtain', {duration: .5, autoAlpha: 0, ease: 'power3.inOut'}, 'curtainDis')
+                        .to('.curtain__logo', {duration: .5, scale: .8, ease: 'power3.inOut'}, 'curtainDis')
+                        // .fromTo(headerH1[0], {duration: 3, scrambleText:{text: ''}}, {scrambleText:{text:headerH1[0].textContent, chars:' 0123456789'}})
+                        // .fromTo(headerH2Spans[0], {duration: 3, scrambleText:{text: ''}}, {scrambleText:{text:headerH2Spans[0].textContent, chars:' 0123456789'}}, '-=.1')
+                        // .fromTo(headerH2Spans[1], {duration: 3, scrambleText:{text: ''}}, {scrambleText:{text:headerH2Spans[1].textContent, chars:' 0123456789'}}, '-=.1')
+                        // .fromTo('.header', {'--minH': 100}, {'--minH': 75, duration: 1, ease: 'expo.inOut'}, '+=.1')
+                        // .from('.header__back', {autoAlpha: 0, duration: 1, ease: 'expo.inOut'}, '-=1')
+                        // .add(()=>{ $('.topbar').removeClass('topbar--is-hidden') }, '-=.65');
+
+            introTlShow.play();
+        // }else{
+        //     $('.topbar').removeClass('topbar--is-hidden');
+        // };
+
+        $('.btn--with-sound').on('click', function(e){
+            e.preventDefault();
+            var bloneAudio = $('.blone-audio');
+
+            introTlHide.play();
+
+            bloneAudio[0].play();
+            gsap.to(bloneAudio[0], {volume: 1});
+            audioIsPlaying = true;
+            $('.sound-trigger').addClass('sound-trigger--is-playing').removeClass('sound-trigger--is-not-playing');
+        });
+
+        $('.btn--without-sound').on('click', function(e){
+            e.preventDefault();
+            introTlHide.play();
+        });
+
+    };
 
     function topbar() {
         
@@ -625,7 +689,7 @@ $(document).ready(function () {
                 $('.bottle-screen__ctas a').attr('href', products[currentPerfumeIndex].permalink);
                 $('.bottle-screen__bottom .perfume').html(products[currentPerfumeIndex].perfume);
                 $('.bottle-screen__bottom .volume').html(products[currentPerfumeIndex].volume);
-                
+
                 gsap.to('.bottle-screen', { '--color-1': products[currentPerfumeIndex].colors[0] });
                 gsap.to('.bottle-screen', { '--color-2': products[currentPerfumeIndex].colors[1], delay: .1 });
                 gsap.to('.bottle-screen', { '--color-3': products[currentPerfumeIndex].colors[2], delay: .2 });

@@ -11,5 +11,6 @@
 //@prepros-append vendor/GLTFLoader.js
 //@prepros-append vendor/ScrambleTextPlugin.js
 //@prepros-append vendor/SplitText.js
+//@prepros-append vendor/DrawSVGPlugin.js
 
 //@prepros-append app.js
