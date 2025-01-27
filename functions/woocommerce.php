@@ -333,7 +333,9 @@ function blone_content_block(){
                 $textContent = get_sub_field('text_content');
                 $ctaLabel = get_sub_field('cta_label');
                 $ctaLink = get_sub_field('cta_link');
-
+                $isBigTextClass = get_sub_field('is_big_text') ? 'block--just-text--big' : '';
+                $isQuote = get_sub_field('is_quote');
+                $quoteWho = get_sub_field('who');
                 $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
                 $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
             ?>
@@ -342,9 +344,14 @@ function blone_content_block(){
                     <div class="title title--center title--section"><h2><?php echo $mainTitle; ?></h2></div>
                 <?php endif; ?> 
 
-                <div class="block block--just-text <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>" <?php echo $blockID; ?>>
+                <div class="block block--just-text <?php echo $isBigTextClass . ' ' . $marginTopClass . ' ' . $marginBottomClass; ?>" <?php echo $blockID; ?>>
                     <?php if($textContent): ?>
-                        <div><?php echo $textContent; ?></div>
+                        <?php if(!$isQuote): ?>
+                            <div><?php echo $textContent; ?></div>
+                        <?php else: ?>
+                            <blockquote><div><?php echo $textContent; ?></div></blockquote>
+                            <p><?php echo $quoteWho; ?></p>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <?php if($ctaLink): 
                         $ctaUrl = $ctaLink['url'];

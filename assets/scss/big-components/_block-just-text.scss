@@ -4,13 +4,79 @@
     padding-left: $gutter*2;
     padding-right: $gutter*2;
 
+    &:has(blockquote){
+        flex-direction: column;
+    }
+
     > div {
         width: 100%;
         max-width: 1200px;
     }
 
+    p {
+        text-wrap: balance;
+    }
+
+    &--big {
+        p {
+            text-transform: uppercase;
+            line-height: 1.72;
+            @include fs-xl;
+            font-weight: $f-w-500;
+        }
+    }
+
+    blockquote {
+        display: grid;
+        gap: $gutter/2;
+        grid-template-columns: repeat(12,1fr);
+        margin: unset;
+
+        >div {
+            grid-column: 3/span 8;
+        }
+
+        p {
+            font-family: $f-secondary;
+            font-weight: $f-w-400;
+            @include fs-xl;
+            font-style: italic;
+        }
+
+        + p {
+            text-align: center;
+            margin-top: 1em;
+        }
+    }
+
     @media (max-width: $xl){
         padding-left: $gutter;
         padding-right: $gutter;
+
+        &--big,
+        blockquote {
+            p {
+                @include fs-lg;
+            }
+        }
+
+        blockquote {
+            >div {
+                grid-column: 2/span 10;
+            }
+        }
+
+    }
+
+    @media (max-width: $lg){
+        &--big {
+            br {
+                display: none;
+            }
+        }
+
+        blockquote {
+            display: block;
+        }
     }
 }

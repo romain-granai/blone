@@ -160,6 +160,14 @@
 	}
 }
 
+.bottle-screen__more-info {
+    @include fs-sm;
+
+    @media (max-width: $lg){
+        @include fs-xs;
+	}
+}
+
 .prev-next {
     appearance: none;
     width: 50px;
