@@ -5,7 +5,7 @@
 	width: 100%;
     @include fs-sm;
     text-transform: uppercase;
-	z-index: 1000;
+	z-index: 2000;
 	transition: transform .8s cubic-bezier(.5,.5,0,1);
 
 	&--is-hidden {

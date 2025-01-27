@@ -1,7 +1,7 @@
         </div> <!-- Closing Barba Container -->
         <?php if(!is_account_page()): ?>
             <div class="footer-sup">
-                <div class="footer-sup__side">
+                <div class="footer-sup__side footer-sup__side--left">
                     <div class="footer-sup__in">
                         <?php 
 
@@ -72,7 +72,7 @@
 
                     
                 </div>
-                <div class="footer-sup__side">
+                <div class="footer-sup__side footer-sup__side--right">
                     <div class="footer-sup__in">
                         <div>
                             <?php 

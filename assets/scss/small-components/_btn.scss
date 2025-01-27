@@ -120,6 +120,7 @@ button {
     padding: 0;
     border: none;
     cursor: pointer;
+    margin-left: $gutter;
 
     &--is-playing {
         background-image: url(../media/img/sound-on.jpg);

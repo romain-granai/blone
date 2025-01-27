@@ -1,4 +1,4 @@
-<div class="topbar">
+<div class="topbar topbar--is-hidden">
 	<div class="topbar__main">
 		<?php
 			$menuName = 'main';
@@ -49,6 +49,8 @@
 		
 		<nav class="nav nav--utils" data-barba-prevent="all">
 			<?php wp_nav_menu( array('theme_location' => 'tools', 'container' => false, 'menu_class' => 'nav-list') ); ?>
+			<button class="sound-trigger sound-trigger--is-not-playing"></button>
+			<audio class="blone-audio" src="<?php echo get_template_directory_uri(); ?>/assets/media/audio/blone-audio.mp3"></audio>
 		</nav>
 		<button class="burger">
 			<span class="burger__bar burger__bar--top"></span>

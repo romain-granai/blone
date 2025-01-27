@@ -16,11 +16,11 @@
     background-color: black;
     background: linear-gradient(52deg,#c9e0d1 0%,#b5c8ff 33%,#dde6ff 66%,#ffeaea 100%);
     // clip-path: polygon(var(--topLeft) 0, var(--topRight) 0, var(--bottomRight) 100%, var(--bottomLeft) 100%);
-    z-index: 2000;
+    z-index: 1000;
 
-    body:not(.home) & {
-        display: none;
-    }
+    // body:not(.home) & {
+    //     display: none;
+    // }
 
     &__logo {
         opacity: 0;

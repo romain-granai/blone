@@ -1,9 +1,9 @@
 $(document).ready(function () {
-    console.log('READY TO RUMBLE');
     var subNavIsOpen = false;
     var mobileNavIsOpen = false;
     var $burger = $('.burger');
     var $mobileNav = $('.mobile-nav');
+    var audioIsPlaying = false;
 
     const lenis = new Lenis({
         duration: 1,
@@ -82,6 +82,7 @@ $(document).ready(function () {
                 once(){
                     intro();
                     topbar();
+                    playAudio();
                     getCartItemCount();
                     nav();
                     mobileNav();
@@ -102,6 +103,7 @@ $(document).ready(function () {
                 afterEnter(){
                     console.log('GLOBAL AFTER ENTER');
                     topbar();
+                    playAudio();
                     btn();
                     productList3d();
                     dropdowns();
@@ -200,7 +202,7 @@ $(document).ready(function () {
     }
 
     function intro(){
-        console.log('INTRO');
+        // console.log('INTRO');
         // if($('.header--home').length){
             // var headerH1 = $('.header h1');
             // var headerH2 = $('.header h2');
@@ -215,6 +217,9 @@ $(document).ready(function () {
             var introTlHide = gsap.timeline({paused: true, onComplete: ()=>{
                 lenis.start();
                 ScrollTrigger.refresh();
+                // $('.curtain').remove();
+                $('.curtain__logo, .curtain__sound-triggers').remove();
+                $('.topbar').removeClass('topbar--is-hidden');
             }});
 
             introTlShow 
@@ -303,6 +308,32 @@ $(document).ready(function () {
 
     };
 
+    function playAudio(){
+        console.log('PLAY AUDIO');
+        var bloneAudio = $('.blone-audio');
+        gsap.set(bloneAudio[0], {volume: 0});
+
+        $('.sound-trigger').on('click', function(){
+            if(audioIsPlaying){
+                gsap.to(bloneAudio[0], {volume: 0, 
+                    onComplete: function(){
+                        bloneAudio[0].pause();
+                        audioIsPlaying = false;
+                        $('.sound-trigger').removeClass('sound-trigger--is-not-playing').addClass('sound-trigger--is-not-playing');
+                    }
+                });
+
+            } else {
+                
+                bloneAudio[0].play();
+                gsap.to(bloneAudio[0], {volume: 1});
+                audioIsPlaying = true;
+                $('.sound-trigger').addClass('sound-trigger--is-playing').removeClass('sound-trigger--is-not-playing');
+
+            }
+        });
+    };
+
     function nav() {
         $('[data-nav]').on('mouseenter, mousemove', (e)=>{
             var thisSubNav = $(e.target).data('nav');
@@ -321,7 +352,7 @@ $(document).ready(function () {
         });
 
         $('[data-nav]').on('mouseleave', (e)=>{
-            console.log(e.relatedTarget);
+            // console.log(e.relatedTarget);
             if(e.relatedTarget.className == 'topbar__main' || e.relatedTarget.className == 'nav-list'){
                 $('[data-nav]').removeClass('is-active');
                 $('.topbar__sub').removeClass('topbar__sub--is-active');
@@ -757,25 +788,25 @@ $(document).ready(function () {
                 scrollTrigger: {
                     onEnter: function(){
                         if(hasVid){
-                            console.log('VIDEO PLAYED')
+                            // console.log('VIDEO PLAYED')
                             $this.find('video')[0].play();
                         }
                     },
                     onLeave: function(){
                         if(hasVid){
-                            console.log('VIDEO PAUSED')
+                            // console.log('VIDEO PAUSED')
                             $this.find('video')[0].pause();
                         }
                     },
                     onEnterBack: function(){
                         if(hasVid){
-                            console.log('VIDEO PLAYED')
+                            // console.log('VIDEO PLAYED')
                             $this.find('video')[0].play();
                         }
                     },
                     onLeaveBack: function(){
                         if(hasVid){
-                            console.log('VIDEO PAUSED')
+                            // console.log('VIDEO PAUSED')
                             $this.find('video')[0].pause();
                         }
                     },
@@ -835,25 +866,25 @@ $(document).ready(function () {
                 scrollTrigger: {
                     onEnter: function(){
                         if(hasVid){
-                            console.log('VIDEO PLAYED')
+                            // console.log('VIDEO PLAYED')
                             $this.find('video')[0].play();
                         }
                     },
                     onLeave: function(){
                         if(hasVid){
-                            console.log('VIDEO PAUSED')
+                            // console.log('VIDEO PAUSED')
                             $this.find('video')[0].pause();
                         }
                     },
                     onEnterBack: function(){
                         if(hasVid){
-                            console.log('VIDEO PLAYED')
+                            // console.log('VIDEO PLAYED')
                             $this.find('video')[0].play();
                         }
                     },
                     onLeaveBack: function(){
                         if(hasVid){
-                            console.log('VIDEO PAUSED')
+                            // console.log('VIDEO PAUSED')
                             $this.find('video')[0].pause();
                         }
                     },
@@ -1020,7 +1051,6 @@ $(document).ready(function () {
             // var posXPercent = (posX / width) * 100;
             var posYPercent = (posY / height) * 100;
             const imgPosMap = gsap.utils.mapRange(0, 100, 25, -25, posYPercent);
-            console.log()
             
             gsap.to(thisDetail, {'--posY': posY + 'px', duration: 2, ease: 'power4.out'});
             gsap.to(thisDetailImg, {'--y': imgPosMap + 'px', duration: 2, ease: 'power4.out'});
@@ -1344,7 +1374,7 @@ $(document).ready(function () {
             $thisbutton.addClass('no-touch');
 
             $.post(custom_ajax_object.ajax_url, data, function(response) {
-                console.log('Full response:', response); // Log the full response
+                // console.log('Full response:', response); // Log the full response
     
                 if (response && response.fragments) {
                     // If the response contains fragments, consider it successful
@@ -1382,7 +1412,7 @@ $(document).ready(function () {
                 offset = offset + $('.text-with-navigation__nav').innerHeight();
             };
 
-            console.log(offset);
+            // console.log(offset);
 
             lenis.scrollTo(thisHref, {
 				offset: -parseFloat(offset),
@@ -1486,7 +1516,7 @@ $(document).ready(function () {
     // };
 
     function relatedProductsSwiper() {
-        console.log('SWIIIIIIIIIPER');
+        // console.log('SWIIIIIIIIIPER');
     
         var swiperMain = $('.related.products');
         var swiperWrapper = swiperMain.find('ul');

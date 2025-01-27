@@ -6,6 +6,10 @@
     box-shadow: 0 0 20px rgba(0,0,0,0.05);
     // overflow: ;
 
+    body:has([data-barba-namespace="home"]) & {
+        grid-template-columns: 1fr;
+    }
+
     @media (max-width: $xl){
         padding: 0 $gutter;
     }
@@ -76,6 +80,47 @@
     grid-column: 2/6;
     gap: $gutter;
     // background: blue;
+}
+
+.footer-sup__side--right {
+    body:has([data-barba-namespace="home"]) & {
+        display: none;
+    }
+}
+
+.footer-sup__side--left {
+
+    body:has([data-barba-namespace="home"]) & {
+        display: block;
+
+        .footer-sup__in {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(12,1fr);
+
+            div:first-child {
+                grid-column: 2/span 5;
+            }
+
+            div:last-child {
+                grid-column: 8/span 4;
+                max-width: 600px;
+                justify-self: center;
+            }
+
+            @media (max-width: $xl){
+                grid-template-columns: repeat(2,1fr);
+
+                div:first-child,
+                div:last-child {
+                    grid-column: unset;
+                }
+            }
+            
+        }
+    }
+
+
 }
 
 .mail-and-subscribe {

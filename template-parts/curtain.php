@@ -12,7 +12,7 @@
             </g>
         </svg>
     </div>
-    
+
     <div class="curtain__sound-triggers">
         <button class="btn btn--with-sound">With Sound</button>
         <button class="btn btn--without-sound">Without Sound</button>

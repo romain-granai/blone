@@ -220,6 +220,7 @@ function blone_content_block(){
         <?php while( have_rows('content_blocks') ): the_row(); ?>
 
             <?php if( get_row_layout() == 'full_media' ): 
+                $blockID = get_sub_field('block_id') ? 'id="' . slugify(get_sub_field('block_id')) . '"' : '';
                 $mainTitle = get_sub_field('main_title');
                 $animationTypeClass = 'block--full-media--'.get_sub_field('animation_type');
                 $tone = get_sub_field('tone');
@@ -244,7 +245,7 @@ function blone_content_block(){
                     <div class="title title--center title--section"><h2><?php echo $mainTitle; ?></h2></div>
                 <?php endif; ?>
 
-                <div class="block block--full-media <?php echo $animationTypeClass . ' ' . $textPositionClass . ' ' . $ctaPositionClass . ' ' . $typeClass . ' ' . $marginTopClass . ' ' . $marginBottomClass . ' ' . $toneClass; ?>"> 
+                <div class="block block--full-media <?php echo $animationTypeClass . ' ' . $textPositionClass . ' ' . $ctaPositionClass . ' ' . $typeClass . ' ' . $marginTopClass . ' ' . $marginBottomClass . ' ' . $toneClass; ?>" <?php echo $blockID; ?>> 
                     <div class="media">
                         <?php if($mediaType == 'image'): ?>
                             <?php if(!empty( $img )): ?>
@@ -284,6 +285,7 @@ function blone_content_block(){
             <?php elseif(get_row_layout() == 'bottle_block'): ?>
                 <?php get_template_part( 'template-parts/home-bottle-screen' ); ?>
             <?php elseif( get_row_layout() == 'text_and_media' ): 
+                $blockID = get_sub_field('block_id') ? 'id="' . slugify(get_sub_field('block_id')) . '"' : '';
                 $mainTitle = get_sub_field('main_title');
                 $alignmentClass = get_sub_field('alignment');
                 $title = get_sub_field('title');
@@ -299,7 +301,7 @@ function blone_content_block(){
                     <div class="title title--center title--section"><h2><?php echo $mainTitle; ?></h2></div>
                 <?php endif; ?>
 
-                <div class="block block--text-n-media <?php echo $alignmentClass . ' ' . $marginTopClass . ' ' . $marginBottomClass; ?>">
+                <div class="block block--text-n-media <?php echo $alignmentClass . ' ' . $marginTopClass . ' ' . $marginBottomClass; ?>" <?php echo $blockID; ?>>
                     <div class="block--text-n-media__text">
                         <?php if($title): ?>
                             <h2><?php echo $title; ?></h2>
@@ -326,6 +328,7 @@ function blone_content_block(){
                 </div>
 
             <?php elseif( get_row_layout() == 'just_text' ): 
+                $blockID = get_sub_field('block_id') ? 'id="' . slugify(get_sub_field('block_id')) . '"' : '';
                 $mainTitle = get_sub_field('main_title');
                 $textContent = get_sub_field('text_content');
                 $ctaLabel = get_sub_field('cta_label');
@@ -339,7 +342,7 @@ function blone_content_block(){
                     <div class="title title--center title--section"><h2><?php echo $mainTitle; ?></h2></div>
                 <?php endif; ?> 
 
-                <div class="block block--just-text <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                <div class="block block--just-text <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>" <?php echo $blockID; ?>>
                     <?php if($textContent): ?>
                         <div><?php echo $textContent; ?></div>
                     <?php endif; ?>
@@ -353,6 +356,7 @@ function blone_content_block(){
                 </div>
 
             <?php elseif( get_row_layout() == 'title' ): 
+                $blockID = get_sub_field('block_id') ? 'id="' . slugify(get_sub_field('block_id')) . '"' : '';
                 $level = get_sub_field('level');
                 $title = get_sub_field('title');
                 $theTitle = '<'. $level .'>'. $title . '</'. $level .'>';
@@ -360,9 +364,10 @@ function blone_content_block(){
                 $widthAlignmentClass = 'title--width-' . get_sub_field('width');
             ?>
 
-                <div class="title <?php echo $alignmentClass; echo ' ' . $widthAlignmentClass;  ?> title--section"><?php echo $theTitle; ?></div>
+                <div class="title <?php echo $alignmentClass; echo ' ' . $widthAlignmentClass;  ?> title--section" <?php echo $blockID; ?>><?php echo $theTitle; ?></div>
 
             <?php elseif( get_row_layout() == 'media_list' ): 
+                $blockID = get_sub_field('block_id') ? 'id="' . slugify(get_sub_field('block_id')) . '"' : '';
                 $mainTitle = get_sub_field('main_title');
                 $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
                 $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
@@ -372,7 +377,7 @@ function blone_content_block(){
                 <?php endif; ?> 
 
                 <?php if( have_rows('list') ): ?>
-                    <ul class="media-list <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                    <ul class="media-list <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>" <?php echo $blockID; ?>>
 
                     <?php while( have_rows('list') ): the_row(); 
                         $image = get_sub_field('media');
@@ -402,11 +407,12 @@ function blone_content_block(){
                 <?php endif; ?>
 
             <?php elseif( get_row_layout() == 'text_with_navigation' ): 
+                $blockID = get_sub_field('block_id') ? 'id="' . slugify(get_sub_field('block_id')) . '"' : '';
                 $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
                 $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
             ?>
 
-                <div class="block block--text-with-navigation <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                <div class="block block--text-with-navigation <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>" <?php $blockID; ?>>
                     <?php if( have_rows('list') ): ?>
                         <div class="text-with-navigation">
                             <nav class="text-with-navigation__nav">
@@ -442,12 +448,13 @@ function blone_content_block(){
                     <?php endif; ?>
                 </div>
             <?php elseif( get_row_layout() == 'form' ): 
+                $blockID = get_sub_field('block_id') ? 'id="' . slugify(get_sub_field('block_id')) . '"' : '';
                 $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
                 $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
                 $formTitle = get_sub_field('form_title'); 
                 $formText = get_sub_field('form_text');    
             ?>
-                <div class="block block--form <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                <div class="block block--form <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>" <?php echo $blockID; ?>>
                     <div>
                         <div class="block--form__left">
                             <?php if($formTitle): ?>
@@ -464,12 +471,13 @@ function blone_content_block(){
                     </div>
                 </div>
             <?php elseif( get_row_layout() == 'list' ): 
+                $blockID = get_sub_field('block_id') ? 'id="' . slugify(get_sub_field('block_id')) . '"' : '';
                 $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
                 $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
                 $gridTemplate = get_sub_field('grid');
             ?>
 
-                <div class="block block--list <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                <div class="block block--list <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>" <?php echo $blockID; ?>>
                     <?php if( have_rows('list') ): ?>
                         <!-- <div> -->
                             <ul class="list" style="--col: <?php echo $gridTemplate; ?>">
@@ -494,11 +502,12 @@ function blone_content_block(){
                 </div>
             
             <?php elseif( get_row_layout() == 'download_list' ): 
+                $blockID = get_sub_field('block_id') ? 'id="' . slugify(get_sub_field('block_id')) . '"' : '';
                 $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
                 $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
                 $content = get_sub_field('text_content');
             ?>
-                <div class="block block--download <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                <div class="block block--download <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>" <?php echo $blockID ?>>
                     <div class="download">
                         <?php if($content): ?>
                             <div class="download__side">
@@ -528,6 +537,7 @@ function blone_content_block(){
                     </div>
                 </div>
             <?php elseif( get_row_layout() == 'contact_form' ): 
+                $blockID = get_sub_field('block_id') ? 'id="' . slugify(get_sub_field('block_id')) . '"' : '';
                 $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
                 $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
                 $title = get_sub_field('title');
@@ -538,7 +548,7 @@ function blone_content_block(){
                     <h2><?php echo $title; ?></h2>
                 </div>
                 <?php endif; ?>
-                <div class="block block--contact-form <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>">
+                <div class="block block--contact-form <?php echo $marginTopClass . ' ' . $marginBottomClass; ?>" <?php echo $blockID; ?>>
                     <?php echo do_shortcode($form); ?>
                 </div>
 
