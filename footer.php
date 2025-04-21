@@ -30,7 +30,7 @@
                         </div>
                         
                         <div id="mc_embed_signup">
-                            <form action="https://gmail.us21.list-manage.com/subscribe/post?u=f9138a877b7e33863a21294d7&amp;id=6d661aae6f&amp;f_id=00e867e1f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+                            <form action="https://blonelamaison.us14.list-manage.com/subscribe/post?u=c619a4b0cf84f9639d38393f2&amp;id=698f907da5&amp;f_id=00498ce0f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
                                 <div id="mc_embed_signup_scroll">
                                     <div class="mc-field-group">
                                         <label for="mce-EMAIL" class="d-none">Email Address<span class="asterisk">*</span></label>

@@ -12,5 +12,6 @@
 //@prepros-append vendor/ScrambleTextPlugin.js
 //@prepros-append vendor/SplitText.js
 //@prepros-append vendor/DrawSVGPlugin.js
+//@prepros-append vendor/CustomEase.js
 
 //@prepros-append app.js

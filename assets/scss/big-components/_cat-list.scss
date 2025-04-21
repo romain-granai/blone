@@ -8,6 +8,7 @@
 	display: grid;
 	// flex-direction: column;
 	gap: .5rem;
+	overflow-x: clip;
 
     @media (max-width: $xl){
         padding: 0 $gutter;
@@ -190,18 +191,18 @@
 		height: calc(100% + 50px);
 		object-fit: cover;
 		transform: translate3d(var(--x), var(--y), 0);
-		filter: blur(10px) brightness(3) contrast(2);
-		transition: filter .3s ease-out .1s;
+		// filter: blur(10px) brightness(3) contrast(2);
+		// transition: filter .3s ease-out .1s;
 		
 	}
 	
-	.cat-item:has(.cat-item__link:hover) & {
-		img {
-			filter: blur(1px) brightness(1) contrast(1);
-			transition: filter .3s ease-out .15s;
-		}
+	// .cat-item:has(.cat-item__link:hover) & {
+	// 	img {
+	// 		filter: blur(1px) brightness(1) contrast(1);
+	// 		transition: filter .3s ease-out .15s;
+	// 	}
 		
-	}
+	// }
 }
 
 .cat-item__details__text {

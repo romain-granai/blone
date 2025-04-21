@@ -47,7 +47,7 @@ function blone_display_acf_dropdowns(){
             echo '<li class="dropdown">';
             echo    '<button class="dropdown__trigger">'. $title .'<span class="dropdown__trigger__plus"></span></button>';
             echo    '<div class="dropdown__content">';
-            echo        '<div>'. $content .'</div>';
+            echo        '<div><div>'. $content .'</div></div>';
             echo    '</div>';
             echo '</li>';
 
@@ -63,18 +63,12 @@ add_action('woocommerce_after_add_to_cart_form', 'blone_display_acf_dropdowns');
 
 remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
 
-
-
-function blone_add_image_into_product_loop($loop_name){
-
-    if(is_shop()){
+function blone_add_image_into_product_loop($query) {
+    if ( is_shop() && $query->is_main_query() ) {
         $image = get_field('product_list_image', get_option('woocommerce_shop_page_id'));
-
-        echo '<li class="product-list__image"><div class="media"><img src="' . $image['url'] . '" alt="' . $image['alt'] . '" /></div></li>';
+        echo '<li class="product-list__image"><div class="media"><img src="' . esc_url($image['url']) . '" alt="' . esc_attr($image['alt']) . '" /></div></li>';
     }
-
 }
-
 add_action('loop_start', 'blone_add_image_into_product_loop');
 
 /**
@@ -126,6 +120,11 @@ function append_custom_html_after_product_item_open() {
     }
 
     $product_id = $product->get_id();
+
+    $thumbnail_id = get_post_thumbnail_id( $product_id );
+    $image_data = wp_get_attachment_image_src( $thumbnail_id, 'full' );
+    $image_url = $image_data[0];
+
     $model = get_field('product_3d_model', $product_id);
     $title = get_the_title($product_id);
     $colors_array = [];
@@ -149,7 +148,10 @@ function append_custom_html_after_product_item_open() {
 
             ?>
         </span>
-        <div class="product-item__3d" id="product-item__3d" data-model="<?php echo $model['url']; ?>"></div>
+        <div class="product-item__image">
+            <img src="<?php echo $image_url; ?>" alt="<?php echo $title; ?>">
+        </div>
+        <!-- <div class="product-item__3d" id="product-item__3d" data-model="<?php echo $model['url']; ?>"></div> -->
     </div>
     <?php
 }
@@ -234,9 +236,9 @@ function blone_content_block(){
                 $text = get_sub_field('text');
                 $ctaLabel = get_sub_field('cta_label');
                 $ctaLink = get_sub_field('cta_link');
-                $ctaUrl = $ctaLink['url'];
-                $ctaTitle = $ctaLink['title'];
-                $ctaTarget = $ctaLink['target'] ? $ctaLink['target'] : '_self';
+                $ctaUrl    = is_array($ctaLink) ? (isset($ctaLink['url']) ? $ctaLink['url'] : '') : '';
+                $ctaTitle  = is_array($ctaLink) ? (isset($ctaLink['title']) ? $ctaLink['title'] : '') : '';
+                $ctaTarget = is_array($ctaLink) ? (isset($ctaLink['target']) && $ctaLink['target'] ? $ctaLink['target'] : '_self') : '_self';
                 $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
                 $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
             ?>
@@ -335,6 +337,7 @@ function blone_content_block(){
                 $ctaLink = get_sub_field('cta_link');
                 $isBigTextClass = get_sub_field('is_big_text') ? 'block--just-text--big' : '';
                 $isQuote = get_sub_field('is_quote');
+                $isSerifClass = get_sub_field('is_serif') ? 'block--just-text--is-serif' : '';
                 $quoteWho = get_sub_field('who');
                 $marginTopClass = get_sub_field('margin_top') != 'none' ? get_sub_field('margin_top') : '';
                 $marginBottomClass = get_sub_field('margin_bottom') != 'none' ? get_sub_field('margin_bottom') : '';
@@ -344,7 +347,7 @@ function blone_content_block(){
                     <div class="title title--center title--section"><h2><?php echo $mainTitle; ?></h2></div>
                 <?php endif; ?> 
 
-                <div class="block block--just-text <?php echo $isBigTextClass . ' ' . $marginTopClass . ' ' . $marginBottomClass; ?>" <?php echo $blockID; ?>>
+                <div class="block block--just-text <?php echo $isBigTextClass . ' ' . $marginTopClass . ' ' . $marginBottomClass . ' ' . $isSerifClass; ?>" <?php echo $blockID; ?>>
                     <?php if($textContent): ?>
                         <?php if(!$isQuote): ?>
                             <div><?php echo $textContent; ?></div>
@@ -681,13 +684,14 @@ function blone_display_cat_page_shop(){
         $familyQuery = new WP_Query($args);
 
     if(is_shop() && $familyQuery->have_posts()): ?>
-        <div class="title title--center title--section"><h2>Nos Familles olfactives</h2></div>
+        <div class="title title--center title--section" id="families"><h2><?php echo get_field('families_title_label', 'option'); ?></h2></div>
         <ul class="cat-list">
             <?php $index = 0; ?>
             <?php while ($familyQuery->have_posts()) : $familyQuery->the_post(); 
                 $desc = get_field('family_description');
                 $img = get_the_post_thumbnail_url(get_the_ID(), 'large'); 
                 $relatedProduct = get_field('related_product')[0];
+                $relatedProductDecription = get_field('family_related_product_description');
                 $theProductTitle = get_the_title($relatedProduct);
                 $theProductPermalink = get_the_permalink($relatedProduct);
                 $isOpenClass = $index == 0 ? 'cat-item__dropdown--is-open' : '';
@@ -711,15 +715,15 @@ function blone_display_cat_page_shop(){
                                 <?php echo $desc; ?>
                             </div>
                             <div class="cat-item__dropdown__bottom">
-                                <p>Notre parfum <?php echo $theProductTitle; ?> a des notes lorem ipsum</p>
-                                <a href="<?php echo $theProductPermalink; ?>" class="btn btn--dark-neg">Voir <?php echo $theProductTitle; ?></a>
+                                <p><?php echo $relatedProductDecription; ?></p>
+                                <a href="<?php echo $theProductPermalink; ?>" class="btn btn--dark-neg"><?php echo get_field('see_label', 'option'); ?> <?php echo $theProductTitle; ?></a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="cat-item__info">
-                    <p>Notre parfum <?php echo $theProductTitle; ?> a des notes lorem ipsum</p>
-                    <a href="<?php echo $theProductPermalink; ?>" class="btn btn--dark-neg">Voir <?php echo $theProductTitle; ?></a>
+                    <p><?php echo $relatedProductDecription; ?></p>
+                    <a href="<?php echo $theProductPermalink; ?>" class="btn btn--dark-neg"><?php echo get_field('see_label', 'option'); ?> <?php echo $theProductTitle; ?></a>
                 </div>
                 <div class="cat-item__details">
                     <div class="cat-item__details__media">
@@ -884,6 +888,26 @@ function get_cart_item_count() {
     }
 }
 
+function custom_related_products_args( $args ) {
+    $args['posts_per_page'] = 3; // Limit to 3 related products
+    $args['columns'] = 3;        // Display in 3 columns (optional)
+    return $args;
+}
+add_filter( 'woocommerce_output_related_products_args', 'custom_related_products_args', 20 );
+
+function disable_add_to_cart_for_unavailable_products( $purchasable, $product ) {
+    // Get the ACF field value for product availability (true/false)
+    $available = get_field('product_available', $product->get_id());
+    
+    // If availability is false (or not true), disable purchasing
+    if ( ! $available ) {
+        return false;
+    }
+    
+    return $purchasable;
+}
+add_filter( 'woocommerce_is_purchasable', 'disable_add_to_cart_for_unavailable_products', 10, 2 );
+
 // Add .swiper class to the section.related.products
 
 // function add_custom_class_to_related_products_section( $template_name, $template_path, $located, $args ) {
@@ -905,8 +929,38 @@ function get_cart_item_count() {
 // }
 // add_action( 'woocommerce_after_template_part', 'add_custom_class_to_related_products_section_end', 10, 4 );
 
+// in your theme’s functions.php or a custom plugin
 
+add_filter( 'woocommerce_cart_item_name', 'mytheme_add_perfume_and_first_line_to_cart_item', 10, 3 );
+function mytheme_add_perfume_and_first_line_to_cart_item( $name, $cart_item, $cart_item_key ) {
+    $product_id = $cart_item['product_id'];
+    $product    = wc_get_product( $product_id );
 
+    // 1) ACF field
+    $perfume = get_field( 'product_perfume', $product_id );
+    if ( $perfume ) {
+        $name .= '<p class="wc-cart-custom-field">' . esc_html( $perfume ) . '</p>';
+    }
+
+    // 2) WooCommerce short description → first paragraph only
+    $short_desc = $product ? $product->get_short_description() : '';
+    if ( $short_desc ) {
+        // wrap in paragraphs
+        $desc_html = wpautop( $short_desc );
+        // extract only the first <p>…</p>
+        if ( preg_match( '/<p.*?>(.*?)<\/p>/is', $desc_html, $matches ) ) {
+            // $matches[1] is the inner text of the first paragraph (HTML allowed)
+            $first_p = '<p class="wc-cart-short-description-first">' . wp_kses_post( $matches[1] ) . '</p>';
+        } else {
+            // fallback: strip tags and grab up to first newline
+            $lines   = preg_split( '/\r\n|\r|\n/', strip_tags( $short_desc ) );
+            $first_p = '<p class="wc-cart-short-description-first">' . esc_html( $lines[0] ) . '</p>';
+        }
+        $name .= $first_p;
+    }
+
+    return $name;
+}
 
 
 

@@ -1,6 +1,8 @@
 .block--just-text {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding-left: $gutter*2;
     padding-right: $gutter*2;
 
@@ -15,6 +17,13 @@
 
     p {
         text-wrap: balance;
+    }
+
+    &--is-serif {
+        p {
+            font-family: $f-secondary;
+            font-weight: $f-w-400;
+        }
     }
 
     &--big {
@@ -37,8 +46,7 @@
         }
 
         p {
-            font-family: $f-secondary;
-            font-weight: $f-w-400;
+            
             @include fs-xl;
             font-style: italic;
         }
@@ -46,6 +54,12 @@
         + p {
             text-align: center;
             margin-top: 1em;
+            font-family: $f-primary;
+            font-optical-sizing: auto;
+            font-style: normal;
+            font-variant-numeric: lining-nums;
+            font-feature-settings: "lnum" 1;
+            letter-spacing: .05em;
         }
     }
 

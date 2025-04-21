@@ -18,12 +18,15 @@
 					$titleDataNav = strtolower($firstLevelItem->title);
 					$titleDataNav = preg_replace('/[^a-z0-9]+/', '-', $titleDataNav);
 					$titleDataNav = trim($titleDataNav, '-');
-
+					$navRelatedImg = get_field('navigation_image', $firstLevelItem->ID);
 					$hasSubItems = isset($menuStructure[$firstLevelItem->ID]);
 				?>
 
 					<li>
 						<a href="<?php echo esc_url($firstLevelItem->url); ?>" <?php echo $hasSubItems ? 'data-nav="' . $titleDataNav . '"' : ''; ?> title="<?php echo esc_html($firstLevelItem->title); ?>" <?php echo $target ?>> <?php echo esc_html($firstLevelItem->title); ?> </a>
+						<?php if($navRelatedImg): ?>
+							<img src="<?php echo $navRelatedImg['url']; ?>" alt="<?php echo $navRelatedImg['alt']; ?>">
+						<?php endif; ?>
 					</li>
 
 				<?php endforeach; ?>
@@ -79,7 +82,6 @@
 	</div>
 	<?php if(isset($menuStructure[0]) && is_array($menuStructure[0])) :
 		foreach($menuStructure[0] as $firstLevelItem): 
-
 		?>
 			<?php if(isset($menuStructure[$firstLevelItem->ID]) && is_array($menuStructure[$firstLevelItem->ID])): 
 				$titleDataNav = strtolower($firstLevelItem->title);
@@ -89,41 +91,50 @@
 				<div class="topbar__sub" data-parent-nav="<?php echo $titleDataNav; ?>">
 					<div class="topbar__sub__inner">
 						<div class="topbar__sub__nav">
-
-						<?php if(isset($menuStructure[$firstLevelItem->ID])):
-						foreach($menuStructure[$firstLevelItem->ID] as $secondLevelItem):
-							$target = $secondLevelItem->target == '_blank' ? ' target="_blank"' : '';
-						?>
-
-							<nav class="nav nav--sub">
-								<ul class="nav-list">
-									<li>
-										<a href="<?php echo esc_url($secondLevelItem->url); ?>" title="<?php echo esc_html($secondLevelItem->title); ?>" <?php echo $target ?>> <?php echo esc_html($secondLevelItem->title); ?> </a>
-									</li>
-
-									<?php if(isset($menuStructure[$secondLevelItem->ID])): ?>
-										<?php foreach ($menuStructure[$secondLevelItem->ID] as $thirdLevelItem): 
-											$target = $thirdLevelItem->target == '_blank' ? ' target="_blank"' : '';?>
+							<?php if(isset($menuStructure[$firstLevelItem->ID])):
+								foreach($menuStructure[$firstLevelItem->ID] as $secondLevelItem):
+									$target = $secondLevelItem->target == '_blank' ? ' target="_blank"' : '';
+							?>
+									<nav class="nav nav--sub">
+										<ul class="nav-list">
 											<li>
-												<a href="<?php echo esc_url($thirdLevelItem->url); ?>" title="<?php echo esc_html($thirdLevelItem->title); ?>" <?php echo $target ?>> <?php echo esc_html($thirdLevelItem->title); ?> </a>
+												<?php if($secondLevelItem->url !== '#'): ?>
+													<a href="<?php echo esc_url($secondLevelItem->url); ?>" title="<?php echo esc_html($secondLevelItem->title); ?>" <?php echo $target; ?>>
+														<?php echo esc_html($secondLevelItem->title); ?>
+													</a>
+												<?php else: ?>
+													<span class="nav-list__title"><?php echo esc_html($secondLevelItem->title); ?></span>
+												<?php endif; ?>
 											</li>
-										<?php endforeach; ?>
-									<?php endif; ?>
-								</ul>
-							</nav>
-
-							<?php endforeach; ?>
-						<?php endif; ?>
-
+											<?php if(isset($menuStructure[$secondLevelItem->ID])): ?>
+												<?php foreach ($menuStructure[$secondLevelItem->ID] as $thirdLevelItem): 
+													$target = $thirdLevelItem->target == '_blank' ? ' target="_blank"' : '';
+												?>
+													<li>
+														<?php $navRelatedImg = get_field('navigation_image', $thirdLevelItem->ID); ?>	
+														<a href="<?php echo esc_url($thirdLevelItem->url); ?>" title="<?php echo esc_html($thirdLevelItem->title); ?>" <?php echo $target; ?>>
+															<?php echo esc_html($thirdLevelItem->title); ?>
+														</a>
+														<?php if($navRelatedImg): ?>
+															<img src="<?php echo $navRelatedImg['url']; ?>" alt="<?php echo $navRelatedImg['alt']; ?>">
+														<?php endif; ?>
+														
+													</li>
+												<?php endforeach; ?>
+											<?php endif; ?>
+										</ul>
+									</nav>
+								<?php endforeach; ?>
+							<?php endif; ?>
 						</div>
-
 						<div class="nav-media">
-							<img src="https://assets.codepen.io/225413/blone-lemon.png" alt="">
+							<img src="" alt="">
 						</div>
 					</div>	
 				</div>
 			<?php endif; ?>
 		<?php endforeach; ?>
 	<?php endif; ?>
+
 
 </div>

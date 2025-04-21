@@ -134,6 +134,13 @@
 		// z-index: 1;
 		// cursor: default;
 	}
+
+	.topbar--is-hidden & {
+		&:after {
+			display: none;
+			pointer-events: none;
+		}
+	}
 }
 
 .nav-list {
@@ -146,6 +153,10 @@
 	.nav--sub & {
 		flex-direction: column;
 		gap: 1em;
+	}
+
+	img {
+		display: none;
 	}
 
 	a {
@@ -197,6 +208,19 @@
 		.sub-menu {
 			display: block;
 		}
+	}
+
+	&:after {
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0.15em;
+		left: calc(100% + .25em);
+		width: .5em;
+		height: .5em;
+		border-bottom: .5px solid black;
+		border-right: .5px solid black;
+		transform: rotate(45deg);
 	}
 }
 

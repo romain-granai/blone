@@ -550,5 +550,78 @@ legend {
     margin-top: $gutter/4!important;
 }
 
+.woocommerce table.shop_table {
+    border-left: none;
+    border-right: none;
+}
+
+button[name="update_cart"] {
+    display: none!important;
+}
+
+.woocommerce-cart table.cart img {
+    width: 100px;
+    height: auto;
+}
+
+td.product-remove {
+    width: 25px;
+}
+
+td.product-thumbnail {
+    width: 100px;
+}
+
+td.product-name a {
+    @include fs-lg;
+    font-weight: 600;
+
+    // p {
+    //     @include fs-xs;
+    //     font-weight: 400;
+    // }
+}
+
+body:has(.cart-collaterals) .woocommerce {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: $gutter;
+
+    @media (max-width: $lg){
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+body:has(.cart-collaterals) .woocommerce-notices-wrapper {
+    grid-area: span 1 / span 3;
+}
+
+body:has(.cart-collaterals) [name="apply_coupon"] {
+    margin-top: 1em;
+}
+
+.cart_totals h2 {
+    border-top: 1px solid rgba(0,0,0,.1);
+    padding: 9px 12px;
+    line-height: 1.5;
+}
+
+.woocommerce-checkout-review-order-table .wc-cart-short-description-first {
+    display: none;
+}
+
+
+
+#additional_sample_field {
+    margin-top: $gutter / 2;
+    label {
+        margin-right: 1em;
+    }
+}
+
+.shipping_address {
+    margin-bottom: $gutter;
+}
 
 

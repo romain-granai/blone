@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <?php wp_head(); ?>
     <meta name="theme-color" content="FFFFFF">
+    <link rel="icon" href="<?php echo get_template_directory_uri(); ?>/assets/media/img/favicon-dark.ico" type="image/x-icon">
+    <link rel="icon" href="<?php echo get_template_directory_uri(); ?>/assets/media/img/favicon-dark.ico" type="image/x-icon" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="<?php echo get_template_directory_uri(); ?>/assets/media/img/favicon-light.ico" type="image/x-icon" media="(prefers-color-scheme: dark)">
 </head>
 
 <body <?php body_class(); ?> data-barba="wrapper">
@@ -83,6 +86,7 @@
         $namespace;
         if(is_front_page()){
             $namespace = 'home';
+        
         } else if(is_singular( 'product' )){
             $namespace = 'single-product';
         } else if(is_shop()) {
@@ -104,6 +108,8 @@
             // $headerMediaType = get_field('header_media_type', $pageID); 
             $headerImg = get_field('header_image', $pageID);
             $headerText = get_field('header_title', $pageID) ? get_field('header_title', $pageID) : get_the_title($pageID);
+            $headerVideoMp4 = get_field('header_video_mp4');
+            $headerVideoWebm = get_field('header_video_webm');
         ?>
 
                 <header class="header <?php echo $headerSizeClass; ?>">
@@ -111,7 +117,18 @@
                     <?php if(!is_account_page() && !is_cart() && !is_checkout()): ?>
                         <?php if(!empty( $headerImg )): ?>
                             <div class="header__media">
+                                <?php if(!$headerVideoMp4 || !$headerVideoWebm): ?>
                                 <img src="<?php echo esc_url($headerImg['url']); ?>" alt="<?php echo esc_attr($headerImg['alt']); ?>" />
+                                <?php else: 
+                                    $videoMp4Url = $headerVideoMp4['url'];
+                                    $videoWebmUrl = $headerVideoWebm['url'];
+                                ?>
+                                <!-- <video src="<?php echo $videoUrl; ?>" muted loop preload playsinline paused autoplay></video> -->
+                                <video muted loop preload playsinline paused>
+                                    <source src="<?php echo $videoMp4Url; ?>" type="video/mp4"/>
+                                    <source src="<?php echo $videoWebmUrl; ?>" type="video/webm"/>
+                                </video>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
                     <?php endif; ?>
