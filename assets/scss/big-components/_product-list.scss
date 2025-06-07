@@ -12,7 +12,7 @@
         margin-bottom: $gutter*2;
     }
 
-    @media (max-width: $lg){
+    @media (max-width: $xl){
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -76,6 +76,16 @@
 
     .price {
 
+    }
+
+    &:has(a[href*="samples"]),
+    &:has(a[href*="echantillons"]){
+
+        .product-item__number {
+            display: none;
+        }
+
+        
     }
 }
 

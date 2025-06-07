@@ -17,6 +17,23 @@
     }
 }
 
+.topbar__message {
+	background: black;
+	color: white;
+	text-transform: uppercase;
+	font-weight: 700;
+	@include fs-xs;
+	padding: .75em 0;
+
+	a {
+		text-decoration: underline;
+	}
+
+	.marquee3k__wrapper > div {
+		padding: 0 1em;
+	}
+}
+
 .topbar__main {
 	position: relative;
 	display: grid;

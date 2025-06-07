@@ -107,7 +107,7 @@
                 max-width: 600px;
                 justify-self: center;
             }
-
+            
             @media (max-width: $xl){
                 grid-template-columns: repeat(2,1fr);
 
@@ -116,10 +116,18 @@
                     grid-column: unset;
                 }
             }
+
+            @media (max-width: $md){
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: space-between;
+                grid-column: 2/6;
+                gap: $gutter;
+            }
             
         }
     }
-
 
 }
 
@@ -127,6 +135,7 @@
     display: flex;
     align-items: flex-end;
     gap: $gutter/4;
+    width: 100%;
 
     .email {
         flex: 1 1 100%;

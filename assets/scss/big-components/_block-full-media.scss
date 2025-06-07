@@ -91,8 +91,6 @@
     padding: $gutter*2;
     z-index: 3;
 
-
-
     @media (max-width: $xl){
         padding: $gutter;
     }
@@ -217,7 +215,7 @@
 
 .block--full-media__front .btn {
     @media (max-width: $lg){
-        align-self: unset;
+        align-self: center;
         justify-self: unset;
     }
 }

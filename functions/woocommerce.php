@@ -277,9 +277,9 @@ function blone_content_block(){
                         <?php if($ctaLabel && $ctaLink): ?>
                             <!-- btn--big btn--rounded -->
                             <?php if($tone == 'light'): ?>
-                                <a href="<?php echo $ctaUrl ?>" class="btn btn--dark-neg btn--big" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>" title="<?php echo $ctaTitle ?>"><span><?php echo $ctaLabel; ?></span></a>
+                                <a href="<?php echo $ctaUrl ?>" class="btn btn--dark-neg" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>" title="<?php echo $ctaTitle ?>"><span><?php echo $ctaLabel; ?></span></a>
                             <?php else: ?>
-                                <a href="<?php echo $ctaUrl ?>" class="btn btn--light-neg btn--big" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>" title="<?php echo $ctaTitle ?>"><span><?php echo $ctaLabel; ?></span></a>
+                                <a href="<?php echo $ctaUrl ?>" class="btn btn--light-neg" data-text="<?php echo $ctaLabel; ?>" target="<?php echo $ctaTarget; ?>" title="<?php echo $ctaTitle ?>"><span><?php echo $ctaLabel; ?></span></a>
                             <?php endif; ?>
                         <?php endif; ?>
                     </div>
@@ -616,10 +616,10 @@ function custom_display_product_images() {
         array_unshift( $attachment_ids, $product->get_image_id() );
     }
 
-    if ( $attachment_ids && has_post_thumbnail() ) {
+    if ( $attachment_ids ) {
         $attachment_count = count($attachment_ids) > 4 ? 4 : count($attachment_ids);
         echo '<div class="single-product__images">';
-
+            
             echo '<div class="single-product__thumbnails" style="--grid-div: '.$attachment_count.'">';
             $counter = 0;
             foreach ( $attachment_ids as $attachment_id ) {
@@ -960,6 +960,64 @@ function mytheme_add_perfume_and_first_line_to_cart_item( $name, $cart_item, $ca
     }
 
     return $name;
+}
+
+// add_filter('woocommerce_package_rates', 'custom_shipping_for_specific_product', 10, 2);
+// function custom_shipping_for_specific_product($rates, $package) {
+//     $target_product_id = 1565; // Replace with your product ID
+//     $custom_shipping_cost = 5; // Your custom price
+
+//     $product_found = false;
+
+//     foreach ($package['contents'] as $item) {
+//         if ($item['product_id'] == $target_product_id) {
+//             $product_found = true;
+//             break;
+//         }
+//     }
+
+//     if ($product_found) {
+//         foreach ($rates as $rate_key => $rate) {
+//             if ($rate->method_id === 'flat_rate') {
+//                 $rates[$rate_key]->cost = $custom_shipping_cost;
+//             }
+//         }
+//     }
+
+//     return $rates;
+// }
+
+add_filter('woocommerce_package_rates', 'custom_shipping_for_specific_product', 10, 2);
+function custom_shipping_for_specific_product($rates, $package) {
+    // Target product IDs
+    $target_ids = array(1565, 1569);
+    $custom_shipping_cost = 5;
+
+    // Collect all product IDs in this package
+    $ids_in_cart = array();
+    foreach ($package['contents'] as $item) {
+        $ids_in_cart[] = $item['product_id'];
+    }
+    $unique_ids = array_unique($ids_in_cart);
+
+    // If the cart contains only products from our target set,
+    // and no other product IDs, then apply the custom rate.
+    // This covers:
+    // – Exactly [1565]  
+    // – Exactly [1569]  
+    // – Exactly [1565, 1569]
+    if (
+        count(array_diff($unique_ids, $target_ids)) === 0
+        && count($unique_ids) <= 2
+    ) {
+        foreach ($rates as $rate_key => $rate) {
+            if ($rate->method_id === 'flat_rate') {
+                $rates[$rate_key]->cost = $custom_shipping_cost;
+            }
+        }
+    }
+
+    return $rates;
 }
 
 

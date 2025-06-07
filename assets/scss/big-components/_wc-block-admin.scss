@@ -86,7 +86,7 @@
 
 .wpcf7 {
     label {
-        @include fs-sm;
+        // @include fs-sm;
         margin-bottom: .3em;
         margin-bottom: 0;
         line-height: unset;
@@ -622,6 +622,32 @@ body:has(.cart-collaterals) [name="apply_coupon"] {
 
 .shipping_address {
     margin-bottom: $gutter;
+}
+
+.woocommerce-products-header {
+    display: none;
+}
+
+.woocommerce-cart-form {
+    #coupon_code {
+        margin-bottom: $gutter;
+    }
+}
+
+#wc-stripe-express-checkout__order-attribution-inputs {
+    position: absolute;
+    left: -999999px;
+}
+
+.woocommerce-SavedPaymentMethods-saveNew {
+    display: flex!important;
+    gap: $gutter/2;
+
+    input {
+        flex: 0 0 20px!important;
+        height: 20px!important;
+        width: 20px!important;
+    }
 }
 
 

@@ -144,6 +144,10 @@
     grid-template-rows: repeat(var(--grid-div, 3), 1fr);
     gap: $gutter/2;
 
+    > *:only-child {
+        display: none;
+    }
+
     @media (max-width: $lg){
         grid-template-rows: unset;
         grid-template-columns: repeat(var(--grid-div, 3), 1fr);

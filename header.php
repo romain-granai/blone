@@ -19,8 +19,15 @@
         // Define custom query arguments
         $args = array(
             'post_type'      => 'product',
-            'posts_per_page' => -1, // To retrieve all products, use -1. You can specify a number to limit the posts.
-            'post_status'    => 'publish'
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                  'key'     => 'show_on_bottle_screen', // ← exact ACF field name
+                  'value'   => '1',                     // ACF true/false “true” is stored as string "1"
+                  'compare' => '=',
+                ),
+              ),
         );
 
         // Instantiate the custom query
@@ -124,7 +131,7 @@
                                     $videoWebmUrl = $headerVideoWebm['url'];
                                 ?>
                                 <!-- <video src="<?php echo $videoUrl; ?>" muted loop preload playsinline paused autoplay></video> -->
-                                <video muted loop preload playsinline paused>
+                                <video muted loop preload="auto" playsinline autoplay>
                                     <source src="<?php echo $videoMp4Url; ?>" type="video/mp4"/>
                                     <source src="<?php echo $videoWebmUrl; ?>" type="video/webm"/>
                                 </video>

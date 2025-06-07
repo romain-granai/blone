@@ -22,171 +22,70 @@ $(document).ready(function () {
 
     lenis.stop();
 
-    // barba.use(barbaPrefetch);
-
-    // barba.init({
-    //     debug: true,
-    //     preventRunning: true,
-    //     // prevent: ({ el }) => el.classList && (el.classList.contains('added_to_cart') || el.classList.contains('wc-block-cart__submit-button')),
-    //     prevent: ({el, event, href}) => {
-    //         const hrefToReload = ['account', 'checkout', 'cart', 'paiement', 'mon-compte', 'panier'];
-    //         let currentUrl = window.location.href;
-
-    //         return hrefToReload.some(url => href.includes(url)) || hrefToReload.some(url => currentUrl.includes(url));
-    //     },
-    //     transitions: [
-    //         {
-    //             name: 'fade',
-    //             // to: {
-    //             //     namespace: [
-    //             //         'shop',
-    //             //         'home',
-    //             //         'single-product',
-    //             //         'page'
-    //             //     ]
-    //             // },
-    //             // from: {
-    //             //     namespace: [
-    //             //         'shop',
-    //             //         'home',
-    //             //         'single-product',
-    //             //         'page'
-    //             //     ]
-    //             // },
-    //             leave({current, next, trigger}) {
-    //                 console.log('GLOBAL LEAVE');
-
-    //                 return new Promise(resolve => {
-    //                      const leavingAnim = gsap.timeline({
-    //                          onComplete(){
-    //                              resolve();
-    //                          }
-    //                      });
-     
-    //                      leavingAnim .to('.curtain', {duration: .75, autoAlpha: 1, ease: Expo.easeInOut})
-    //                                  .set(current.container, { autoAlpha: 0, display: 'none'});
-    //                  });
-    //             },
-    //             enter({current, next, trigger}) {
-    //                 console.log('GLOBAL ENTER');
-
-    //                 return new Promise(resolve => {
-                         
-    //                      const enterAnim = gsap.timeline({
-    //                          onComplete(){
-    //                              resolve();
-    //                          }
-    //                      });
-     
-    //                      enterAnim   .fromTo(next.container, 0, {autoAlpha: 0}, {autoAlpha: 1, ease: Expo.easeInOut})
-    //                                  .to('.curtain', {duration: .75, autoAlpha: 0, ease: Expo.easeInOut});
-    //                  });
-    //             },
-    //             once(){
-
-    //                 // relatedProductsSwiper();
-    //                 preventSamePageReload();
-    //                 disableBarbaOnAdminBar();
-    //                 // preventBarbaOnSomeLinks();
-    //             },
-    //             afterEnter(){
-    //                 console.log('GLOBAL AFTER ENTER');
-    //                 topbar();
-    //                 playAudio();
-    //                 btn();
-    //                 // productList3d();
-    //                 dropdowns();
-    //                 mediaList();
-    //                 customAddToCart();
-    //                 blockTextNMedia();
-    //                 blockFullMedia();
-    //                 blockTextWithNavigation();
-    //                 homeSliderBottle();
-    //                 preventSamePageReload();
-    //                 disableBarbaOnAdminBar();
-    //                 // preventBarbaOnSomeLinks();
-
-    //             },
-    //             beforeLeave(){
-    //                 $('.topbar a').removeClass('is-active');
-    //                 $('.topbar__sub').removeClass('topbar__sub--is-active');
-    //                 $('.topbar').removeClass('topbar--is-hidden');
-    //             },
-    //             beforeEnter(data){
-    //                 var cf7Form = $(data.next.container).find('.wpcf7-form')[0];
-
-    //                 $mobileNav.removeClass('mobile-nav--is-open');
-    //                 mobileNavIsOpen = false;
-    //                 lenis.start();
-
-    //                 window.scrollTo(0, 0);
-    //                 killAllScrollTrigger();
-    //                 preventSamePageReload();
-
-    //                 // if(!cf7Form.length) return;
-
-    //                 setTimeout(function(){
-    //                     reInitCF7(cf7Form);
-    //                 }, 200);
-    //             }
-
-    //         }
-    //     ],
-    //     views: [{
-    //         namespace: 'shop',
-    //         afterEnter(){
-    //             console.log('AFTER ENTER SHOP');
-    //             catList();
-    //             productListMedia();
-    //         },
-    //     },{
-    //         namespace: 'single-product',
-    //         afterEnter(){
-    //             console.log('AFTER ENTER Single Product');
-    //             singleProductImages();
-    //             relatedProductsSwiper();
-    //         }
-    //     },{
-    //         namespace: 'cart',
-    //         afterEnter(){
-    //             console.log('AFTER ENTER CART');
-    //             // $('a').attr('data-barba-prevent', true);
-    //         }
-    //     },{
-    //         namespace: 'checkout',
-    //         afterEnter(){
-    //             console.log('AFTER ENTER Checkout');
-    //             // $('a').attr('data-barba-prevent', true);
-    //         }
-    //     },{
-    //         namespace: 'account',
-    //         afterEnter(){
-    //             console.log('AFTER ENTER Account');
-    //             // $('a').attr('data-barba-prevent', true);
-    //         }
-    //     }]
-    // });
-
     window.addEventListener('beforeunload', function (e) {
         gsap.to('.curtain', {autoAlpha: 1, duration: .25});
         $('.topbar').addClass('topbar--is-hidden');
         $('.topbar__sub').removeClass('topbar__sub--is-active');
     });
 
-    if(sessionStorage.getItem('intro-seen') && sessionStorage.getItem('intro-seen') == 'true'){
+    // if(sessionStorage.getItem('intro-seen') && sessionStorage.getItem('intro-seen') == 'true'){
 
-        if($('.header video').length){
-            $('.header video')[0].play();
-        };
+    //     if($('.header video').length){
+    //         $('.header video')[0].addEventListener('loadedmetadata', () => {
+    //             $('.header video')[0].pause();
+    //         });
+            
+    //     };
 
+    //     lenis.start();
+    //     ScrollTrigger.refresh();
+    //     $('.topbar').removeClass('topbar--is-hidden');
+    //     gsap.to('.curtain', {autoAlpha: 0, duration: .25, onStart: function(){
+    //         if($('.header video').length){
+    //             $('.header video')[0].play();
+    //         }
+    //     }});
+
+    // } else {
+    //     intro();
+    // };
+
+    if ( sessionStorage.getItem('intro-seen') === 'true' ) {
+
+        var $vid = $('.header video');
+        if ( $vid.length ) {
+          var vid = $vid.get(0);
+      
+          // 1) Ensure the browser really sees these properties early
+          $vid.prop('muted', true);
+          $vid.prop('autoplay', true);
+          $vid.attr('preload', 'auto');
+      
+          // 2) Pause right away to prevent the built-in autoplay
+          //    (so we can manually control when it starts)
+          vid.pause();
+        }
+      
         lenis.start();
         ScrollTrigger.refresh();
         $('.topbar').removeClass('topbar--is-hidden');
-        gsap.to('.curtain', {autoAlpha: 0, duration: .25})
-
-    } else {
+      
+        // 3) When the curtain goes away, play it
+        gsap.to('.curtain', {
+          autoAlpha: 0,
+          duration: 0.25,
+          onStart: function() {
+            if ( $vid.length ) {
+              vid.play().catch(function() {
+                // swallow any autoplay‐blocked error
+              });
+            }
+          }
+        });
+      
+      } else {
         intro();
-    };
+      }
 
     
     topbar();
@@ -251,13 +150,17 @@ $(document).ready(function () {
                     .set('.curtain__logo', {display: 'block', autoAlpha: 1})
                     .add(drawCurtainLogo.timeScale(1.5))
                     .from('.curtain__logo__line--3', {duration: 1.75, drawSVG: 0, ease: 'expo.out'}, '-=.075')
-                    .to('.curtain .btn', {autoAlpha: 1, display: 'block'}, '+=0')
+                    .to('.curtain .btn', {autoAlpha: 1, display: 'block'}, '+=0');
                     // .to('.curtain', {'--topLeft': '100%', ease: 'power2.inOut'}, 'step2-=.15')
                     // .to('.curtain', {'--bottomLeft': '100%', ease: 'power2.inOut'}, 'step2-=.125')
-                    
-
             
-            introTlHide .add(()=>{ $('.header video')[0].play(); })
+            if($('.header video').length){
+                $('.header video')[0].addEventListener('loadedmetadata', () => {
+                    $('.header video')[0].pause();
+                });
+            }
+            
+            introTlHide .add(()=>{ if($('.header video').length){ $('.header video')[0].play() } })
                         .to('.curtain', {duration: .5, autoAlpha: 0, ease: 'power3.inOut'}, 'curtainDis')
                         .to('.curtain__logo', {duration: .5, scale: .8, ease: 'power3.inOut'}, 'curtainDis')
                         // .fromTo(headerH1[0], {duration: 3, scrambleText:{text: ''}}, {scrambleText:{text:headerH1[0].textContent, chars:' 0123456789'}})
@@ -329,6 +232,16 @@ $(document).ready(function () {
         topBarHDebounce();
 
         $(window).on('resize', topBarHDebounce);
+
+        // MARQUEE
+
+        if($('.topbar__message').length){
+
+            Marquee3k.init({
+                selector: 'topbar__message', // define a custom classname
+            });
+
+        }
 
     };
 
@@ -572,7 +485,15 @@ $(document).ready(function () {
                     child.material = shinyMaterial;
                 }
             });
-    
+            
+            // object.traverse(function (child) {
+            //     if (child.isMesh) {
+            //         child.material.transparent = false;
+            //         child.material.opacity = 1;
+            //         child.material.depthWrite = true;
+            //     }
+            // });
+
             bottleScene.add(object);
             object.scale.set(1.5, 1.5, 1.5);
         }, undefined, function (error) {

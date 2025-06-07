@@ -52,6 +52,7 @@
     height: 100vh;
     background-color: white;
     padding: var(--topBarH) $gutter*2 $gutter $gutter*2;
+    overflow: auto;
     @include fs-lg;
     @include transition($duration: .2s);
 

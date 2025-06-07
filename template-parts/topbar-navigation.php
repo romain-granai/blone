@@ -1,4 +1,9 @@
 <div class="topbar topbar--is-hidden">
+	<?php if( get_field('topbar_message', 'option') ): ?>
+		<div class="topbar__message marquee3k">
+			<div><?php echo get_field('topbar_message', 'option'); ?></div>
+		</div>
+	<?php endif; ?>
 	<div class="topbar__main">
 		<?php
 			$menuName = 'main';
@@ -61,7 +66,7 @@
 			<span class="burger__bar burger__bar--bottom"></span>
 		</button>
 	</div>
-	<div class="mobile-nav">
+	<div class="mobile-nav" data-lenis-prevent>
 	<?php
 
 		wp_nav_menu(array(

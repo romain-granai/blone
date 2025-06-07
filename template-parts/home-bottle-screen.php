@@ -4,8 +4,15 @@
         // Define custom query arguments
         $args = array(
             'post_type'      => 'product',
-            'posts_per_page' => -1, // To retrieve all products, use -1. You can specify a number to limit the posts.
-            'post_status'    => 'publish'
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            'meta_query'     => array(
+                array(
+                  'key'     => 'show_on_bottle_screen', // ← exact ACF field name
+                  'value'   => '1',                     // ACF true/false “true” is stored as string "1"
+                  'compare' => '=',
+                ),
+              ),
         );
 
         // Instantiate the custom query
@@ -22,6 +29,7 @@
         if ( $loop->have_posts() ) :
             $is_first_product = true;
             while ( $loop->have_posts() ) : $loop->the_post();
+
                 global $product;
                 
                 // Get product title
@@ -63,7 +71,7 @@
     ?>
     <div class="bottle-screen" data-model="<?php echo $model['url']; ?>" style="--bg-opacity: 0; --color-1: <?php echo $first_product_colors[0]; ?>; --color-2:  <?php echo $first_product_colors[1]; ?>; --color-3: <?php echo $first_product_colors[2]; ?>; --color-4: <?php echo $first_product_colors[3]; ?>;">
         <div class="title title--center title--section">
-            <h2>Nos Parfums</h2>
+            <h2><?php echo get_field('our_perfumes', 'option'); ?></h2>
         </div>
         <div class="bottle-screen__bg">
             <span class="bottle-screen__number">1</span>
@@ -982,7 +990,7 @@
                 <span class="perfume"><?php echo $first_product_perfume; ?></span> - <span class="volume"><?php echo $first_product_volume; ?></span>
             </div>
             <div class="bottle-screen__ctas">
-                <a href="<?php echo $first_product_permalink; ?>" class="btn btn--dark-neg btn--big" title="See Product" data-text="See Product"><span>See Product</span></a>
+                <a href="<?php echo $first_product_permalink; ?>" class="btn btn--dark-neg" title="See Product" data-text="<?php echo get_field('see_product_label', 'option'); ?>"><span><?php echo get_field('see_product_label', 'option'); ?></span></a>
             </div>
         </div>
     </div>
